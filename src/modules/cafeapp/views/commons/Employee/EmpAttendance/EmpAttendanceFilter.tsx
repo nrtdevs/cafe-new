@@ -1,0 +1,116 @@
+import { getUserData } from '@src/auth/utils'
+import { employeeAttendanceResponseTypes } from '@src/modules/cafeapp/redux/RTKFiles/ResponseTypes'
+import FormGroupCustom from '@src/modules/common/components/formGroupCustom/FormGroupCustom'
+import { useModal } from '@src/modules/common/components/modal/HandleModal'
+import SideModal from '@src/modules/common/components/sideModal/sideModal'
+import BsTooltip from '@src/modules/common/components/tooltip'
+import ApiEndpoints from '@src/utility/http/ApiEndpoints'
+import { loadDropdown } from '@src/utility/http/Apis/dropdowns'
+import { FM } from '@src/utility/Utils'
+import React, { FC, Fragment } from 'react'
+import { Sliders } from 'react-feather'
+import { useForm } from 'react-hook-form'
+import { Button, ButtonProps, Col, Row } from 'reactstrap'
+
+type FilterProps = {
+    handleFilterData: (e: any) => void
+}
+
+const defaultValues: employeeAttendanceResponseTypes = {
+    //   role_id: 2,
+    from_date: '',
+    end_date: '',
+    employee_id: ''
+}
+
+const EmpAttendanceFilter: FC<FilterProps> = (props) => {
+    // toggle modal
+    const [modal, toggleModal] = useModal()
+
+    // form hook
+    const form = useForm<employeeAttendanceResponseTypes>({
+        defaultValues
+    })
+
+    //load login user detail
+    const user1 = getUserData()
+
+    // reset form on modal close
+    React.useEffect(() => {
+        if (!modal) {
+            form.reset(defaultValues)
+        }
+    }, [modal])
+
+    return (
+        <Fragment>
+            <BsTooltip<ButtonProps>
+                onClick={toggleModal}
+                Tag={Button}
+                title={FM('filter')}
+                size='sm'
+                color='primary'
+            >
+                <Sliders size='14' />
+            </BsTooltip>
+            <SideModal
+                handleSave={form.handleSubmit(props.handleFilterData)}
+                open={modal}
+                handleModal={() => {
+                    toggleModal()
+                }}
+                title={FM('filter-employee-Attendance')}
+                done='filter'
+            >
+                <Row>
+                    <Col md='12'>
+                        {/* <p className='text-dark mb-0'>{FM('filter-product')}</p> */}
+                        {/* <p className='text-muted small'>{FM('filter-users-description')}</p> */}
+                    </Col>
+                    <Col md='12'>
+                        <FormGroupCustom
+                            key={`${user1?.cafe_id}`}
+                            control={form.control}
+                            async
+                            label={'select employee name'}
+                            name='employee_id'
+                            loadOptions={loadDropdown}
+                            path={ApiEndpoints.employeList}
+                            selectLabel={(e) => `${e.email} | ${e.name} `}
+                            selectValue={(e) => e.id}
+                            jsonData={{
+                                cafe_id: user1?.cafe_id
+                            }}
+                            defaultOptions
+                            type='select'
+                            className='mb-1'
+                            rules={{ required: false }}
+                        />
+                    </Col>
+                    <Col md='12'>
+                        <FormGroupCustom
+                            control={form.control}
+                            label={'Start Date'}
+                            name='from_date'
+                            type='date'
+                            className='mb-1'
+                            rules={{ required: false }}
+                        />
+                    </Col>
+                    <Col md='12'>
+                        <FormGroupCustom
+                            control={form.control}
+                            label={'End Date'}
+                            name='end_date'
+                            type='date'
+                            className='mb-1'
+                            rules={{ required: false }}
+                        />
+                    </Col>
+                </Row>
+            </SideModal>
+        </Fragment>
+    )
+}
+
+export default EmpAttendanceFilter
