@@ -6,7 +6,7 @@ import Proptypes from 'prop-types'
 
 const ScrollTop = props => {
   // ** Props
-  const { showOffset, scrollBehaviour, children, ...rest } = props
+  const { showOffset, scrollBehaviour = 'smooth', children, ...rest } = props
 
   // ** State
   const [visible, setVisible] = useState(false)
@@ -43,8 +43,4 @@ ScrollTop.propTypes = {
   showOffset: Proptypes.number,
   children: Proptypes.any.isRequired,
   scrollBehaviour: Proptypes.oneOf(['smooth', 'instant', 'auto'])
-}
-
-ScrollTop.defaultProps = {
-  scrollBehaviour: 'smooth'
 }

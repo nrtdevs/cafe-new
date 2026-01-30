@@ -36,7 +36,15 @@ export default class HttpService {
     axios.interceptors.request.use(
       (config) => {
         // ** Get token from localStorage
-        const accessToken = this.getToken() !== null ? JSON.parse(this.getToken()) : null
+        const token = this.getToken()
+        let accessToken = null
+        if (token !== null) {
+          try {
+            accessToken = JSON.parse(token)
+          } catch (e) {
+            accessToken = token
+          }
+        }
         // log('accessToken', accessToken)
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
@@ -103,9 +111,9 @@ export default class HttpService {
     formData = null,
     params,
     authenticate = true,
-    success = () => {},
-    error = () => {},
-    loading = () => {},
+    success = () => { },
+    error = () => { },
+    loading = () => { },
     baseURL = this.httpConfig.baseUrl,
     ...extra
   }: RequestType): AxiosPromise<any> | void {
@@ -154,7 +162,13 @@ export default class HttpService {
       ],
       transformResponse: [
         (dataLocal: any) => {
-          dataLocal = JSON?.parse(dataLocal)
+          if (typeof dataLocal === 'string') {
+            try {
+              dataLocal = JSON.parse(dataLocal)
+            } catch (e) {
+              /* ignore */
+            }
+          }
           // Do whatever you want to transform the data
           //   log('transformResponse', dataLocal)
           this.isUnauthenticated(dataLocal)
@@ -187,14 +201,14 @@ export default class HttpService {
     }
   }
 
-  
+
   returnSuccessResponse = (
     res: any,
     showSuccessToast: boolean,
     showErrorToast: boolean,
-    success = (e: any) => {},
-    error = (e: any) => {},
-    loading = (e: any) => {}
+    success = (e: any) => { },
+    error = (e: any) => { },
+    loading = (e: any) => { }
   ) => {
     loading(false)
     const data = res.data
@@ -217,8 +231,8 @@ export default class HttpService {
   returnErrorResponse = (
     e: any,
     showErrorToast: boolean,
-    error = (a: any) => {},
-    loading = (a: any) => {}
+    error = (a: any) => { },
+    loading = (a: any) => { }
   ) => {
     loading(false)
     log('response error cache', e)
@@ -236,55 +250,55 @@ export default class HttpService {
 const http = new HttpService({})
 export const axiosBaseQuery =
   (baseURL?: string): BaseQueryFn<RequestType> =>
-  async ({
-    showErrorToast = true,
-    showSuccessToast = false,
-    noEntryMode,
-    authenticate = true,
-    path,
-    method,
-    jsonData,
-    formData,
-    params
-  }: RequestType) => {
-    try {
-      const a = await http.request({
-        showSuccessToast,
-        showErrorToast,
-        noEntryMode,
-        authenticate,
-        async: true,
-        path,
-        method,
-        jsonData,
-        formData,
-        params,
-        baseURL
-      })
-      if (String(a?.request?.responseURL)?.includes('/unauthorized')) {
-        http.isUnauthenticated({ code: 401 })
-      }
-      //   const data: any = defaultHttpConfig.enableAES ? decryptAnything(a?.data) : a?.data
-      const data: any = a?.data
-      if (showSuccessToast) {
-        SuccessToast(a?.data?.message)
-      }
-      return { data: data ?? '' }
-    } catch (axiosError) {
-      const err = axiosError as AxiosError
-      const data = err.response?.data as any
-      const errMessage = data?.message as any
-      if (showErrorToast) {
-        ErrorToast(errMessage)
-      }
-      if (String(err?.request?.responseURL)?.includes('/unauthorized')) {
-        http.isUnauthenticated({ code: 401 })
-      }
-      return {
-        error: {
-          status: err.response?.status,
-          data: err.response?.data || err.message
+    async ({
+      showErrorToast = true,
+      showSuccessToast = false,
+      noEntryMode,
+      authenticate = true,
+      path,
+      method,
+      jsonData,
+      formData,
+      params
+    }: RequestType) => {
+      try {
+        const a = await http.request({
+          showSuccessToast,
+          showErrorToast,
+          noEntryMode,
+          authenticate,
+          async: true,
+          path,
+          method,
+          jsonData,
+          formData,
+          params,
+          baseURL
+        })
+        if (String(a?.request?.responseURL)?.includes('/unauthorized')) {
+          http.isUnauthenticated({ code: 401 })
+        }
+        //   const data: any = defaultHttpConfig.enableAES ? decryptAnything(a?.data) : a?.data
+        const data: any = a?.data
+        if (showSuccessToast) {
+          SuccessToast(a?.data?.message)
+        }
+        return { data: data ?? '' }
+      } catch (axiosError) {
+        const err = axiosError as AxiosError
+        const data = err.response?.data as any
+        const errMessage = data?.message as any
+        if (showErrorToast) {
+          ErrorToast(errMessage)
+        }
+        if (String(err?.request?.responseURL)?.includes('/unauthorized')) {
+          http.isUnauthenticated({ code: 401 })
+        }
+        return {
+          error: {
+            status: err.response?.status,
+            data: err.response?.data || err.message
+          }
         }
       }
     }
-  }

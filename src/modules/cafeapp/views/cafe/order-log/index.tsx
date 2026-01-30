@@ -321,7 +321,7 @@ const OrderLog = (props: any) => {
       page: state.search ? 1 : state.page,
       per_page_record: state.per_page_record,
       jsonData: {
-        order_id: location?.state?.id,
+
         // name: !isValid(state.filterData) ? state.search : undefined,
         ...state.filterData,
         start_date: state.filterData
@@ -825,7 +825,7 @@ const OrderLog = (props: any) => {
                       )}
 
                       {state?.selectedUser?.payment_mode === 4 ||
-                      state?.selectedUser?.payment_mode === 3 ? (
+                        state?.selectedUser?.payment_mode === 3 ? (
                         <>
                           <li className='text-muted'>
                             {FM('cash')} :{state?.selectedUser?.cash_amount}
@@ -926,10 +926,10 @@ const OrderLog = (props: any) => {
                           {state.selectedUser?.order_status === 1
                             ? 'Pending'
                             : state.selectedUser?.order_status === 3
-                            ? 'Completed'
-                            : state.selectedUser?.order_status === 2
-                            ? 'Confirmed'
-                            : ' Cancelled'}
+                              ? 'Completed'
+                              : state.selectedUser?.order_status === 2
+                                ? 'Confirmed'
+                                : ' Cancelled'}
                         </span>
                       </li>
                       <li className=''>
@@ -1141,27 +1141,27 @@ const OrderLog = (props: any) => {
               className='text-capitalize'
               color={
                 statusObj1[
-                  row?.payment_mode === 1
-                    ? 'cash'
-                    : row?.payment_mode === 2
+                row?.payment_mode === 1
+                  ? 'cash'
+                  : row?.payment_mode === 2
                     ? 'online'
                     : row?.payment_mode === 4
-                    ? 'split'
-                    : row?.payment_mode === 3
-                    ? 'udhar'
-                    : ''
+                      ? 'split'
+                      : row?.payment_mode === 3
+                        ? 'udhar'
+                        : ''
                 ]
               }
             >
               {row?.payment_mode === 1
                 ? 'cash'
                 : row?.payment_mode === 2
-                ? 'upi'
-                : row?.payment_mode === 4
-                ? 'split'
-                : row?.payment_mode === 3
-                ? 'udhar'
-                : ''}
+                  ? 'upi'
+                  : row?.payment_mode === 4
+                    ? 'split'
+                    : row?.payment_mode === 3
+                      ? 'udhar'
+                      : ''}
             </Badge>
           }
         </Fragment>

@@ -22,23 +22,24 @@ export const loginApi = (args: LoginApiArgs) => {
 
 export const login = ({
   formData,
-  loading = (e: boolean) => {},
-  success = (e: any) => {},
+  loading = (e: boolean) => { },
+  success = (e: any) => { },
   // eslint-disable-next-line no-unused-vars
   errorMessage = 'login-failed',
   successMessage = 'login-successful',
-  dispatch = (e: any) => {},
+  dispatch = (e: any) => { },
   ability,
   redirect = true,
-  navigate = (e: any) => {},
-  error = (e: any) => {}
+  navigate = (e: any) => { },
+  error = (e: any) => { }
 }) => {
-  console.log(formData,'formData')
+  console.log(formData, 'formData')
   http.request({
     jsonData: formData,
     method: 'post',
     path: ApiEndpoints.login,
     loading,
+    authenticate: false,
     showErrorToast: true,
     error: (e: any) => {
       error(e)
@@ -46,7 +47,7 @@ export const login = ({
       // ErrorToast(errorMessage)
     },
     // success: (data: any) => {
-     
+
     //   const p = data?.payload?.permissions?.map((a:any) => ({
     //       action: a.se_name,
     //       subject: a?.group_name
@@ -147,95 +148,95 @@ export const login = ({
     //   success(data)
     // }
     success: (data: any) => {
-  // Map permissions
-  const permissions = data?.payload?.permissions?.map((perm: any) => ({
-    action: perm?.se_name,
-    subject: perm?.group_name
-  })) ?? []
+      // Map permissions
+      const permissions = data?.payload?.permissions?.map((perm: any) => ({
+        action: perm?.se_name,
+        subject: perm?.group_name
+      })) ?? []
 
-  log(permissions, 'Mapped Permissions')
+      log(permissions, 'Mapped Permissions')
 
-  // Extract browse permissions
-  const browsePermissions = permissions.filter((perm: any) =>
-    perm.action?.includes('-browse')
-  )
-  log(browsePermissions, 'Browse Permissions')
+      // Extract browse permissions
+      const browsePermissions = permissions.filter((perm: any) =>
+        perm.action?.includes('-browse')
+      )
+      log(browsePermissions, 'Browse Permissions')
 
-  const firstPermission = browsePermissions?.[0]
-  if (!firstPermission) {
-    console.warn('No browse permission found, cannot redirect.')
-    return
-  }
+      const firstPermission = browsePermissions?.[0]
+      if (!firstPermission) {
+        console.warn('No browse permission found, cannot redirect.')
+        return
+      }
 
-  // Optional: filtered permission list (can be used if needed)
-  const filteredPermissions = permissions.filter((item: any) =>
-    browsePermissions.some(
-      (perm: any) => perm.action === item.action && perm.subject === item.subject
-    )
-  )
-  log(filteredPermissions, 'Filtered Permissions')
+      // Optional: filtered permission list (can be used if needed)
+      const filteredPermissions = permissions.filter((item: any) =>
+        browsePermissions.some(
+          (perm: any) => perm.action === item.action && perm.subject === item.subject
+        )
+      )
+      log(filteredPermissions, 'Filtered Permissions')
 
-  // Construct user object with abilities
-  const userData = {
-    ...data?.payload,
-    ability: permissions.concat(extraPermissions)
-  }
+      // Construct user object with abilities
+      const userData = {
+        ...data?.payload,
+        ability: permissions.concat(extraPermissions)
+      }
 
-  // Dispatch login and show toast
-  dispatch(handleLogin(userData))
-  SuccessToast(successMessage)
+      // Dispatch login and show toast
+      dispatch(handleLogin(userData))
+      SuccessToast(successMessage)
 
-  // Update ability
-  ability.update(userData.ability)
+      // Update ability
+      ability.update(userData.ability)
 
-  // Handle redirection
-  if (redirect) {
-    if (data?.payload?.role_id === 1) {
-      window.location.href = '/report'
-      return
+      // Handle redirection
+      if (redirect) {
+        if (data?.payload?.role_id === 1) {
+          window.location.href = '/report'
+          return
+        }
+
+        // Subject to route mapping
+        const redirectMap: Record<string, string> = {
+          dashboard: '/dashboard',
+          unit: '/unit',
+          cafe: '/cafe',
+          order: '/order',
+          adminEmployee: '/commons/employee',
+          menu: '/menus',
+          category: '/category',
+          product: '/product',
+          employee: '/commons/employee',
+          salary: '/commons/salary',
+          customer: '/customer',
+          customerAccount: '/account',
+          expense: '/expense',
+          attendence: '/attendance',
+          OnlyForCafe: '/sub-cafe',
+          role: '/role',
+          wastage: '/manage-wastage',
+          'stock-history-browse': '/stock-manage-log',
+          'stock-transfer': '/stock-transfer',
+          'pull-data': '/pull-data',
+          'opening-stock': '/cafe-opening-stock',
+          brand: '/brand',
+          catsubcat: '/warehouse-category',
+          item: '/item',
+          'item-prchase': '/purchase-item',
+          stockManage: '/stockmanage'
+        }
+
+        const redirectPath = redirectMap[firstPermission.subject]
+        if (redirectPath) {
+          window.location.href = redirectPath
+        } else {
+          console.warn('No redirect path matched for:', firstPermission.subject)
+        }
+      }
+
+      // Optional: success callback
+      success(data)
     }
-
-    // Subject to route mapping
-    const redirectMap: Record<string, string> = {
-      dashboard: '/dashboard',
-      unit: '/unit',
-      cafe: '/cafe',
-      order: '/order',
-      adminEmployee: '/commons/employee',
-      menu: '/menus',
-      category: '/category',
-      product: '/product',
-      employee: '/commons/employee',
-      salary: '/commons/salary',
-      customer: '/customer',
-      customerAccount: '/account',
-      expense: '/expense',
-      attendence: '/attendance',
-      OnlyForCafe: '/sub-cafe',
-      role: '/role',
-      wastage: '/manage-wastage',
-      'stock-history-browse': '/stock-manage-log',
-      'stock-transfer': '/stock-transfer',
-      'pull-data': '/pull-data',
-      'opening-stock': '/cafe-opening-stock',
-      brand: '/brand',
-      catsubcat: '/warehouse-category',
-      item: '/item',
-      'item-prchase': '/purchase-item',
-      stockManage: '/stockmanage'
-    }
-
-    const redirectPath = redirectMap[firstPermission.subject]
-    if (redirectPath) {
-      window.location.href = redirectPath
-    } else {
-      console.warn('No redirect path matched for:', firstPermission.subject)
-    }
-  }
-
-  // Optional: success callback
-  success(data)
-}
 
   })
 }

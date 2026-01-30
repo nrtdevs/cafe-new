@@ -274,7 +274,7 @@ const UserDropdown = () => {
             </DropdownItem>
           )}
 
-          <DropdownItem tag={Link} onClick={handlePassModal}>
+          <DropdownItem onClick={handlePassModal}>
             <Lock size={14} className='me-75' />
             <span className='align-middle'>{FM('change-password')}</span>
           </DropdownItem>

@@ -107,21 +107,21 @@ export default [
         ...Permissions.reportBrowse
       },
       {
-        id: 'menuReport',
+        id: 'menuReport-item',
         title: 'Menu Report',
         icon: <Circle size={12} />,
         navLink: getPath('menu-wise-report'),
         ...Permissions.reportBrowse
       },
       {
-        id: 'menu-Report',
+        id: 'menu-Report-weekly',
         title: 'Weekly Cafe sales',
         icon: <Circle size={12} />,
         navLink: getPath('cafe-wise-sale'),
         ...Permissions.reportBrowse
       },
       {
-        id: 'menu-Report',
+        id: 'menu-Report-weekly-menu',
         title: 'Weekly Menu sales',
         icon: <Circle size={12} />,
         navLink: getPath('menu-wise-sale'),
@@ -150,7 +150,7 @@ export default [
       }
     ]
   },
-   {
+  {
     id: 'demand-products',
     title: 'Demand Product',
     icon: <Menu size={20} />,
@@ -161,7 +161,7 @@ export default [
   },
 
 
-    {
+  {
     id: 'demand-product',
     title: 'Demand Product',
     icon: <Menu size={20} />,
@@ -171,7 +171,7 @@ export default [
     ...Permissions.brandBrowse
   },
 
- 
+
 
   //sub-cafe
   {
@@ -370,7 +370,7 @@ export default [
     // badgeText: '12',
     children: [
       {
-        id: 'employeeList',
+        id: 'employeeList-admin',
         title: 'Employee List',
         icon: <Users size={12} />,
         navLink: getPath('employee.list'),
@@ -378,7 +378,7 @@ export default [
         ...Permissions.adminEmployeeBrowse
       },
       {
-        id: 'employeeList',
+        id: 'employeeList-user',
         title: 'Employee List',
         icon: <Users size={12} />,
         navLink: getPath('employees'),
@@ -438,8 +438,8 @@ export default [
       }
     ]
   },
-     {
-    id: 'quantity-mismatch-list',
+  {
+    id: 'quantity-mismatch-list-1',
     title: 'Quantity Mismatch',
     icon: <ArrowDownLeft size={20} />,
     badge: 'light-success',
@@ -449,8 +449,8 @@ export default [
   },
 
 
-    {
-    id: 'quantity-mismatch-lists',
+  {
+    id: 'quantity-mismatch-lists-2',
     title: 'Quantity Mismatch',
     icon: <ArrowDownLeft size={20} />,
     badge: 'light-success',

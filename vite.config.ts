@@ -24,9 +24,10 @@ export default defineConfig({
       }
     })
   ],
-  define: {
-    global: 'globalThis'
-  },
+  // define: {
+  //   global: 'window',
+  //   'process.env': {}
+  // },
   server: {
     port: 3000,
     cors: {
@@ -47,6 +48,7 @@ export default defineConfig({
     // },
   },
   resolve: {
+    mainFields: ['browser', 'module', 'main'],
     alias: [
       {
         find: /^~.+/,
@@ -107,10 +109,6 @@ export default defineConfig({
         replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6'
       },
       {
-        find: 'process',
-        replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6'
-      },
-      {
         find: '@components',
         replacement: path.resolve(__dirname, 'src/@core/components')
       },
@@ -131,6 +129,7 @@ export default defineConfig({
   //     jsx: 'automatic'
   //   },
   optimizeDeps: {
+    include: ['react-router-dom', 'react-router', 'history', 'axios'],
     esbuildOptions: {
       loader: {
         '.js': 'jsx'
@@ -153,6 +152,9 @@ export default defineConfig({
     }
   },
   build: {
+    commonjsOptions: {
+      transformMixedEsModules: true
+    },
     rollupOptions: {
       plugins: [rollupNodePolyFill()]
     }
