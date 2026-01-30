@@ -35,7 +35,7 @@ import { RenderHeaderMenu } from '@src/utility/context/RenderHeader'
 import ApiEndpoints from '@src/utility/http/ApiEndpoints'
 import { loadDropdown } from '@src/utility/http/Apis/dropdowns'
 import { stateReducer } from '@src/utility/stateReducer'
-import { Fragment, useContext, useEffect, useReducer } from 'react'
+import React, { Fragment, useContext, useEffect, useReducer } from 'react'
 import { TableColumn } from 'react-data-table-component'
 import { Edit, Eye, List, Menu, Plus, PlusCircle, RefreshCcw, Trash2 } from 'react-feather'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -153,6 +153,7 @@ const DemandProduct = (props: any) => {
   // delete mutation
   const [menuDelete, deleteResp] = useDeleteDemandByIdMutation()
 
+  // "sass": "^1.51.0",
  
 
   // default states
@@ -372,7 +373,7 @@ const DemandProduct = (props: any) => {
 
   // open view modal
   useEffect(() => {
-    if (isValid(state.editData && state?.enableEdit)) {
+    if (isValid(state?.editData && state?.enableEdit)) {
       setValues<menusResponseTypes>(
         {
           id: state.selectedUser?.id,
@@ -386,7 +387,7 @@ const DemandProduct = (props: any) => {
            
 
 
-          demand_date: state?.editData.demand_date,
+          demand_date: state?.editData?.demand_date,
    
           items: state?.editData?.requested_products?.map((recipe: any) => {
             return {
@@ -500,20 +501,20 @@ const DemandProduct = (props: any) => {
                               control={form.control}
                               async
                               isClearable
-                              isDisabled={state.editData?.create_menu === 1}
+                              isDisabled={state?.editData?.create_menu === 1}
                               label='Product'
                               name={`items.${index}.item_id`}
                               loadOptions={loadDropdown}
-                              jsonData={
-                                state.editData
-                                  ? ''
-                                  : form.setValue(`items.${index}.unit_id`, {
-                                      label: form.watch(`items.${index}.item_id`)?.extra?.unit
-                                        ?.name,
-                                      value: form.watch(`items.${index}.item_id`)?.extra
-                                        ?.unit_id
-                                    })
-                              }
+                              // jsonData={
+                              //   state.editData
+                              //     ? ''
+                              //     : form.setValue(`items.${index}.unit_id`, {
+                              //         label: form.watch(`items.${index}.item_id`)?.extra?.unit
+                              //           ?.name,
+                              //         value: form.watch(`items.${index}.item_id`)?.extra
+                              //           ?.unit_id
+                              //       })
+                              // }
                               onChangeValue={(e) => {
                                 let isDuplicate = false
                                 fields.forEach((i: any, idx) => {
@@ -527,9 +528,14 @@ const DemandProduct = (props: any) => {
                                   }
                                 })
 
+                                
+
                                 if (!isDuplicate) {
                                   form.setValue(`items.${index}.item_id`, e)
-                                  form.clearErrors(`items.${index}.item_id`)
+                                  form.setValue(`items.${index}.unit_id`, {
+                                    label: e?.extra?.unit?.name,
+                                    value: e?.extra?.unit_id
+                                  })
                                 }
                               }}
                               path={ApiEndpoints.products}
@@ -544,10 +550,11 @@ const DemandProduct = (props: any) => {
 
                           <Col md='4'>
                             <FormGroupCustom
+                              key={`${form.watch(`items.${index}.item_id`)}`}
                               control={form.control}
                               async
                               isClearable
-                              isDisabled={state.editData?.create_menu === 1}
+                            
                               label='unit'
                               name={`items.${index}.unit_id`}
                               loadOptions={loadDropdown}
@@ -564,7 +571,7 @@ const DemandProduct = (props: any) => {
                           <Col md='4'>
                             <FormGroupCustom
                               defaultValue={1}
-                              isDisabled={state.editData?.create_menu === 1}
+                            
                               name={`items.${index}.quantity`}
                               type={'number'}
                               label={'Quantity'}
@@ -573,6 +580,24 @@ const DemandProduct = (props: any) => {
                               rules={{ required: true, min: 1 }}
                             />
                           </Col>
+          
+                          { <Col md='3'>
+                             Brand:{`${state?.editData?.requested_products?.[index]?.brand?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.brand?.name}`:form.watch(`items.${index}.item_id`)?.extra?.brand?.name}
+                          </Col>}
+
+                             { <Col md='3'>
+                            Packsize:{`${state?.editData?.requested_products?.[index]?.packsize?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.packsize?.name}`:form.watch(`items.${index}.item_id`)?.extra?.packsize?.name}
+                          </Col>}
+
+                              { <Col md='3'>
+                            Category:{`${state?.editData?.requested_products?.[index]?.category?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.category?.name}`:form.watch(`items.${index}.item_id`)?.extra?.category?.name}
+                          </Col>}
+
+                              { <Col md='3'>
+                            Subcategory:{`${state?.editData?.requested_products?.[index]?.subcategory?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.subcategory?.name}`:form.watch(`items.${index}.item_id`)?.extra?.subcategory?.name}
+                          </Col>}
+                        
+                        
                         </Row>
                       </Col>
                       <Col md='3' className='mt-1'>
@@ -698,32 +723,39 @@ const DemandProduct = (props: any) => {
             </Col>
           </Row>
 
-          <div className='row my-2 mx-1 justify-content-center'>
-            <table className='table table-striped table-borderless'>
-              <thead style={{ backgroundColor: '#84B0CA' }} className='text-black'>
-                <tr>
-                  <th scope='col'>#</th>
-                  <th scope='col'>Product</th>
-                  <th scope='col'>Quantity</th>
-                  <th scope='col'>Unit name</th>
-                </tr>
-              </thead>
-              <tbody>
-                {state.selectedUser?.requested_products?.map((item: any, index: any) => {
-                  return (
-                    <>
-                      <tr>
-                        <th scope='row'>{index + 1}</th>
-                        <td>{item?.product?.name}</td>
-                        <td>{item?.quantity}</td>
-                        <td>{item?.unit?.name}</td>
-                      </tr>
-                    </>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+         <div className="row my-3 mx-1 justify-content-center">
+  <div className="col-12 table-responsive">
+    <table className="table table-striped table-hover table-bordered text-center">
+      <thead className="text-white" style={{ backgroundColor: '#84B0CA' }}>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Unit</th>
+          <th scope="col">Brand</th>
+          <th scope="col">Pack Size</th>
+          <th scope="col">Category</th>
+          <th scope="col">Sub Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {state.selectedUser?.requested_products?.map((item: any, index: number) => (
+          <tr key={item.id || index}>
+            <th scope="row">{index + 1}</th>
+            <td>{item?.product?.name || '-'}</td>
+            <td>{item?.quantity || '-'}</td>
+            <td>{item?.unit?.name || '-'}</td>
+            <td>{item?.brand?.name || '-'}</td>
+            <td>{item?.packsize?.name || '-'}</td>
+            <td>{item?.category?.name || '-'}</td>
+            <td>{item?.subcategory?.name || '-'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
           
         </div>
       </CenteredModal>

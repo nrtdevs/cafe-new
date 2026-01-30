@@ -376,9 +376,14 @@ const CreateTransferItem = (props: any) => {
                       <Row className='g'>
                         <Col md='3'>
                           <FormGroupCustom
+                            key={`${field?.id} -${viewOrders?.requested_products[index]?.warehouse_product?.name}`}
                             control={form.control}
                             async
                             isClearable
+                            defaultValue={{
+                              label: viewOrders?.requested_products[index]?.warehouse_product?.name,
+                              value: viewOrders?.requested_products[index]?.warehouse_product_product_id
+                            }}
                             label='Item'
                             name={`items.${index}.item_id`}
                             loadOptions={loadDropdown}
@@ -422,10 +427,15 @@ const CreateTransferItem = (props: any) => {
                         
 
                         <Col md='2'>
-                          <FormGroupCustom
+                           <FormGroupCustom
+                            key={`${field?.id} -${viewOrders?.requested_products[index]?.warehouse_product_product_id?.extra?.unit?.name}`}
                             control={form.control}
                             async
                             label='unit'
+                            defaultValue={{
+                              label: viewOrders?.requested_products[index]?.warehouse_product_product_id?.extra?.unit?.name,
+                              value: viewOrders?.requested_products[index]?.warehouse_product_product_id?.extra?.unit?.id
+                            }}
                             name={`items.${index}.unit_id`}
                             loadOptions={loadDropdown}
                             path={ApiEndpoints.unitList}
@@ -504,12 +514,13 @@ const CreateTransferItem = (props: any) => {
                             }}
                           /> */}
                           <FormGroupCustom
-                            key={field.id}
+                            key={`${field?.id} - ${viewOrders?.requested_products[index]?.quantity}`}
                             name={`items.${index}.quantity`}
                             type='number'
                             label='Quantity'
                             className='mb-0'
                             control={form.control}
+                            defaultValue={viewOrders?.requested_products[index]?.quantity}
                             rules={{ required: true }}
                             onChangeValue={(e) => {
                               let value = parseFloat(e.target.value) // ✅ Always parse as float
@@ -540,7 +551,9 @@ const CreateTransferItem = (props: any) => {
                         </Col>
                         <Col md='2'>
                           <FormGroupCustom
+                            key={`${field?.id} - ${viewOrders?.requested_products[index]?.warehouse_product_last_average_price}`}
                             name={`items.${index}.rate`}
+                            defaultValue={viewOrders?.requested_products[index]?.warehouse_product_last_average_price}
                             type={'number'}
                             label={'Rate'}
                             className='mb-0'
@@ -550,7 +563,9 @@ const CreateTransferItem = (props: any) => {
                         </Col>
                         <Col md='2'>
                           <FormGroupCustom
+                            key={`${field?.id} - ${viewOrders?.requested_products[index]?.warehouse_product_last_average_price} - ${viewOrders?.requested_products[index]?.quantity}`}
                             name={`items.${index}.totalRate`}
+                            defaultValue={viewOrders?.requested_products[index]?.quantity  * viewOrders?.requested_products[index]?.warehouse_product_last_average_price}
                             type={'number'}
                             label={'Total Rate'}
                             className='mb-0 pointer-events-none'

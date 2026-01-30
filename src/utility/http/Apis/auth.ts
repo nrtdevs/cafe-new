@@ -33,6 +33,7 @@ export const login = ({
   navigate = (e: any) => {},
   error = (e: any) => {}
 }) => {
+  console.log(formData,'formData')
   http.request({
     jsonData: formData,
     method: 'post',

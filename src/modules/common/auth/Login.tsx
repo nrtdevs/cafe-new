@@ -27,8 +27,8 @@ import { login } from '@src/utility/http/Apis/auth'
 import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 const defaultValues = {
-    //   password: '12345678',
-    //   email: 'admin@gmail.com'
+      password: '',
+      email: ''
 }
 
 const extraPermissions = [

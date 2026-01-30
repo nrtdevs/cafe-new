@@ -17,124 +17,124 @@ const ApexLineChart = ({
   chartData: any
 }) => {
   // ** Chart Options
-  const options: ApexOptions = {
-    chart: {
-      toolbar: {
-        show: true,
-        offsetX: 0,
-        offsetY: 0,
-        tools: {
-          download: true,
-          selection: true,
-          zoom: true,
-          zoomin: true,
-          zoomout: true,
-          pan: true,
-          // reset: true | '<img src="/static/icons/reset.png" width="20">',
-          customIcons: []
-        },
-        export: {
-          csv: {
-            filename: undefined,
-            columnDelimiter: ',',
-            headerCategory: 'category',
-            headerValue: 'value',
-            dateFormatter(timestamp: any) {
-              return new Date(timestamp).toDateString()
-            }
-          },
-          svg: {
-            filename: undefined
-          },
-          png: {
-            filename: undefined
-          }
-        },
-        autoSelected: 'zoom'
-      }
-    },
+  // const options: ApexOptions = {
+  //   chart: {
+  //     toolbar: {
+  //       show: true,
+  //       offsetX: 0,
+  //       offsetY: 0,
+  //       tools: {
+  //         download: true,
+  //         selection: true,
+  //         zoom: true,
+  //         zoomin: true,
+  //         zoomout: true,
+  //         pan: true,
+  //         // reset: true | '<img src="/static/icons/reset.png" width="20">',
+  //         customIcons: []
+  //       },
+  //       export: {
+  //         csv: {
+  //           filename: undefined,
+  //           columnDelimiter: ',',
+  //           headerCategory: 'category',
+  //           headerValue: 'value',
+  //           dateFormatter(timestamp: any) {
+  //             return new Date(timestamp).toDateString()
+  //           }
+  //         },
+  //         svg: {
+  //           filename: undefined
+  //         },
+  //         png: {
+  //           filename: undefined
+  //         }
+  //       },
+  //       autoSelected: 'zoom'
+  //     }
+  //   },
 
-    markers: {
-      strokeWidth: 1,
-      strokeOpacity: 1,
-      strokeColors: [
-        '#194798',
-        '#f9a825',
-        '#00d25b',
-        '#ff5b5b',
-        '#7367f0',
-        '#00cfe8',
-        '#fcb92c',
-        '#ff679b',
-        '#1ee0ac'
-      ],
-      colors: [
-        '#194798',
-        '#f9a825',
-        '#00d25b',
-        '#ff5b5b',
-        '#7367f0',
-        '#00cfe8',
-        '#fcb92c',
-        '#ff679b',
-        '#1ee0ac'
-      ]
-    },
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'straight'
-    },
-    colors: [
-      '#194798',
-      '#f9a825',
-      '#00d25b',
-      '#ff5b5b',
-      '#7367f0',
-      '#00cfe8',
-      '#fcb92c',
-      '#ff679b',
-      '#1ee0ac'
-    ],
-    grid: {
-      xaxis: {
-        lines: {
-          show: true
-        }
-      }
-    },
-    tooltip: {
-      custom(data) {
-        return `<div class='px-1 py-50'>
-              <span>${data.series[data.seriesIndex][data.dataPointIndex]}%</span>
-            </div>`
-      }
-    },
-    xaxis: {
-      categories: isValidArray(chartData?.data)
-        ? chartData?.data?.map((a: any) => formatDate(a?.date, 'DD MMM YYYY'))
-        : []
-    },
-    yaxis: {
-      opposite: direction === 'rtl'
-    }
-  }
+  //   markers: {
+  //     strokeWidth: 1,
+  //     strokeOpacity: 1,
+  //     strokeColors: [
+  //       '#194798',
+  //       '#f9a825',
+  //       '#00d25b',
+  //       '#ff5b5b',
+  //       '#7367f0',
+  //       '#00cfe8',
+  //       '#fcb92c',
+  //       '#ff679b',
+  //       '#1ee0ac'
+  //     ],
+  //     colors: [
+  //       '#194798',
+  //       '#f9a825',
+  //       '#00d25b',
+  //       '#ff5b5b',
+  //       '#7367f0',
+  //       '#00cfe8',
+  //       '#fcb92c',
+  //       '#ff679b',
+  //       '#1ee0ac'
+  //     ]
+  //   },
+  //   dataLabels: {
+  //     enabled: false
+  //   },
+  //   stroke: {
+  //     curve: 'straight'
+  //   },
+  //   colors: [
+  //     '#194798',
+  //     '#f9a825',
+  //     '#00d25b',
+  //     '#ff5b5b',
+  //     '#7367f0',
+  //     '#00cfe8',
+  //     '#fcb92c',
+  //     '#ff679b',
+  //     '#1ee0ac'
+  //   ],
+  //   grid: {
+  //     xaxis: {
+  //       lines: {
+  //         show: true
+  //       }
+  //     }
+  //   },
+  //   tooltip: {
+  //     custom(data) {
+  //       return `<div class='px-1 py-50'>
+  //             <span>${data.series[data.seriesIndex][data.dataPointIndex]}%</span>
+  //           </div>`
+  //     }
+  //   },
+  //   xaxis: {
+  //     categories: isValidArray(chartData?.data)
+  //       ? chartData?.data?.map((a: any) => formatDate(a?.date, 'DD MMM YYYY'))
+  //       : []
+  //   },
+  //   yaxis: {
+  //     opposite: direction === 'rtl'
+  //   }
+  // }
 
-  // ** Chart Series
-  const series = [
-    {
-      data: isValidArray(chartData?.data) ? chartData?.data?.map((a: any) => a?.taskCount) : []
-    },
-    {
-      data: isValidArray(chartData?.data)
-        ? chartData?.data?.map((a: any) => a?.taskCount - rand(1, 10))
-        : []
-    }
-    // {
-    //   data: [0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 300]
-    // }
-  ]
+  // // ** Chart Series
+  // const series = [
+  //   {
+  //     data: isValidArray(chartData?.data) ? chartData?.data?.map((a: any) => a?.taskCount) : []
+  //   },
+  //   {
+  //     data: isValidArray(chartData?.data)
+  //       ? chartData?.data?.map((a: any) => a?.taskCount - rand(1, 10))
+  //       : []
+  //   }
+  //   // {
+  //   //   data: [0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 100, 0, 300]
+  //   // }
+  // ]
 
   return (
     <Card>
@@ -154,7 +154,7 @@ const ApexLineChart = ({
         </div>
       </CardHeader>
       <CardBody>
-        <Chart options={options} series={series} type='line' height={400} />
+        {/* <Chart options={options} series={series} type='line' height={400} /> */}
       </CardBody>
     </Card>
   )

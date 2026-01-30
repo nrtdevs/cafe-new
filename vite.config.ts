@@ -38,7 +38,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        includePaths: ['node_modules', './src/assets']
+        includePaths: ['node_modules', './src/assets'],
+        quietDeps: true // 🔥 MOST IMPORTANT FIX
       }
     }
     // postcss: {

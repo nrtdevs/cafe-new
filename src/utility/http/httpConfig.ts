@@ -1,7 +1,8 @@
 // ** Api Endpoints
 
 // const domain = 'cafeapi.chjind.com'
-const domain = 'www.cafeapi.gofactz.com'
+// const domain = 'www.cafeapi.gofactz.com'
+const domain = 'cafeapiv2.chjind.com'
 
 export default {
   // ** This will be prefixed in authorization header with token

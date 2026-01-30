@@ -461,13 +461,13 @@ const MeetingList = (props: any) => {
                                             name='meeting_time_end'
                                             type='time'
                                             className='mb-1'
-                                            datePickerOptions={{
-                                                minDate: form.watch('meeting_time_start')
-                                                    ? new Date(
-                                                        `${formatDate(new Date())} ${form.watch('meeting_time_start')}` ?? ''
-                                                    )
-                                                    : new Date()
-                                            }}
+                                            // datePickerOptions={{
+                                            //     minDate: form.watch('meeting_time_start')
+                                            //         ? new Date(
+                                            //             `${formatDate(new Date())} ${form.watch('meeting_time_start')}` ?? ''
+                                            //         )
+                                            //         : new Date()
+                                            // }}
                                             rules={{ required: true }}
                                         />
                                     </Col>
