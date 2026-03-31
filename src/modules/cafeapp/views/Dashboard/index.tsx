@@ -147,9 +147,16 @@ function Dashboard(props: any) {
   const viewOrders: orderResponseTypes = viewOrderRes?.data?.payload
   const [ChildLogin, createChildLogin] = useCafeChLoginMutation()
   const users = useUser()
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const menuDataS = isValidArray(menuData) ? menuData : []
+
+  useEffect(() => {
+    if (orderRes?.isSuccess === false) {
+      setLoading(false)
+    }
+  }, [orderRes])
 
   //cafe child login
   useEffect(() => {
@@ -225,7 +232,7 @@ function Dashboard(props: any) {
   useEffect(() => {
     setHeaderMenu(
       <>
-        <Show IF={users?.parentLogin === true}>
+        <Show IF={users?.parentLogin === true || users?.parent_key !== null}>
           <BsTooltip<ButtonProps>
             className='btn btn-primary btn-sm'
             color='primary'
@@ -327,35 +334,35 @@ function Dashboard(props: any) {
           form.watch('payment_mode')?.value === 1
             ? Number(userData?.payable_amount)
             : form.watch('payment_mode')?.value === 3
-            ? Number(userData?.cash_amount)
-            : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 1
-            ? Number(userData?.cash_amount)
-            : form.watch('payment_mode')?.value === 4
-            ? Number(userData?.cash_amount)
-            : 0,
+              ? Number(userData?.cash_amount)
+              : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 1
+                ? Number(userData?.cash_amount)
+                : form.watch('payment_mode')?.value === 4
+                  ? Number(userData?.cash_amount)
+                  : 0,
         online_amount:
           form.watch('payment_mode')?.value === 2
             ? Number(userData?.payable_amount)
             : form.watch('payment_mode')?.value === 3
-            ? Number(userData?.online_amount)
-            : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 1
-            ? Number(userData?.online_amount)
-            : form.watch('payment_mode')?.value === 4
-            ? Number(userData?.online_amount)
-            : 0,
+              ? Number(userData?.online_amount)
+              : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 1
+                ? Number(userData?.online_amount)
+                : form.watch('payment_mode')?.value === 4
+                  ? Number(userData?.online_amount)
+                  : 0,
         udhaar_amount:
           (form.watch('customer_id') && form.watch('order_status'))?.value === 1
             ? userData?.udhaar_amount
             : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 3
-            ? Number(form.watch('udhaar_amount'))
-            : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 1
-            ? Number(userData?.payable_amount)
-            : 0,
+              ? Number(form.watch('udhaar_amount'))
+              : form.watch('payment_mode')?.value === 3 && form.watch('order_status')?.value === 1
+                ? Number(userData?.payable_amount)
+                : 0,
         payment_received: userData?.payment_received ? Number(userData?.payment_received) : 0,
         discount: Number(userData?.discount) ?? 0,
         order_duration: Math.round(
           state.menuArr?.reduce((a: any, b: any) => a + b?.order_duration, 0) /
-            state.menuArr?.length
+          state.menuArr?.length
         ),
         order_details: state.menuArr.map((d: any, i: any) => {
           let taxs = (d.price * d.buy_quantity * d?.category?.tax) / 100
@@ -427,24 +434,24 @@ function Dashboard(props: any) {
         send_invoice_to_whats_app: viewOrders?.send_invoice_to_whats_app === true ? 1 : 0,
         payment_mode: viewOrders?.payment_mode
           ? {
-              label:
-                viewOrders?.payment_mode === 1
-                  ? 'CASH'
-                  : viewOrders?.payment_mode === 2
+            label:
+              viewOrders?.payment_mode === 1
+                ? 'CASH'
+                : viewOrders?.payment_mode === 2
                   ? 'ONLINE'
                   : viewOrders?.payment_mode === 3
-                  ? 'UDHAR'
-                  : viewOrders?.payment_mode === 4
-                  ? 'SPLIT'
-                  : '',
-              value: viewOrders?.payment_mode
-            }
+                    ? 'UDHAR'
+                    : viewOrders?.payment_mode === 4
+                      ? 'SPLIT'
+                      : '',
+            value: viewOrders?.payment_mode
+          }
           : undefined,
         customer_id: viewOrders?.customer_id
           ? {
-              label: viewOrders?.customer?.name,
-              value: viewOrders?.customer_id
-            }
+            label: viewOrders?.customer?.name,
+            value: viewOrders?.customer_id
+          }
           : undefined,
 
         order_details: viewOrders?.order_details?.map((d: orderContainsResponseTypes, i: any) => {
@@ -841,7 +848,7 @@ function Dashboard(props: any) {
                     />
                   </Col>
                   {form.watch('order_status')?.value === 3 &&
-                  form.watch('payment_mode')?.value === 3 ? (
+                    form.watch('payment_mode')?.value === 3 ? (
                     <>
                       <Col md='3'>
                         <FormGroupCustom
@@ -946,7 +953,7 @@ function Dashboard(props: any) {
                         {Number(form.watch('discount')) > 0 ? (
                           <>
                             {Number(form.watch('discount_amount')) ==
-                            Number(form.watch('cash_amount')) +
+                              Number(form.watch('cash_amount')) +
                               Number(form.watch('online_amount')) ? (
                               <></>
                             ) : (
@@ -958,7 +965,7 @@ function Dashboard(props: any) {
                         ) : (
                           <>
                             {Number(form.watch('payable_amount')) ==
-                            Number(form.watch('cash_amount')) +
+                              Number(form.watch('cash_amount')) +
                               Number(form.watch('online_amount')) ? (
                               <></>
                             ) : (
@@ -1018,11 +1025,11 @@ function Dashboard(props: any) {
                       type='number'
                       className='mb-1 me-1'
                       rules={{ required: false }}
-                      //   append={
-                      //     <InputGroupText>
-                      //       <span>%</span>
-                      //     </InputGroupText>
-                      //   }
+                    //   append={
+                    //     <InputGroupText>
+                    //       <span>%</span>
+                    //     </InputGroupText>
+                    //   }
                     />
                   </Col>
 
@@ -1045,8 +1052,8 @@ function Dashboard(props: any) {
                   </Col> */}
                   <Col xs='2' className='mt-2'>
                     <LoadingButton
-                      disabled={orderRes?.isLoading}
-                      loading={orderRes?.isLoading}
+                      disabled={loading || orderRes?.isLoading}
+                      loading={loading || orderRes?.isLoading}
                       className='btn-icon me-1'
                       tooltip={'Place Order'}
                       color='primary'
@@ -1092,10 +1099,9 @@ function Dashboard(props: any) {
               <>
                 <Row
                   key={'drdefd'}
-                  className={`session-cart m-0 p-1 g-0 ${
-                    'pb-0'
+                  className={`session-cart m-0 p-1 g-0 ${'pb-0'
                     // isValid(item?.in_offer_cart) ? 'pb-0' : 'border-bottom'
-                  } align-items-start `}
+                    } align-items-start `}
                 >
                   <Col md='12' className=''>
                     <Row className='g-0 mb-50 pt-50'>
@@ -1143,6 +1149,7 @@ function Dashboard(props: any) {
                               const total = form.watch(`order_details.${i}.discount` as any)
                                 ? price * d?.buy_quantity
                                 : price * d?.buy_quantity
+
 
                               return (
                                 <>
@@ -1364,51 +1371,51 @@ function Dashboard(props: any) {
                 <>
                   {isValidArray(menuData)
                     ? menuData?.map((item: menusResponseTypes, index: any) => {
-                        const itemIndex = state.menuArr.findIndex((x) => x.id === item.id)
+                      const itemIndex = state.menuArr.findIndex((x) => x.id === item.id)
 
-                        return (
-                          <>
-                            <div
-                              className='border-bottom cursor-pointer'
-                              onClick={() => handleMenuClick(item)}
-                              style={{
-                                backgroundColor: itemIndex !== -1 ? '#f5f5f5' : '#fff'
-                              }}
-                            >
-                              <Row>
-                                <Col md='3'>
-                                  <img
-                                    src={item?.image_path ?? logo}
-                                    className='img-fluid m-1'
-                                    alt='Menu image'
-                                  />
-                                </Col>
+                      return (
+                        <>
+                          <div
+                            className='border-bottom cursor-pointer'
+                            onClick={() => handleMenuClick(item)}
+                            style={{
+                              backgroundColor: itemIndex !== -1 ? '#f5f5f5' : '#fff'
+                            }}
+                          >
+                            <Row>
+                              <Col md='3'>
+                                <img
+                                  src={item?.image_path ?? logo}
+                                  className='img-fluid m-1'
+                                  alt='Menu image'
+                                />
+                              </Col>
 
-                                <Col md='7'>
-                                  <h4 className='text-primary text-capitalize mt-1'>
-                                    {item?.name}
-                                  </h4>
+                              <Col md='7'>
+                                <h4 className='text-primary text-capitalize mt-1'>
+                                  {item?.name}
+                                </h4>
 
-                                  <p className='mb-0'>
-                                    <span className='fw-bolder'>Price:</span> {item?.price}
-                                  </p>
-                                </Col>
+                                <p className='mb-0'>
+                                  <span className='fw-bolder'>Price:</span> {item?.price}
+                                </p>
+                              </Col>
 
-                                <Col md='2' className=''>
-                                  <div className='mt-1'>
-                                    {itemIndex !== -1 ? (
-                                      <p>{state.menuArr[itemIndex].buy_quantity}</p>
-                                    ) : (
-                                      ''
-                                    )}
-                                  </div>
-                                  {itemIndex !== -1 ? <Check className='text-success' /> : ''}
-                                </Col>
-                              </Row>
-                            </div>
-                          </>
-                        )
-                      })
+                              <Col md='2' className=''>
+                                <div className='mt-1'>
+                                  {itemIndex !== -1 ? (
+                                    <p>{state.menuArr[itemIndex].buy_quantity}</p>
+                                  ) : (
+                                    ''
+                                  )}
+                                </div>
+                                {itemIndex !== -1 ? <Check className='text-success' /> : ''}
+                              </Col>
+                            </Row>
+                          </div>
+                        </>
+                      )
+                    })
                     : null}
                 </>
               )}

@@ -583,8 +583,8 @@ export const Permissions = Object.freeze({
     resource: 'opening-stock',
     belongs_to: 2
   },
- //brand
-   brandBrowse: {
+  //brand
+  brandBrowse: {
     action: 'brand-browse',
     resource: 'brand',
     belongs_to: 7
@@ -609,7 +609,7 @@ export const Permissions = Object.freeze({
     resource: 'brand',
     belongs_to: 7
   },
-   //item
+  //item
   itemBrowse: {
     action: 'item-browse',
     resource: 'item',
@@ -635,18 +635,18 @@ export const Permissions = Object.freeze({
     resource: 'item',
     belongs_to: 7
   },
-   //purchase item
+  //purchase item
   purchaseItemBrowse: {
     action: 'item-prchase-browse',
     resource: 'item-prchase',
     belongs_to: 7
   },
- purchaseItemRead: {
+  purchaseItemRead: {
     action: 'item-prchase-read',
     resource: 'item-prchase',
     belongs_to: 7
   },
-purchaseItemCreate: {
+  purchaseItemCreate: {
     action: 'item-prchase-create',
     resource: 'item-prchase',
     belongs_to: 7
@@ -661,25 +661,25 @@ purchaseItemCreate: {
     resource: 'item-prchase',
     belongs_to: 7
   },
-    purchaseItemImport: {
+  purchaseItemImport: {
     action: 'item-prchase-import',
     resource: 'item-prchase',
     belongs_to: 7
   },
 
- 
+
   //catsubcat
-    catsubcatBrowse: {
+  catsubcatBrowse: {
     action: 'catsubcat-browse',
     resource: 'catsubcat',
     belongs_to: 7
   },
- catsubcatRead: {
+  catsubcatRead: {
     action: 'catsubcat-read',
     resource: 'catsubcat',
     belongs_to: 7
   },
-catsubcatCreate: {
+  catsubcatCreate: {
     action: 'catsubcat-create',
     resource: 'catsubcat',
     belongs_to: 7
@@ -706,7 +706,7 @@ catsubcatCreate: {
     resource: 'warehouse',
     belongs_to: 2
   },
- warehouseCreate: {
+  warehouseCreate: {
     action: 'warehouse-create',
     resource: 'warehouse',
     belongs_to: 2
@@ -728,26 +728,26 @@ catsubcatCreate: {
     resource: 'item-transfer',
     belongs_to: 7
   },
- itemTransferCreate: {
+  itemTransferCreate: {
     action: 'item-transfer-add',
     resource: 'item-transfer',
     belongs_to: 7
   },
- 
- itemTransferDelete: {
+
+  itemTransferDelete: {
     action: 'item-transfer-delete',
     resource: 'item-transfer',
     belongs_to: 7
   },
 
   //employee handover
-   
+
   employeeHanoverRead: {
     action: 'employee-handover-read',
     resource: 'employee-handover',
     belongs_to: 4
   },
-   
+
   employeeHandoverCreate: {
     action: 'employee-handover-add',
     resource: 'employee-handover',
@@ -755,29 +755,29 @@ catsubcatCreate: {
   },
 
   //cash handover list
-    cashHandoverRead: {
+  cashHandoverRead: {
     action: 'cash-handover-read',
     resource: 'cash-handover',
     belongs_to: 2
   },
-   
-   cashHandoverCreate: {
+
+  cashHandoverCreate: {
     action: 'cash-handover-add',
     resource: 'cash-handover',
     belongs_to: 2
   },
-   
-   cashHandoverDelete: {
+
+  cashHandoverDelete: {
     action: 'cash-handover-delete',
     resource: 'cash-handover',
     belongs_to: 2
   },
 
   //cafe setting
-    cafeSettings: {
+  cafeSettings: {
     action: 'cafe_setting',
     resource: 'cafe_setting',
     belongs_to: 2
   },
- 
+
 })

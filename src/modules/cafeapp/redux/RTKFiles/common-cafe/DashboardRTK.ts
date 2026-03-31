@@ -106,7 +106,7 @@ export const DasboardManagement = createApi({
                 path: ApiEndpoints.export_menuwise_report
             })
         }),
-           loadEmployeeRecoveryData: builder.mutation<ResponseListType, RequestType>({
+        loadEmployeeRecoveryData: builder.mutation<ResponseListType, RequestType>({
             query: (args) => ({
                 jsonData: args?.jsonData,
                 params: { page: args?.page, per_page_record: args.per_page_record },
@@ -114,12 +114,20 @@ export const DasboardManagement = createApi({
                 path: ApiEndpoints.employeeRecovery
             })
         }),
-            loadMenuWiseLiveReport: builder.mutation<ResponseListType, RequestType>({
+        loadMenuWiseLiveReport: builder.mutation<ResponseListType, RequestType>({
             query: (args) => ({
                 jsonData: args?.jsonData,
-             
+
                 method: 'post',
                 path: ApiEndpoints.menuWiseMonitoringReport
+            })
+        }),
+        loadExportMenuWiseLiveReport: builder.mutation<ResponseListType, RequestType>({
+            query: (args) => ({
+                jsonData: args?.jsonData,
+
+                method: 'post',
+                path: ApiEndpoints.export_menuWise_Report
             })
         }),
     })
@@ -136,5 +144,6 @@ export const {
     useLoadMenuReportTableMutation,
     useLoadExportMenuOrderDataMutation,
     useLoadEmployeeRecoveryDataMutation,
-    useLoadMenuWiseLiveReportMutation
+    useLoadMenuWiseLiveReportMutation,
+    useLoadExportMenuWiseLiveReportMutation
 } = DasboardManagement

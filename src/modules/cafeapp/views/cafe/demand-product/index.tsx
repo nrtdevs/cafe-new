@@ -1,11 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
-    useCreateOrUpdateDemandMutation,
+  useCreateOrUpdateDemandMutation,
 
   useDeleteDemandByIdMutation,
- 
+
+  useDemandPrintMutation,
+
   useLoadDemandsMutation,
-  
+
 } from '@src/modules/cafeapp/redux/RTKFiles/cafe/MenusRTK'
 import CustomDataTable, {
   TableDropDownOptions,
@@ -37,7 +39,7 @@ import { loadDropdown } from '@src/utility/http/Apis/dropdowns'
 import { stateReducer } from '@src/utility/stateReducer'
 import React, { Fragment, useContext, useEffect, useReducer } from 'react'
 import { TableColumn } from 'react-data-table-component'
-import { Edit, Eye, List, Menu, Plus, PlusCircle, RefreshCcw, Trash2 } from 'react-feather'
+import { Edit, Eye, List, Menu, Plus, PlusCircle, Printer, RefreshCcw, Trash2 } from 'react-feather'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -66,7 +68,7 @@ import { getUserData } from '@src/auth/utils'
 // validation schema
 const userFormSchema = {
   // file: yup.string().required()
- warehouse_id: yup.object().typeError('Please Select Warehouse').required(),
+  warehouse_id: yup.object().typeError('Please Select Warehouse').required(),
   items: yup.array().of(
     yup.object().shape({
       item_id: yup.object().typeError('Please Select Product').required(),
@@ -95,6 +97,7 @@ type States = {
   selectedUser?: menusResponseTypes
   enableEdit?: boolean
   editData?: any
+
 }
 
 const defaultValues: menusResponseTypes = {
@@ -108,7 +111,7 @@ const defaultValues: menusResponseTypes = {
   quantity: '',
   price: '',
   recipes: [],
-  items:[]
+  items: []
 }
 const DemandProduct = (props: any) => {
   // header menu context categoryResponseTypes
@@ -123,11 +126,11 @@ const DemandProduct = (props: any) => {
   const canReadUser = Can(Permissions.productMenuRead)
 
   //can create transfer
-    const canAddTransfer = Can(Permissions.itemTransferCreate)
+  const canAddTransfer = Can(Permissions.itemTransferCreate)
 
-    // console.log(userData,'userdata')
+  console.log(canAddTransfer, 'canAddTransfer')
 
-  const navigate=useNavigate()
+  const navigate = useNavigate()
 
   // form hook
   const form = useForm<menusResponseTypes>({
@@ -153,8 +156,10 @@ const DemandProduct = (props: any) => {
   // delete mutation
   const [menuDelete, deleteResp] = useDeleteDemandByIdMutation()
 
+  //print by mutation
+  const [demandPrint, demandPrintResp] = useDemandPrintMutation()
+
   // "sass": "^1.51.0",
- 
 
   // default states
   const initState: States = {
@@ -203,9 +208,9 @@ const DemandProduct = (props: any) => {
   // handle save menu
   const handleSaveUser = (userData: any) => {
     const data = {
-      
+
       warehouse_id: userData?.warehouse_id?.value,
-      demand_date:userData?.demand_date?formatDate(userData?.demand_date,'YYYY-MM-DD'):'',
+      demand_date: userData?.demand_date ? formatDate(userData?.demand_date, 'YYYY-MM-DD') : '',
       items: userData?.items?.map((item: any) => {
         return {
           item_id: item?.item_id?.value,
@@ -309,7 +314,7 @@ const DemandProduct = (props: any) => {
   // handle filter data
   const handleFilterData = (e: any) => {
     setState({
-      filterData: {subcategory_id:e?.subcategory_id?.value?e?.subcategory_id?.value:undefined,category_id:e?.category_id?.value?e?.category_id?.value:undefined,warehouse_product_category_id:e?.warehouse_product_category_id?.value?e?.warehouse_product_category_id?.value:undefined,warehouse_product_subcategory_id:e?.warehouse_product_subcategory_id?.value?e?.warehouse_product_subcategory_id?.value:undefined,warehouse_product_product_id:e?.warehouse_product_product_id?.value?e?.warehouse_product_product_id?.value:undefined,  product_id: e?.product_id?.value?e?.product_id?.value:undefined,warehouse_id:e?.warehouse_id?.value?e?.warehouse_id?.value:undefined,demand_date:e?.demand_date?formatDate(e?.demand_date,'YYYY-MM-DD'):undefined,cafe_id:e?.cafe_id?.value?e?.cafe_id?.value:undefined},
+      filterData: { subcategory_id: e?.subcategory_id?.value ? e?.subcategory_id?.value : undefined, category_id: e?.category_id?.value ? e?.category_id?.value : undefined, warehouse_product_category_id: e?.warehouse_product_category_id?.value ? e?.warehouse_product_category_id?.value : undefined, warehouse_product_subcategory_id: e?.warehouse_product_subcategory_id?.value ? e?.warehouse_product_subcategory_id?.value : undefined, warehouse_product_product_id: e?.warehouse_product_product_id?.value ? e?.warehouse_product_product_id?.value : undefined, product_id: e?.product_id?.value ? e?.product_id?.value : undefined, warehouse_id: e?.warehouse_id?.value ? e?.warehouse_id?.value : undefined, demand_date: e?.demand_date ? formatDate(e?.demand_date, 'YYYY-MM-DD') : undefined, cafe_id: e?.cafe_id?.value ? e?.cafe_id?.value : undefined },
       page: 1,
       search: '',
       per_page_record: 20
@@ -330,23 +335,23 @@ const DemandProduct = (props: any) => {
   // create a menu on header
   useEffect(() => {
     if (!canAddUser) return
-    if(loadMenuResp?.data?.payload?.creatable===false) return
+    if (loadMenuResp?.data?.payload?.creatable === false) return
     setHeaderMenu(
-      <> 
-      {<NavItem className=''>
+      <>
+        {<NavItem className=''>
           <BsTooltip title={FM('add-demand')}>
             <NavLink className='' onClick={toggleModalAdd}>
               <PlusCircle className={'ficon ' + (modalAdd ? 'text-primary' : '')} />
             </NavLink>
           </BsTooltip>
         </NavItem>}
-     
+
       </>
     )
     return () => {
       setHeaderMenu(null)
     }
-  }, [modalAdd, canAddUser,loadMenuResp?.data?.payload?.creatable])
+  }, [modalAdd, canAddUser, loadMenuResp?.data?.payload?.creatable])
 
   //handle actions
   const handleActions = (ids?: any, action?: any, eventId?: any) => {
@@ -377,31 +382,31 @@ const DemandProduct = (props: any) => {
       setValues<menusResponseTypes>(
         {
           id: state.selectedUser?.id,
-              warehouse_id: state.editData.warehouse_id
+          warehouse_id: state.editData.warehouse_id
             ? {
-                label: state.editData?.warehouse?.name,
-                value: state.editData?.warehouse_id
-              }
+              label: state.editData?.warehouse?.name,
+              value: state.editData?.warehouse_id
+            }
             : undefined,
 
-           
+
 
 
           demand_date: state?.editData?.demand_date,
-   
+
           items: state?.editData?.requested_products?.map((recipe: any) => {
             return {
               item_id: recipe?.product
                 ? {
-                    label: recipe?.product?.name,
-                    value: recipe?.product?.id
-                  }
+                  label: recipe?.product?.name,
+                  value: recipe?.product?.id
+                }
                 : undefined,
               unit_id: recipe?.unit_id
                 ? {
-                    label: recipe?.unit?.name,
-                    value: recipe?.unit_id
-                  }
+                  label: recipe?.unit?.name,
+                  value: recipe?.unit_id
+                }
                 : undefined,
               quantity: recipe.quantity
             }
@@ -431,6 +436,18 @@ const DemandProduct = (props: any) => {
     }
   }, [state.selectedUser])
 
+  const handlePrintData = (data: any) => {
+    demandPrint({
+      id: data?.id
+    })
+  }
+
+  useEffect(() => {
+    if (demandPrintResp?.data?.payload?.url) {
+      window.open(demandPrintResp?.data?.payload?.url, '_blank')
+    }
+  }, [demandPrintResp?.data?.payload?.url])
+
   // create menu modal
   const renderCreateModal = () => {
     return (
@@ -448,7 +465,7 @@ const DemandProduct = (props: any) => {
             <Row>
               <Card>
                 <Row>
-                  
+
                   <Col md='4'>
                     <FormGroupCustom
                       control={form.control}
@@ -466,18 +483,18 @@ const DemandProduct = (props: any) => {
                       rules={{ required: true }}
                     />
                   </Col>
-                   <Col md='4'>
-                        <FormGroupCustom
-                            control={form.control}
-                            label={FM('demand-date')}
-                            name='demand_date'
-                            type='date'
-                            className='mb-1'
+                  <Col md='4'>
+                    <FormGroupCustom
+                      control={form.control}
+                      label={FM('demand-date')}
+                      name='demand_date'
+                      type='date'
+                      className='mb-1'
 
-                            rules={{ required: false }}
-                        />
-                    </Col>
-            
+                      rules={{ required: false }}
+                    />
+                  </Col>
+
                 </Row>
               </Card>
             </Row>
@@ -528,7 +545,7 @@ const DemandProduct = (props: any) => {
                                   }
                                 })
 
-                                
+
 
                                 if (!isDuplicate) {
                                   form.setValue(`items.${index}.item_id`, e)
@@ -554,12 +571,12 @@ const DemandProduct = (props: any) => {
                               control={form.control}
                               async
                               isClearable
-                            
+
                               label='unit'
                               name={`items.${index}.unit_id`}
                               loadOptions={loadDropdown}
                               path={ApiEndpoints.unitList}
-                              
+
                               selectLabel={(e) => `${e.name} `}
                               selectValue={(e) => e.id}
                               defaultOptions
@@ -571,7 +588,7 @@ const DemandProduct = (props: any) => {
                           <Col md='4'>
                             <FormGroupCustom
                               defaultValue={1}
-                            
+
                               name={`items.${index}.quantity`}
                               type={'number'}
                               label={'Quantity'}
@@ -580,24 +597,24 @@ const DemandProduct = (props: any) => {
                               rules={{ required: true, min: 1 }}
                             />
                           </Col>
-          
-                          { <Col md='3'>
-                             Brand:{`${state?.editData?.requested_products?.[index]?.brand?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.brand?.name}`:form.watch(`items.${index}.item_id`)?.extra?.brand?.name}
+
+                          {<Col md='3'>
+                            Brand:{`${state?.editData?.requested_products?.[index]?.brand?.name}` !== 'undefined' ? `${state?.editData?.requested_products?.[index]?.brand?.name}` : form.watch(`items.${index}.item_id`)?.extra?.brand?.name}
                           </Col>}
 
-                             { <Col md='3'>
-                            Packsize:{`${state?.editData?.requested_products?.[index]?.packsize?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.packsize?.name}`:form.watch(`items.${index}.item_id`)?.extra?.packsize?.name}
+                          {<Col md='3'>
+                            Packsize:{`${state?.editData?.requested_products?.[index]?.packsize?.name}` !== 'undefined' ? `${state?.editData?.requested_products?.[index]?.packsize?.name}` : form.watch(`items.${index}.item_id`)?.extra?.packsize?.name}
                           </Col>}
 
-                              { <Col md='3'>
-                            Category:{`${state?.editData?.requested_products?.[index]?.category?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.category?.name}`:form.watch(`items.${index}.item_id`)?.extra?.category?.name}
+                          {<Col md='3'>
+                            Category:{`${state?.editData?.requested_products?.[index]?.category?.name}` !== 'undefined' ? `${state?.editData?.requested_products?.[index]?.category?.name}` : form.watch(`items.${index}.item_id`)?.extra?.category?.name}
                           </Col>}
 
-                              { <Col md='3'>
-                            Subcategory:{`${state?.editData?.requested_products?.[index]?.subcategory?.name}`!=='undefined'?`${state?.editData?.requested_products?.[index]?.subcategory?.name}`:form.watch(`items.${index}.item_id`)?.extra?.subcategory?.name}
+                          {<Col md='3'>
+                            Subcategory:{`${state?.editData?.requested_products?.[index]?.subcategory?.name}` !== 'undefined' ? `${state?.editData?.requested_products?.[index]?.subcategory?.name}` : form.watch(`items.${index}.item_id`)?.extra?.subcategory?.name}
                           </Col>}
-                        
-                        
+
+
                         </Row>
                       </Col>
                       <Col md='3' className='mt-1'>
@@ -723,40 +740,40 @@ const DemandProduct = (props: any) => {
             </Col>
           </Row>
 
-         <div className="row my-3 mx-1 justify-content-center">
-  <div className="col-12 table-responsive">
-    <table className="table table-striped table-hover table-bordered text-center">
-      <thead className="text-white" style={{ backgroundColor: '#84B0CA' }}>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Product</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Unit</th>
-          <th scope="col">Brand</th>
-          <th scope="col">Pack Size</th>
-          <th scope="col">Category</th>
-          <th scope="col">Sub Category</th>
-        </tr>
-      </thead>
-      <tbody>
-        {state.selectedUser?.requested_products?.map((item: any, index: number) => (
-          <tr key={item.id || index}>
-            <th scope="row">{index + 1}</th>
-            <td>{item?.product?.name || '-'}</td>
-            <td>{item?.quantity || '-'}</td>
-            <td>{item?.unit?.name || '-'}</td>
-            <td>{item?.brand?.name || '-'}</td>
-            <td>{item?.packsize?.name || '-'}</td>
-            <td>{item?.category?.name || '-'}</td>
-            <td>{item?.subcategory?.name || '-'}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</div>
+          <div className="row my-3 mx-1 justify-content-center">
+            <div className="col-12 table-responsive">
+              <table className="table table-striped table-hover table-bordered text-center">
+                <thead className="text-white" style={{ backgroundColor: '#84B0CA' }}>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Brand</th>
+                    <th scope="col">Pack Size</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Sub Category</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {state.selectedUser?.requested_products?.map((item: any, index: number) => (
+                    <tr key={item.id || index}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{item?.product?.name || '-'}</td>
+                      <td>{item?.quantity || '-'}</td>
+                      <td>{item?.unit?.name || '-'}</td>
+                      <td>{item?.brand?.name || '-'}</td>
+                      <td>{item?.packsize?.name || '-'}</td>
+                      <td>{item?.category?.name || '-'}</td>
+                      <td>{item?.subcategory?.name || '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-          
+
         </div>
       </CenteredModal>
     )
@@ -787,7 +804,7 @@ const DemandProduct = (props: any) => {
     //     </Fragment>
     //   )
     // },
-   
+
     {
       name: 'demand date',
       sortable: false,
@@ -798,7 +815,7 @@ const DemandProduct = (props: any) => {
         </Fragment>
       )
     },
-        {
+    {
       name: 'status',
       sortable: false,
       id: 'status',
@@ -856,65 +873,77 @@ const DemandProduct = (props: any) => {
                         ]}
                     /> */}
           <ButtonGroup role='group' className='my-2'>
-      
-            
-          
-                <UncontrolledTooltip placement='top' id='view' target='view'>
-                  {'view'}
-                </UncontrolledTooltip>
-                <Button
-                  className='d-flex waves-effect btn btn-secondary btn-sm'
-                  id='view'
-                  color='secondary'
-                  onClick={() => {
-                    setState({
-                      selectedUser: row
-                    })
-                  }}
-                >
-                  <Eye size={14} />
-                </Button>
-           
 
- {canAddTransfer&&<>
-   <Show IF={row?.status === 0}>
- <UncontrolledTooltip placement='top' id='create-item-transfer' target='create-item-transfer'>
-                {'Create Item Transfer'}
-              </UncontrolledTooltip>
-              <Button
-                className='d-flex waves-effect btn btn-dark btn-sm'
-                id='create-item-transfer'
-                color=''
-                onClick={() => {
-                  navigate(getPath('item-transfer-create', { id: row?.id }))
+            <UncontrolledTooltip placement='top' id='print' target='print'>
+              {'Print'}
+            </UncontrolledTooltip>
+            <Button
+              className='d-flex waves-effect btn btn-primary btn-sm'
+              id='print'
+              color='primary'
+              onClick={() => {
+                handlePrintData(row)
+              }}
+            >
+              <Printer size={14} />
+            </Button>
 
-                  //orders-log
-                }}
-              >
-                <Plus size={14} />
-              </Button>
-              </Show>
- </>}
-              
-            
-           
-            {canEditUser ? (
-              <>
-               <Show IF={row?.status === 0}>
-                <UncontrolledTooltip placement='top' id='edit' target='edit'>
-                  {'edit'}
+            <UncontrolledTooltip placement='top' id='view' target='view'>
+              {'view'}
+            </UncontrolledTooltip>
+            <Button
+              className='d-flex waves-effect btn btn-secondary btn-sm'
+              id='view'
+              color='secondary'
+              onClick={() => {
+                setState({
+                  selectedUser: row
+                })
+              }}
+            >
+              <Eye size={14} />
+            </Button>
+
+
+            {canAddTransfer && <>
+              <Show IF={row?.status === 0}>
+                <UncontrolledTooltip placement='top' id='create-item-transfer' target='create-item-transfer'>
+                  {'Create Item Transfer'}
                 </UncontrolledTooltip>
                 <Button
                   className='d-flex waves-effect btn btn-dark btn-sm'
-                  id='edit'
+                  id='create-item-transfer'
                   color=''
                   onClick={() => {
-                    toggleModalAdd()
-                    setState({ editData: row })
+                    navigate(getPath('item-transfer-create', { id: row?.id }))
+
+                    //orders-log
                   }}
                 >
-                  <Edit size={14} />
+                  <Plus size={14} />
                 </Button>
+              </Show>
+            </>}
+
+
+
+            {canEditUser ? (
+              <>
+                <Show IF={row?.status === 0}>
+                  <UncontrolledTooltip placement='top' id='edit' target='edit'>
+                    {'edit'}
+                  </UncontrolledTooltip>
+                  <Button
+                    className='d-flex waves-effect btn btn-dark btn-sm'
+                    id='edit'
+                    color=''
+                    onClick={() => {
+                      toggleModalAdd()
+                      setState({ editData: row })
+                    }}
+                  >
+                    <Edit size={14} />
+                  </Button>
                 </Show>
               </>
             ) : (
@@ -924,26 +953,26 @@ const DemandProduct = (props: any) => {
             {canDeleteUser ? (
               <>
                 <Show IF={row?.status === 0}>
-                <UncontrolledTooltip
-                  placement='top'
-                  id={`grid-delete-${row?.id}`}
-                  target={`grid-delete-${row?.id}`}
-                >
-                  {'delete'}
-                </UncontrolledTooltip>
-                <ConfirmAlert
-                  className='d-flex waves-effect btn btn-danger btn-sm'
-                  eventId={`item-delete-${row?.id}`}
-                  text={FM('are-you-sure')}
-                  title={FM('delete-item', { name: row?.name })}
-                  onClickYes={() => {
-                    handleActions([row?.id], 'delete', `item-delete-${row?.id}`)
-                  }}
-                  onSuccessEvent={onSuccessEvent}
-                  id={`grid-delete-${row?.id}`}
-                >
-                  <Trash2 size={14} id='delete' />
-                </ConfirmAlert>
+                  <UncontrolledTooltip
+                    placement='top'
+                    id={`grid-delete-${row?.id}`}
+                    target={`grid-delete-${row?.id}`}
+                  >
+                    {'delete'}
+                  </UncontrolledTooltip>
+                  <ConfirmAlert
+                    className='d-flex waves-effect btn btn-danger btn-sm'
+                    eventId={`item-delete-${row?.id}`}
+                    text={FM('are-you-sure')}
+                    title={FM('delete-item', { name: row?.name })}
+                    onClickYes={() => {
+                      handleActions([row?.id], 'delete', `item-delete-${row?.id}`)
+                    }}
+                    onSuccessEvent={onSuccessEvent}
+                    id={`grid-delete-${row?.id}`}
+                  >
+                    <Trash2 size={14} id='delete' />
+                  </ConfirmAlert>
                 </Show>
               </>
             ) : (

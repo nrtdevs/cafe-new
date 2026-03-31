@@ -1,69 +1,58 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
     useActionMismatchQuantityIdMutation,
-    useCreateOrUpdateDemandMutation,
-
-  useDeleteDemandByIdMutation,
- 
-  useLoadDemandsMutation,
-  useLoadMismatchListMutation,
-  
+    useDeleteDemandByIdMutation,
+    useLoadMismatchListMutation,
+    useLoadWasteListMutation
 } from '@src/modules/cafeapp/redux/RTKFiles/cafe/MenusRTK'
 import CustomDataTable, {
-  TableDropDownOptions,
-  TableFormData
+    TableDropDownOptions,
+    TableFormData
 } from '@src/modules/common/components/CustomDataTable/CustomDataTable'
 import LoadingButton from '@src/modules/common/components/buttons/LoadingButton'
 import FormGroupCustom from '@src/modules/common/components/formGroupCustom/FormGroupCustom'
 import Header from '@src/modules/common/components/header'
 import CenteredModal from '@src/modules/common/components/modal/CenteredModal'
-import ConfirmAlert from '@src/modules/common/components/modal/ConfirmAlert'
 import { useModal } from '@src/modules/common/components/modal/HandleModal'
 import BsTooltip from '@src/modules/common/components/tooltip'
-import Hide from '@src/utility/Hide'
 import { Permissions } from '@src/utility/Permissions'
 import Show, { Can } from '@src/utility/Show'
 import {
-  FM,
-  SuccessToast,
-  emitAlertStatus,
-  formatDate,
-  isValid,
-  log,
-  setInputErrors,
-  setValues
+    emitAlertStatus,
+    FM,
+    formatDate,
+    isValid,
+    log,
+    setInputErrors,
+    setValues,
+    SuccessToast
 } from '@src/utility/Utils'
 import { RenderHeaderMenu } from '@src/utility/context/RenderHeader'
-import ApiEndpoints from '@src/utility/http/ApiEndpoints'
-import { loadDropdown } from '@src/utility/http/Apis/dropdowns'
 import { stateReducer } from '@src/utility/stateReducer'
 import { Fragment, useContext, useEffect, useReducer } from 'react'
 import { TableColumn } from 'react-data-table-component'
-import { Activity, Edit, Eye, List, Menu, Plus, PlusCircle, RefreshCcw, Trash2, X } from 'react-feather'
+import { Activity, Eye, List, PlusCircle, RefreshCcw, X } from 'react-feather'
 import { useFieldArray, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import {
-  Button,
-  ButtonGroup,
-  ButtonProps,
-  Card,
-  CardBody,
-  Col,
-  Form,
-  Label,
-  NavItem,
-  NavLink,
-  Row,
-  UncontrolledTooltip,
-  Badge
+    Badge,
+    Button,
+    ButtonGroup,
+    Card,
+    Col,
+    Form,
+    Label,
+    NavItem,
+    NavLink,
+    Row,
+    UncontrolledTooltip
 } from 'reactstrap'
 import * as yup from 'yup'
 import { menusResponseTypes, StockItem } from '../../../redux/RTKFiles/ResponseTypes'
 // import DemandFilter from './DemandFilter'
-import { getPath } from '@src/router/RouteHelper'
 import { useNavigate } from 'react-router-dom'
-import { getUserData } from '@src/auth/utils'
-import QuantityMismatchFilter from './QuantityMismatchFilter'
+import QuantityMismatchFilter from '../qunatity-mismatch-list/QuantityMismatchFilter'
+import WastedItemFilter from './WasteItemFilter'
+
 
 
 // validation schema
@@ -104,7 +93,7 @@ type States = {
 const defaultValues: any = {
 warehouse_remarks:''
 }
-const QuantityMismatch = (props: any) => {
+const WasteItems = (props: any) => {
   // header menu context categoryResponseTypes
   const { setHeaderMenu } = useContext(RenderHeaderMenu)
   // can add menu
@@ -142,7 +131,7 @@ const QuantityMismatch = (props: any) => {
   // create or update menu mutation
   const [createMenu, createResp] = useActionMismatchQuantityIdMutation()
   // load menus
-  const [loadMenu, loadMenuResp] = useLoadMismatchListMutation()
+  const [loadMenu, loadMenuResp] = useLoadWasteListMutation()
 
   // delete mutation
   const [menuDelete, deleteResp] = useDeleteDemandByIdMutation()
@@ -285,7 +274,14 @@ const QuantityMismatch = (props: any) => {
   // handle filter data
   const handleFilterData = (e: any) => {
     setState({
-      filterData: {transfer_recieved_id:e?.transfer_recieved_id?.value?e?.transfer_recieved_id?.value:undefined,subcategory_id:e?.subcategory_id?.value?e?.subcategory_id?.value:undefined,category_id:e?.category_id?.value?e?.category_id?.value:undefined,warehouse_product_category_id:e?.warehouse_product_category_id?.value?e?.warehouse_product_category_id?.value:undefined,warehouse_product_subcategory_id:e?.warehouse_product_subcategory_id?.value?e?.warehouse_product_subcategory_id?.value:undefined,warehouse_product_product_id:e?.warehouse_product_product_id?.value?e?.warehouse_product_product_id?.value:undefined,  product_id: e?.product_id?.value?e?.product_id?.value:undefined,warehouse_id:e?.warehouse_id?.value?e?.warehouse_id?.value:undefined,demand_date:e?.demand_date?formatDate(e?.demand_date,'YYYY-MM-DD'):undefined,cafe_id:e?.cafe_id?.value?e?.cafe_id?.value:undefined},
+      filterData: {
+        item_id: e?.item_id?.value ? e?.item_id?.value : undefined,
+        brand_id: e?.brand_id?.value ? e?.brand_id?.value : undefined,
+        unit_id: e?.unit_id?.value ? e?.unit_id?.value : undefined,
+        pack_size: e?.pack_size?.value ? e?.pack_size?.value : undefined,
+        category_id: e?.category_id?.value ? e?.category_id?.value : undefined,
+        subcategory_id: e?.subcategory_id?.value ? e?.subcategory_id?.value : undefined
+      },
       page: 1,
       search: '',
       per_page_record: 20
@@ -409,223 +405,223 @@ const QuantityMismatch = (props: any) => {
   }, [state.selectedUser])
 
   // create menu modal
-  const renderCreateModal = () => {
-    return (
-      <CenteredModal
-        open={modalAdd}
-        done={state?.selectedStatus==='approved' ? 'Approved' : 'Reject'}
-        title={state?.selectedStatus==='approved' ? 'Action Approved' : 'Action Reject'}
-        handleModal={closeAddModal}
-        modalClass={'modal-sm'}
-        loading={createResp?.isLoading}
-        handleSave={form.handleSubmit(handleSaveUser)}
-      >
-        <div className='p-2'>
-          <Form onSubmit={form.handleSubmit(handleSaveUser)}>
-            <Row>
-              <Card>
-                <Row>
+//   const renderCreateModal = () => {
+//     return (
+//       <CenteredModal
+//         open={modalAdd}
+//         done={state?.selectedStatus==='approved' ? 'Approved' : 'Reject'}
+//         title={state?.selectedStatus==='approved' ? 'Action Approved' : 'Action Reject'}
+//         handleModal={closeAddModal}
+//         modalClass={'modal-sm'}
+//         loading={createResp?.isLoading}
+//         handleSave={form.handleSubmit(handleSaveUser)}
+//       >
+//         <div className='p-2'>
+//           <Form onSubmit={form.handleSubmit(handleSaveUser)}>
+//             <Row>
+//               <Card>
+//                 <Row>
                   
-                  <Col md='12'>
-                            <FormGroupCustom
+//                   <Col md='12'>
+//                             <FormGroupCustom
                              
-                              name={`warehouse_remarks`}
-                              type={'textarea'}
-                              label={'Warehouse Remarks'}
-                              className='mb-2 mt-2'
-                              control={form.control}
-                              rules={{ required: true }}
-                            />
-                  </Col>
+//                               name={`warehouse_remarks`}
+//                               type={'textarea'}
+//                               label={'Warehouse Remarks'}
+//                               className='mb-2 mt-2'
+//                               control={form.control}
+//                               rules={{ required: true }}
+//                             />
+//                   </Col>
 
-                  <Show IF={state?.selectedStatus==='approved'}>
+//                   <Show IF={state?.selectedStatus==='approved'}>
             
-             <Col md='12' className='mb-2'>
-                <FormGroupCustom
-                  name={`add_to_stock`}
-                  type={'checkbox'}
-                  label={'Add to Stock'}
-                  className='mb-0 w-10'
-                  control={form.control}
-                  rules={{ required: false }}
-                />
+//              <Col md='12' className='mb-2'>
+//                 <FormGroupCustom
+//                   name={`add_to_stock`}
+//                   type={'checkbox'}
+//                   label={'Add to Stock'}
+//                   className='mb-0 w-10'
+//                   control={form.control}
+//                   rules={{ required: false }}
+//                 />
             
-            </Col>
-            </Show>
-                </Row>
-              </Card>
-            </Row>
+//             </Col>
+//             </Show>
+//                 </Row>
+//               </Card>
+//             </Row>
 
-            {/* <Row className='mb-0'>
-              {fields.map((field, index) => (
-                <Card key={field?.id}>
-                  <h5 className='border-bottom mt-1'>
-                    <>
-                      {'items'} {index > 0 ? index + 1 : ''}
+//             {/* <Row className='mb-0'>
+//               {fields.map((field, index) => (
+//                 <Card key={field?.id}>
+//                   <h5 className='border-bottom mt-1'>
+//                     <>
+//                       {'items'} {index > 0 ? index + 1 : ''}
                      
-                    </>
-                  </h5>
+//                     </>
+//                   </h5>
 
-                  <CardBody className='pt-1'>
-                    <Row className='g'>
-                      <Col md='9'>
-                        <Row className='g'>
-                          <Col md='4'>
-                            <FormGroupCustom
-                              control={form.control}
-                              async
-                              isClearable
-                              isDisabled={state.editData?.create_menu === 1}
-                              label='Product'
-                              name={`items.${index}.item_id`}
-                              loadOptions={loadDropdown}
-                              jsonData={
-                                state.editData
-                                  ? ''
-                                  : form.setValue(`items.${index}.unit_id`, {
-                                      label: form.watch(`items.${index}.item_id`)?.extra?.unit
-                                        ?.name,
-                                      value: form.watch(`items.${index}.item_id`)?.extra
-                                        ?.unit_id
-                                    })
-                              }
-                              onChangeValue={(e) => {
-                                let isDuplicate = false
-                                fields.forEach((i: any, idx) => {
-                                  if (i?.item_id?.value === e?.value && idx !== index) {
-                                    isDuplicate = true
+//                   <CardBody className='pt-1'>
+//                     <Row className='g'>
+//                       <Col md='9'>
+//                         <Row className='g'>
+//                           <Col md='4'>
+//                             <FormGroupCustom
+//                               control={form.control}
+//                               async
+//                               isClearable
+//                               isDisabled={state.editData?.create_menu === 1}
+//                               label='Product'
+//                               name={`items.${index}.item_id`}
+//                               loadOptions={loadDropdown}
+//                               jsonData={
+//                                 state.editData
+//                                   ? ''
+//                                   : form.setValue(`items.${index}.unit_id`, {
+//                                       label: form.watch(`items.${index}.item_id`)?.extra?.unit
+//                                         ?.name,
+//                                       value: form.watch(`items.${index}.item_id`)?.extra
+//                                         ?.unit_id
+//                                     })
+//                               }
+//                               onChangeValue={(e) => {
+//                                 let isDuplicate = false
+//                                 fields.forEach((i: any, idx) => {
+//                                   if (i?.item_id?.value === e?.value && idx !== index) {
+//                                     isDuplicate = true
                                
-                                    form.setError(`items.${index}.item_id`, {
-                                      type: 'manual',
-                                      message: 'Duplicate product'
-                                    })
-                                  }
-                                })
+//                                     form.setError(`items.${index}.item_id`, {
+//                                       type: 'manual',
+//                                       message: 'Duplicate product'
+//                                     })
+//                                   }
+//                                 })
 
-                                if (!isDuplicate) {
-                                  form.setValue(`items.${index}.item_id`, e)
-                                  form.clearErrors(`items.${index}.item_id`)
-                                }
-                              }}
-                              path={ApiEndpoints.products}
-                              selectLabel={(e) => `${e.name} `}
-                              selectValue={(e) => e.id}
-                              defaultOptions
-                              type='select'
-                              className='mb-0'
-                              rules={{ required: true }}
-                            />
-                          </Col>
+//                                 if (!isDuplicate) {
+//                                   form.setValue(`items.${index}.item_id`, e)
+//                                   form.clearErrors(`items.${index}.item_id`)
+//                                 }
+//                               }}
+//                               path={ApiEndpoints.products}
+//                               selectLabel={(e) => `${e.name} `}
+//                               selectValue={(e) => e.id}
+//                               defaultOptions
+//                               type='select'
+//                               className='mb-0'
+//                               rules={{ required: true }}
+//                             />
+//                           </Col>
 
-                          <Col md='4'>
-                            <FormGroupCustom
-                              control={form.control}
-                              async
-                              isClearable
-                              isDisabled={state.editData?.create_menu === 1}
-                              label='unit'
-                              name={`items.${index}.unit_id`}
-                              loadOptions={loadDropdown}
-                              path={ApiEndpoints.unitList}
+//                           <Col md='4'>
+//                             <FormGroupCustom
+//                               control={form.control}
+//                               async
+//                               isClearable
+//                               isDisabled={state.editData?.create_menu === 1}
+//                               label='unit'
+//                               name={`items.${index}.unit_id`}
+//                               loadOptions={loadDropdown}
+//                               path={ApiEndpoints.unitList}
                               
-                              selectLabel={(e) => `${e.name} `}
-                              selectValue={(e) => e.id}
-                              defaultOptions
-                              type='select'
-                              className='mb-0 pointer-events-none'
-                              rules={{ required: true }}
-                            />
-                          </Col>
-                          <Col md='4'>
-                            <FormGroupCustom
-                              defaultValue={1}
-                              isDisabled={state.editData?.create_menu === 1}
-                              name={`items.${index}.quantity`}
-                              type={'number'}
-                              label={'Quantity'}
-                              className='mb-0'
-                              control={form.control}
-                              rules={{ required: true, min: 1 }}
-                            />
-                          </Col>
-                        </Row>
-                      </Col>
-                      <Col md='3' className='mt-1'>
-                        <Show IF={index > 0 || index === fields?.length - 1}>
-                          <Show IF={index > 0}>
-                            <BsTooltip<ButtonProps>
-                              Tag={Button}
-                              role={'button'}
-                              color='danger'
-                              size='sm'
-                              className='btn-icon me-1 m-1'
-                              title={'Remove'}
-                              onClick={() => {
-                                remove(index)
-                              }}
-                            >
-                              <>
-                                <Trash2 size={16} /> {'Remove'}
-                              </>
-                            </BsTooltip>
-                          </Show>
-                          <Hide IF={state?.editData?.create_menu === 1}>
-                            <Show IF={index === fields?.length - 1}>
-                              <BsTooltip<ButtonProps>
-                                Tag={Button}
-                                color='primary'
-                                size='sm'
-                                title={'Add More'}
-                                role={'button'}
-                                className='btn-icon m-1'
-                                onClick={() => {
-                                  append({})
-                                }}
-                              >
-                                <>
-                                  <Plus size={16} /> {'items'}
-                                </>
-                              </BsTooltip>
-                            </Show>
-                          </Hide>
-                        </Show>
-                      </Col>
+//                               selectLabel={(e) => `${e.name} `}
+//                               selectValue={(e) => e.id}
+//                               defaultOptions
+//                               type='select'
+//                               className='mb-0 pointer-events-none'
+//                               rules={{ required: true }}
+//                             />
+//                           </Col>
+//                           <Col md='4'>
+//                             <FormGroupCustom
+//                               defaultValue={1}
+//                               isDisabled={state.editData?.create_menu === 1}
+//                               name={`items.${index}.quantity`}
+//                               type={'number'}
+//                               label={'Quantity'}
+//                               className='mb-0'
+//                               control={form.control}
+//                               rules={{ required: true, min: 1 }}
+//                             />
+//                           </Col>
+//                         </Row>
+//                       </Col>
+//                       <Col md='3' className='mt-1'>
+//                         <Show IF={index > 0 || index === fields?.length - 1}>
+//                           <Show IF={index > 0}>
+//                             <BsTooltip<ButtonProps>
+//                               Tag={Button}
+//                               role={'button'}
+//                               color='danger'
+//                               size='sm'
+//                               className='btn-icon me-1 m-1'
+//                               title={'Remove'}
+//                               onClick={() => {
+//                                 remove(index)
+//                               }}
+//                             >
+//                               <>
+//                                 <Trash2 size={16} /> {'Remove'}
+//                               </>
+//                             </BsTooltip>
+//                           </Show>
+//                           <Hide IF={state?.editData?.create_menu === 1}>
+//                             <Show IF={index === fields?.length - 1}>
+//                               <BsTooltip<ButtonProps>
+//                                 Tag={Button}
+//                                 color='primary'
+//                                 size='sm'
+//                                 title={'Add More'}
+//                                 role={'button'}
+//                                 className='btn-icon m-1'
+//                                 onClick={() => {
+//                                   append({})
+//                                 }}
+//                               >
+//                                 <>
+//                                   <Plus size={16} /> {'items'}
+//                                 </>
+//                               </BsTooltip>
+//                             </Show>
+//                           </Hide>
+//                         </Show>
+//                       </Col>
 
                    
-                    </Row>
-                  </CardBody>
-                </Card>
-              ))}
-            </Row> */}
-            {/* <Row>
-              <Col md='12' className=''>
-                <FormGroupCustom
-                  control={form.control}
-                  label={'Image Path'}
-                  name='image_path'
-                  type='dropZone'
-                  className='mb-1'
-                  // dropZoneOptions={{
-                  //     excludeFiles: meeting?.documents ?? undefined
-                  // }}
-                  //   noLabel
-                  noGroup
-                  rules={{ required: false }}
-                />
-              </Col>
-            </Row> */}
-          </Form>
-        </div>
-      </CenteredModal>
-    )
-  }
+//                     </Row>
+//                   </CardBody>
+//                 </Card>
+//               ))}
+//             </Row> */}
+//             {/* <Row>
+//               <Col md='12' className=''>
+//                 <FormGroupCustom
+//                   control={form.control}
+//                   label={'Image Path'}
+//                   name='image_path'
+//                   type='dropZone'
+//                   className='mb-1'
+//                   // dropZoneOptions={{
+//                   //     excludeFiles: meeting?.documents ?? undefined
+//                   // }}
+//                   //   noLabel
+//                   noGroup
+//                   rules={{ required: false }}
+//                 />
+//               </Col>
+//             </Row> */}
+//           </Form>
+//         </div>
+//       </CenteredModal>
+//     )
+//   }
 
   // view User modal
   const renderViewModal = () => {
     return (
       <CenteredModal
         open={modalView}
-        title={'Quantity Mismatch View'}
+        title={'Waste Item View'}
         done='edit'
         hideClose
         disableFooter
@@ -642,77 +638,41 @@ const QuantityMismatch = (props: any) => {
       >
         <div className='p-2'>
           <Row>
+          
             <Col md='6'>
-              <Label className='text-uppercase mb-25'>{FM('transfer-date')}</Label>
-              <p className=''>
-                {formatDate(state.selectedUser?.stock_received?.date) ?? 'N/A'}
-              </p>
+              <Label className='text-uppercase mb-25'>{FM('item')}</Label>
+              <p className='text-capitalize'>{state.selectedUser?.item?.name}</p>
             </Col>
             <Col md='6'>
-              <Label className='text-uppercase mb-25'>{FM('warehouse')}</Label>
-              <p className='text-capitalize'>{state.selectedUser?.warehouse?.name}</p>
+              <Label className='text-uppercase mb-25'>{'brand'}</Label>
+              <p className='text-capitalize'>{state.selectedUser?.item?.brand?.name}</p>
             </Col>
             <Col md='6'>
-              <Label className='text-uppercase mb-25'>{'Cafe'}</Label>
-              <p className='text-capitalize'>{state.selectedUser?.cafe?.name}</p>
-            </Col>
-
-    <Col md='6'>
-              <Label className='text-uppercase mb-25'>{'delivery person'}</Label>
-              <p className='text-capitalize'>{state.selectedUser?.delivery_person}</p>
+              <Label className='text-uppercase mb-25'>{'category'}</Label>
+              <p className='text-capitalize'>{state.selectedUser?.item?.category?.name}</p>
             </Col>
             <Col md='6'>
+              <Label className='text-uppercase mb-25'>{'sub category'}</Label>
+              <p className='text-capitalize'>{state.selectedUser?.item?.subcategory?.name}</p>
+            </Col>
+                  <Col md='6'>
+              <Label className='text-uppercase mb-25'>{'packsize'}</Label>
+              <p className='text-capitalize'>{state.selectedUser?.item?.packsize?.name}</p>
+            </Col>
+              <Col md='6'>
               <Label className='text-uppercase mb-25'>{FM('create-date')}</Label>
-              <p className='text-capitalize'>
+              <p className=''>
                 {formatDate(state.selectedUser?.created_at) ?? 'N/A'}
               </p>
             </Col>
-            <Col md='6'>
-              <Label className='text-uppercase mb-25'>Status</Label>
-              <p className='text-capitalize'>
-                {state.selectedUser?.status === 0 && <Badge color='light-warning'>Pending</Badge>}
-                {state.selectedUser?.status === 1 && <Badge color='light-success'>Approved</Badge>}
-                {state.selectedUser?.status === 2 && <Badge color='light-danger'>Reject</Badge>}
-              </p>
-            </Col>
-             <Col md='6'>
+            <Col md='12'>
               <Label className='text-uppercase mb-25'>{'comment'}</Label>
               <p className='text-capitalize'>{state.selectedUser?.comment}</p>
             </Col>
-               <Col md='6'>
-              <Label className='text-uppercase mb-25'>{'warehouse remarks'}</Label>
-              <p className='text-capitalize'>{state.selectedUser?.warehouse_remarks??'N/A'}</p>
-            </Col>
+             
           </Row>
 
-          <div className='row my-2 mx-1 justify-content-center'>
-            <table className='table table-striped table-borderless'>
-              <thead style={{ backgroundColor: '#84B0CA' }} className='text-black'>
-                <tr>
-                  {/* <th scope='col'>#</th> */}
-                  <th scope='col'>Product</th>
-                  <th scope='col'>Sent Quantity</th>
-                   <th scope='col'>Recieved Quantity</th>
-                  <th scope='col'>Unit name</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* {state.selectedUser?.requested_products?.map((item: any, index: any) => {
-                  return (
-                    <> */}
-                      <tr>
-                        {/* <th scope='row'>{index + 1}</th> */}
-                        <td>{state?.selectedUser?.stock_received?.product?.name}</td>
-                        <td>{state?.selectedUser?.sent_quantity}</td>
-                        <td>{state?.selectedUser?.recieved_quantity}</td>
-                        <td>{state?.selectedUser?.stock_received?.unit?.name}</td>
-                      </tr>
-                    {/* </>
-                  )
-                })} */}
-              </tbody>
-            </table>
-          </div>
+     
           
         </div>
       </CenteredModal>
@@ -721,117 +681,43 @@ const QuantityMismatch = (props: any) => {
 
   // table columns
   const columns: TableColumn<StockItem >[] = [
+ 
     {
-      name: 'cafe',
+      name: 'Item',
       sortable: false,
-      cell: (row) => <Fragment>{row?.cafe?.name}</Fragment>
+      cell: (row) => <Fragment>{row?.item?.name}</Fragment>
     },
-
-
+    
+       {
+      name: 'brand',
+      sortable: false,
+      cell: (row) => <Fragment>{row?.item?.brand?.name}</Fragment>
+    },
+     {
+      name: 'category',
+      sortable: false,
+      cell: (row) => <Fragment>{row?.item?.category?.name}</Fragment>
+    },
+    
+    
     {
-      name: 'warehouse',
+      name: 'quantity',
       sortable: false,
-      cell: (row) => <Fragment>{row?.warehouse?.name}</Fragment>
+      cell: (row) => <Fragment>{row?.quantity} {row?.item?.unit?.name}</Fragment>
     },
-    // {
-    //   name: 'count total products',
-    //   sortable: false,
-    //   cell: (row) => (
-    //     <Fragment>
-    //       {row?.recipes_without_product.length !== 0
-    //         ? '0 (please update the recipe)'
-    //         : row?.recipes_count}
-    //     </Fragment>
-    //   )
-    // },
+ 
    
-    {
-      name: 'transfer date',
+     {
+      name: 'comment',
       sortable: false,
-      id: 'demand_date',
-      cell: (row) => (
-        <Fragment>
-          <Fragment>{formatDate(row?.stock_received?.date)}</Fragment>
-        </Fragment>
-      )
+      cell: (row) => <Fragment>{row?.comment} </Fragment>
     },
-      {
-      name: 'stock received',
-      sortable: false,
-      cell: (row) => <Fragment>{row?.stock_received?.product?.name}</Fragment>
-    },
-       {
-      name: 'sent quantity',
-      sortable: false,
-      cell: (row) => <Fragment>{row?.sent_quantity} {row?.stock_received?.unit?.name}</Fragment>
-    },
-       {
-      name: 'recieved quantity',
-      sortable: false,
-      cell: (row) => <Fragment>{row?.recieved_quantity} {row?.stock_received?.unit?.name}</Fragment>
-    },
-          {
-      name: 'delivery person',
-      sortable: false,
-      cell: (row) => <Fragment>{row?.delivery_person} </Fragment>
-    },
-        {
-      name: 'status',
-      sortable: false,
-      id: 'status',
-      cell: (row) => (
-        <Fragment>
-          {row?.status === 0 && <Badge color='light-warning'>Pending</Badge>}
-          {row?.status === 1 && <Badge color='light-success'>Approved</Badge>}
-          {row?.status === 2 && <Badge color='light-danger'>Reject</Badge>}
-        </Fragment>
-      )
-    },
-
+    
     {
       name: FM('action'),
       cell: (row) => (
         <Fragment>
-          {/* <DropDownMenu
-                        options={[
-                            {
-                                icon: <Edit size={'14'} />,
-                                name: 'Edit',
-                                onClick: () => {
-                                    toggleModalAdd()
-                                    setState({ editData: row })
-                                }
-                            },
-                            {
-                                icon: <Eye size={'14'} />,
-                                name: 'View',
-                                onClick: () => {
-                                    setState({
-                                        selectedUser: row
-                                    })
-                                }
-                            },
-                            {
-                                noWrap: true,
-                                name: (
-                                    <ConfirmAlert
-                                        menuIcon={<Trash2 size={14} />}
-                                        onDropdown
-                                        eventId={`item-delete-${row?.id}`}
-                                        text={FM('are-you-sure')}
-                                        title={FM('delete-item', { name: row?.name })}
-                                        onClickYes={() => {
-                                            handleActions(row?.id, 'delete', `item-delete-${row?.id}`)
-                                        }}
-                                        onSuccessEvent={onSuccessEvent}
-                                    >
-                                        {FM('delete')}
-                                    </ConfirmAlert>
-                                )
-                            }
-
-                        ]}
-                    /> */}
+     
           <ButtonGroup role='group' className='my-2'>
       
             
@@ -1013,12 +899,12 @@ const QuantityMismatch = (props: any) => {
   }
   return (
     <Fragment>
-      {renderCreateModal()}
-      {renderViewModal()}
+       {/* {renderCreateModal()} */}
+      {renderViewModal()} 
 
-      <Header route={props?.route} icon={<List size='25' />} title='Quantity MisMatch List'>
+      <Header route={props?.route} icon={<List size='25' />} title='Waste Items'>
         <ButtonGroup color='dark'>
-          <QuantityMismatchFilter handleFilterData={handleFilterData} />
+          <WastedItemFilter handleFilterData={handleFilterData} />
           <LoadingButton
             tooltip={FM('reload')}
             loading={loadMenuResp.isLoading}
@@ -1049,4 +935,4 @@ const QuantityMismatch = (props: any) => {
   )
 }
 
-export default QuantityMismatch
+export default WasteItems

@@ -67,14 +67,14 @@ export const MenuManagement = createApi({
         path: ApiEndpoints.CategoryWiseMenus
       })
     }),
-     createOrUpdateDemand: builder.mutation<ResponseType, RequestType>({
+    createOrUpdateDemand: builder.mutation<ResponseType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
         method: args?.jsonData?.id ? 'put' : 'post',
-        path: ApiEndpoints. add_demand + (args?.jsonData?.id ? '/' + args?.jsonData?.id : '')
+        path: ApiEndpoints.add_demand + (args?.jsonData?.id ? '/' + args?.jsonData?.id : '')
       })
     }),
-      loadDemands: builder.mutation<ResponseListType, RequestType>({
+    loadDemands: builder.mutation<ResponseListType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
         params: { page: args?.page, per_page_record: args.per_page_record },
@@ -82,20 +82,20 @@ export const MenuManagement = createApi({
         path: ApiEndpoints.list_demand
       })
     }),
-       deleteDemandById: builder.mutation<ResponseType, RequestTypeAction>({
+    deleteDemandById: builder.mutation<ResponseType, RequestTypeAction>({
       query: (args) => ({
         method: 'delete',
         path: ApiEndpoints.add_demand + '/' + args?.id
       })
     }),
-        viewDemands: builder.mutation<ResponseType, RequestTypeAction>({
+    viewDemands: builder.mutation<ResponseType, RequestTypeAction>({
       query: (args) => ({
         jsonData: args,
         method: 'get',
-           path: ApiEndpoints.add_demand + '/' + args?.id
+        path: ApiEndpoints.add_demand + '/' + args?.id
       })
     }),
-     loadMismatchList: builder.mutation<ResponseListType, RequestType>({
+    loadMismatchList: builder.mutation<ResponseListType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
         params: { page: args?.page, per_page_record: args.per_page_record },
@@ -103,11 +103,32 @@ export const MenuManagement = createApi({
         path: ApiEndpoints.quantity_mismatch_list
       })
     }),
-     actionMismatchQuantityId: builder.mutation<ResponseType, RequestType>({
+    actionMismatchQuantityId: builder.mutation<ResponseType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
         method: 'post',
         path: ApiEndpoints.Quantity_mismatch_action + '/' + args?.jsonData?.id
+      })
+    }),
+    loadWasteList: builder.mutation<ResponseListType, RequestType>({
+      query: (args) => ({
+        jsonData: args?.jsonData,
+        params: { page: args?.page, per_page_record: args.per_page_record },
+        method: 'post',
+        path: ApiEndpoints.waste_items
+      })
+    }),
+    exportId: builder.mutation<ResponseType, RequestTypeAction>({
+      query: (args) => ({
+        method: 'get',
+        path: ApiEndpoints.add_demand + '/' + args?.id
+      })
+    }),
+    demandPrint: builder.mutation<any, any>({
+      query: (args) => ({
+        jsonData: args,
+        method: 'get',
+        path: ApiEndpoints.demand_request + '/' + args?.id + '/print'
       })
     }),
   })
@@ -123,5 +144,7 @@ export const {
   useDeleteDemandByIdMutation,
   useViewDemandsMutation,
   useLoadMismatchListMutation,
-  useActionMismatchQuantityIdMutation
+  useActionMismatchQuantityIdMutation,
+  useLoadWasteListMutation,
+  useDemandPrintMutation
 } = MenuManagement

@@ -856,6 +856,9 @@ export interface StockItem {
   updated_at: string;
   warehouse: Warehouse;
   cafe: Cafe;
+  item?: any;
+
+  quantity?: any;
   stock_received: StockReceived;
 }
 

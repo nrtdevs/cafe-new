@@ -22,12 +22,14 @@ import * as yup from 'yup'
 import { tableReportListResponseTypes } from '../../redux/RTKFiles/ResponseTypes'
 import {
   useLoadExportMenuOrderDataMutation,
+  useLoadExportMenuWiseLiveReportMutation,
   useLoadMenuReportTableMutation
 } from '../../redux/RTKFiles/common-cafe/DashboardRTK'
 import Hide from '@src/utility/Hide'
 import { useModal } from '@src/modules/common/components/modal/HandleModal'
 import CenteredModal from '@src/modules/common/components/modal/CenteredModal'
 import Shimmer from '@src/modules/common/components/shimmers/Shimmer'
+import toast from 'react-hot-toast'
 
 // validation schema
 const userFormSchema = {
@@ -56,7 +58,9 @@ const MenuWiseReport = (props: any) => {
   const user = getUserData()
   // can add user
   const [orderTable, orderTableRestResponse] = useLoadExportMenuOrderDataMutation()
+  const [exportMenuWiseLiveReport, exportMenuWiseLiveReportRestResponse] = useLoadExportMenuWiseLiveReportMutation()
   const [modalExportAdd, toggleExportModalAdd] = useModal()
+  const [modalMenuWiseExportAdd, toggleMenuWiseExportModalAdd] = useModal()
 
   // form hook
   const form = useForm<tableReportListResponseTypes>({
@@ -111,6 +115,18 @@ const MenuWiseReport = (props: any) => {
     }
   }, [canAddUser])
 
+  useEffect(() => {
+    if (orderTableRestResponse?.isSuccess === true) {
+      closeExportModal()
+    }
+  }, [orderTableRestResponse])
+
+  useEffect(() => {
+    if (exportMenuWiseLiveReportRestResponse?.isSuccess === true) {
+      closeMenuWiseExportModal()
+    }
+  }, [exportMenuWiseLiveReportRestResponse])
+
   // load wasted list
   const loadWastedList = () => {
     dashboardTable({
@@ -160,17 +176,40 @@ const MenuWiseReport = (props: any) => {
       form.reset()
     }
     toggleExportModalAdd()
+
+  }
+
+
+  // close menu wise export modal
+  const closeMenuWiseExportModal = (reset = true) => {
+    if (reset) {
+      setState({
+        selectedUser: undefined
+      })
+      form.reset()
+    }
+    toggleMenuWiseExportModalAdd()
   }
 
   const urlDemo = orderTableRestResponse?.data?.payload?.[0]?.file_name
+
+  const urlDemo1 = exportMenuWiseLiveReportRestResponse?.data?.payload?.[0]?.file_name
 
   useEffect(() => {
     if (urlDemo) {
       window.open(urlDemo, '_blank')
     } else {
-      console.error('File URL is not available.')
+      // toast.error('File URL is not available.')
     }
   }, [urlDemo])
+
+  useEffect(() => {
+    if (urlDemo1) {
+      window.open(urlDemo1, '_blank')
+    } else {
+      // toast.error('File URL is not available.')
+    }
+  }, [urlDemo1])
 
   // export data
   const handleExport = (userData: any) => {
@@ -184,7 +223,7 @@ const MenuWiseReport = (props: any) => {
       }
     })
 
-    closeExportModal()
+
   }
 
   const renderExportModal = () => {
@@ -192,6 +231,7 @@ const MenuWiseReport = (props: any) => {
       <CenteredModal
         open={modalExportAdd}
         title={'Export Order'}
+        loading={orderTableRestResponse?.isLoading}
         done={state.enableEdit ? 'Export' : 'Export'}
         handleSave={form.handleSubmit(handleExport)}
         // handleSave={() => {
@@ -312,6 +352,167 @@ const MenuWiseReport = (props: any) => {
     )
   }
 
+  //handle menu wise export
+  const handleMenuWiseExport = (data: any) => {
+    exportMenuWiseLiveReport({
+      jsonData: {
+        start_date: formatDate(data?.start_date, 'YYYY-MM-DD'),
+        end_date: formatDate(data?.end_date, 'YYYY-MM-DD'),
+        cafe_id: data?.cafe_id?.value ? data?.cafe_id?.value : cafe_id,
+        sub_cafe_id: data?.sub_cafe_id?.value,
+        menu_name: data?.menu_id?.label
+      }
+    })
+
+
+  }
+
+
+  const renderMenuWiseExportModal = () => {
+    return (
+      <CenteredModal
+        open={modalMenuWiseExportAdd}
+        title={'Export Menu Wise Report'}
+        done={state.enableEdit ? 'Export' : 'Export'}
+        loading={exportMenuWiseLiveReportRestResponse?.isLoading}
+        handleSave={form.handleSubmit(handleMenuWiseExport)}
+        // handleSave={() => {
+        //     setState({
+        //         enableEdit: true
+        //     })
+        //     closeViewModal(false)
+        //     // toggleModalAdd()
+        // }}
+        handleModal={() => closeMenuWiseExportModal(true)}
+      >
+        <div className='p-2'>
+          <Form onSubmit={form.handleSubmit(handleMenuWiseExport)}>
+            <Show IF={user?.role_id === 1}>
+              <Col md='12' lg='12' xl='12' sm='12'>
+                <Show IF={user?.role_id === 1}>
+                  <FormGroupCustom
+                    control={form.control}
+                    async
+                    noGroup
+                    noLabel
+                    isClearable
+                    label={'cafe'}
+                    name='cafe_id'
+                    loadOptions={loadDropdown}
+                    path={ApiEndpoints.cafeList}
+                    selectLabel={(e) => ` ${e.name} `}
+                    selectValue={(e) => e.id}
+                    defaultOptions
+                    type='select'
+                    className='mb-1'
+                    rules={{ required: false }}
+                  />
+                </Show>
+              </Col>
+            </Show>
+
+            {/* <Hide IF={user?.no_of_subcafe === 0}> */}
+            <Col md='12' lg='12' xl='12' sm='12'>
+              <FormGroupCustom
+                key={form.watch('cafe_id') || user?.cafe_id || user?.sub_cafe_id}
+                control={form.control}
+                async
+                noGroup
+                noLabel
+                isClearable
+                isDisabled={form.watch('cafe_id')?.value ? false : user?.no_of_subcafe === 0 ? true : false}
+                label='Sub Cafe'
+                placeholder='Select sub cafe'
+                name='sub_cafe_id'
+                loadOptions={loadDropdown}
+                path={ApiEndpoints.subCafeList}
+                selectLabel={(e) => `${e.name}`}
+                selectValue={(e) => e.id}
+                defaultOptions
+                jsonData={
+                  {
+                    is_parent: form.watch('cafe_id')?.value
+                      ? form.watch('cafe_id')?.value
+                      : user?.cafe_id
+                  }
+                }
+                type='select'
+                className='mb-1'
+                rules={{ required: false }}
+              />
+            </Col>
+            {/* </Hide> */}
+            <Col md='12' lg='12' xl='12' sm='12'>
+              <FormGroupCustom
+                control={form.control}
+                key={`${form.watch('cafe_id')?.value},${form.watch('category_id')?.value}-${form.watch('sub_cafe_id')?.value
+                  }`}
+                noGroup
+                noLabel
+                isClearable
+                async
+                label='Menu'
+                name='menu_id'
+                loadOptions={loadDropdown}
+                path={ApiEndpoints.menu_list}
+                jsonData={{
+                  cafe_id: form.watch('sub_cafe_id')?.value
+                    ? form.watch('sub_cafe_id')?.value
+                    : form.watch('cafe_id')?.value
+                      ? form.watch('cafe_id')?.value
+                      : user?.cafe_id,
+
+                }}
+                selectLabel={(e) => `${e.name}  `}
+                selectValue={(e) => e.id}
+                defaultOptions
+                type='select'
+                className='mb-1'
+                rules={{ required: false }}
+              />
+            </Col>
+            <Col md='12' lg='12' sm='12' xs='12'>
+              <FormGroupCustom
+                noLabel
+                name={'start_date'}
+                isDisabled={!!form.watch('request_for')}
+                type={'date'}
+                isClearable
+                label={FM('start-date')}
+                dateFormat={'YYYY-MM-DD'}
+                datePickerOptions={{
+                  maxDate: form.watch('end_date')
+                }}
+                className='mb-2'
+                control={form.control}
+                rules={{ required: false }}
+              />
+            </Col>
+
+            <Col md='12' lg='12' sm='12' xs='12'>
+              <FormGroupCustom
+                noLabel
+                isClearable
+                isDisabled={!!form.watch('start_date')}
+                name={'end_date'}
+                type={'date'}
+                datePickerOptions={{
+                  minDate: form.watch('start_date')
+                }}
+                label={FM('end-date')}
+                dateFormat={'YYYY-MM-DD'}
+                className='mb-0'
+                control={form.control}
+                rules={{ required: false }}
+              />
+            </Col>
+
+          </Form>
+        </div>
+      </CenteredModal>
+    )
+  }
+
   const handleFilter = (userData: any) => {
     if (userData?.is_overall_report === 1) {
       setFilterData(true)
@@ -349,8 +550,9 @@ const MenuWiseReport = (props: any) => {
   return (
     <Fragment>
       {renderExportModal()}
+      {renderMenuWiseExportModal()}
       <Row>
-        <Col md='10' lg='10' xl='10' sm='12' xs='12'>
+        <Col md='8' lg='8' xl='8' sm='12' xs='12'>
           <h3>{FM('menu-wise-report')}</h3>
         </Col>
         {/* <Col md='1' lg='1' xl='1' sm='12' xs='12' className='d-flex justify-content-end'>
@@ -364,7 +566,7 @@ const MenuWiseReport = (props: any) => {
 
                     </Button>
                 </Col> */}
-        <Col md='2' lg='2' xl='2' sm='12' xs='12' className='d-flex justify-content-end'>
+        <Col md='4' lg='4' xl='4' sm='12' xs='12' className='d-flex justify-content-end'>
           <LoadingButton
             tooltip={FM('export')}
             loading={false}
@@ -373,6 +575,18 @@ const MenuWiseReport = (props: any) => {
             className='mb-2 me-2'
             onClick={() => {
               toggleExportModalAdd()
+            }}
+          >
+            <Download size='14' />
+          </LoadingButton>
+          <LoadingButton
+            tooltip={FM('menu-wise-report')}
+            loading={false}
+            size='sm'
+            color='primary'
+            className='mb-2 me-2'
+            onClick={() => {
+              toggleMenuWiseExportModalAdd()
             }}
           >
             <Download size='14' />

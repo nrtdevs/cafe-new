@@ -266,33 +266,33 @@ const WarehouseItem = (props: any) => {
           name: state?.editData?.name,
           category_name: state?.editData?.category?.name
             ? {
-                label: state.editData?.category?.name,
-                value: state.editData?.category?.id
-              }
+              label: state.editData?.category?.name,
+              value: state.editData?.category?.id
+            }
             : undefined,
           subcategory_name: state.editData?.subcategory?.name
             ? {
-                label: state.editData?.subcategory?.name,
-                value: state.editData?.subcategory?.id
-              }
+              label: state.editData?.subcategory?.name,
+              value: state.editData?.subcategory?.id
+            }
             : undefined,
           unit_name: state?.editData?.unit_id
             ? {
-                label: state.editData?.unit?.name,
-                value: state.editData?.unit_id
-              }
+              label: state.editData?.unit?.name,
+              value: state.editData?.unit_id
+            }
             : undefined,
           brand_name: state?.editData?.brand
             ? {
-                label: state.editData?.brand?.name,
-                value: state.editData?.brand?.id
-              }
+              label: state.editData?.brand?.name,
+              value: state.editData?.brand?.id
+            }
             : undefined,
           packsize_name: state?.editData?.packsize
             ? {
-                label: state.editData?.packsize?.name,
-                value: state.editData?.packsize?.id
-              }
+              label: state.editData?.packsize?.name,
+              value: state.editData?.packsize?.id
+            }
             : undefined,
           current_quanitity: state?.editData?.current_quanitity,
           alert_quanitity: state?.editData?.alert_quanitity,
@@ -512,7 +512,7 @@ const WarehouseItem = (props: any) => {
                   label={FM('current-quantity')}
                   name='current_quanitity'
                   type='number'
-                  className='mb-1'
+                  className={`mb-1 ${state?.editData?.id ? 'pointer-events-none' : ''}`}
                   rules={{ required: true }}
                 />
               </Col>
@@ -955,7 +955,7 @@ const WarehouseItem = (props: any) => {
             className='btn btn-secondary btn-sm d-flex align-items-center'
             size='sm'
             color='secondary'
-            // title={FM('import')}
+          // title={FM('import')}
           >
             <div>
               <Upload size='14' />

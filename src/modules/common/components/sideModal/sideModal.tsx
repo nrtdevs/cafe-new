@@ -46,7 +46,7 @@ function SideModal<T>({
             modalClassName='modal-slide-in'
             contentClassName='pt-0 pb-0'
         >
-            <ModalHeader className='mb-0' toggle={handleModal} close={CloseBtn} tag='div'>
+            <ModalHeader className='mb-0'  tag='div'>
                 <h5 className='modal-title text-capitalize'>{FM(title)}</h5>
             </ModalHeader>
             <ModalBody className='flex-grow-1 pt-2 pb-2' style={{ height: '100vh', overflowY: 'scroll' }}>

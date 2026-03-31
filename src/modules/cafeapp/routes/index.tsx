@@ -89,6 +89,7 @@ const CafeSetting = lazy(() => import('@src/modules/cafeapp/views/cafe/CafeSetti
 const OrderSaleReport = lazy(() => import('@src/modules/cafeapp/views/Report/OrderSaleReport'))
 const MenuLiveReport = lazy(() => import('@src/modules/cafeapp/views/Report/MenuLiveReport'))
 const QuantityMismatch=lazy(()=>import('@src/modules/cafeapp/views/cafe/qunatity-mismatch-list'))
+const WasteItems=lazy(()=>import('@src/modules/cafeapp/views/cafe/waste-items'))
 
 const DprRoutes = [
   {
@@ -486,10 +487,18 @@ const DprRoutes = [
   },
    {
     element: <QuantityMismatch/>,
-    path: '/quantity-mismatch-list',
+    path: '/quantity-mismatch-lists',
     name: 'quantity-mismatch-lists',
     meta: {
       ...Permissions.unitBrowse
+    }
+  },
+     {
+    element: <WasteItems/>,
+    path: '/waste-items',
+    name: 'waste-items',
+    meta: {
+      ...Permissions.brandBrowse
     }
   },
   {

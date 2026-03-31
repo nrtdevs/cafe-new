@@ -458,4 +458,13 @@ export default [
     navLink: getPath('quantity-mismatch-list'),
     ...Permissions.brandBrowse
   },
+    {
+    id: '',
+    title: 'Waste Items',
+    icon: <List size={20} />,
+    badge: 'light-success',
+    // badgeText: '12',
+    navLink: getPath('waste-items'),
+    ...Permissions.brandBrowse
+  },
 ]
