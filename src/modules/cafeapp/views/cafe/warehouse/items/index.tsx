@@ -76,6 +76,9 @@ const userFormSchema = {
     .typeError('Category must be required'),
   name: yup.string().trim().typeError('Name is required').required('Name is required'),
   unit_name: yup.object().required('Unit must be required').typeError('Unit must be required'),
+  brand_name: yup.object().required('Brand must be required').typeError('Brand must be required'),
+  packsize_name: yup.object().required('Pack Size must be required').typeError('Pack Size must be required'),
+  subcategory_name: yup.object().required('Sub Category must be required').typeError('Sub Category must be required'),
   current_quanitity: yup
     .number()
     .typeError('Current Quantity must be a number')
@@ -445,6 +448,7 @@ const WarehouseItem = (props: any) => {
                   isClearable
                   label={FM('sub-category')}
                   name='subcategory_name'
+                  isDisabled={!form.watch('category_name')}
                   loadOptions={loadDropdown}
                   path={ApiEndpoints.listWarehouseCategory}
                   selectLabel={(e) => `${e.name}  `}
@@ -455,7 +459,7 @@ const WarehouseItem = (props: any) => {
                   defaultOptions
                   type='select'
                   className='mb-1'
-                  rules={{ required: false }}
+                  rules={{ required: true }}
                 />
               </Col>
               <Col md='4' lg='4' sm='12' xs='12'>
@@ -982,7 +986,7 @@ const WarehouseItem = (props: any) => {
         // options={options}
         //hideHeader
         // selectableRows={canEditUser || canDeleteUser}
-        searchPlaceholder='search-user-name'
+        searchPlaceholder='search'
         onSort={handleSort}
         defaultSortField={loadItemResponse?.originalArgs?.jsonData?.sort}
         paginatedData={loadItemResponse?.data?.payload}

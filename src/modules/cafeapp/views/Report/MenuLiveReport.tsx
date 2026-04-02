@@ -405,7 +405,7 @@ const MenuLiveReport = (props: any) => {
                             <td className='text-capitalize'>{item?.menu_name}</td>
                             <td>{item?.total_quantity_sold}</td>
                             <td>
-                              {item?.total_discount}{' '}
+                              {Number(item?.total_discount).toFixed(2)}
                               <CurrencyRupee
                                 sx={{
                                   maxHeight: '15px'
@@ -413,7 +413,7 @@ const MenuLiveReport = (props: any) => {
                               />
                             </td>
                             <td>
-                              {item?.total_tax}{' '}
+                              {Number(item?.total_tax).toFixed(2)}
                               <CurrencyRupee
                                 sx={{
                                   maxHeight: '15px'
@@ -421,7 +421,7 @@ const MenuLiveReport = (props: any) => {
                               />
                             </td>
                             <td>
-                              {item?.total_sales_amount}{' '}
+                              {Number(item?.total_sales_amount).toFixed(2)}{' '}
                               <CurrencyRupee
                                 sx={{
                                   maxHeight: '15px'

@@ -28,7 +28,7 @@ const userFormSchema = {
 
   transfer_date: yup.date().typeError('date must be required').required(),
   transfer_to_cafe: yup.object().typeError('Please Select Cafe').required(),
-  delivery_person:yup.string().trim().typeError('Delivery Person Name must be required').required(),
+  delivery_person: yup.string().trim().typeError('Delivery Person Name must be required').required(),
   items: yup.array().of(
     yup.object().shape({
       item_id: yup.object().typeError('Please Select Item').required(),
@@ -63,9 +63,9 @@ const CreateTransferItem = (props: any) => {
   const [printData, setPrintData] = useState<any>(null)
   const params = useParams()
 
- const [viewOrder, viewOrderRes] = useViewDemandsMutation()
-   const viewOrders: any = viewOrderRes?.data?.payload
-   //get view order details
+  const [viewOrder, viewOrderRes] = useViewDemandsMutation()
+  const viewOrders: any = viewOrderRes?.data?.payload
+  //get view order details
   useEffect(() => {
     if (isValid(params.id) && viewOrderRes.isUninitialized) {
       viewOrder({
@@ -120,8 +120,8 @@ const CreateTransferItem = (props: any) => {
     const data = {
       ...userData,
       transfer_to_cafe: userData?.transfer_to_cafe?.value,
-     
-      delivery_person:userData?.delivery_person,
+
+      delivery_person: userData?.delivery_person,
       transfer_date: userData?.transfer_date
         ? formatDate(userData?.transfer_date, 'YYYY-MM-DD')
         : undefined,
@@ -137,9 +137,9 @@ const CreateTransferItem = (props: any) => {
             })
           }
         } else {
-      
+
           return {
-          
+
             demand_request_product_id: viewOrders?.requested_products?.[index]?.id,
             item_id: item?.item_id?.value,
             unit_id: item?.unit_id?.value,
@@ -214,35 +214,35 @@ const CreateTransferItem = (props: any) => {
         {
           transfer_to_cafe: viewOrders?.cafe
             ? {
-                label: viewOrders?.cafe?.name,
-                value: viewOrders?.cafe?.id
-              }
+              label: viewOrders?.cafe?.name,
+              value: viewOrders?.cafe?.id
+            }
             : undefined,
           transfer_date: viewOrders?.demand_date,
           items: viewOrders?.requested_products?.map((item: any) => {
-            console.log(item?.warehouse_product?.warehouse_product?.current_quanitity,'item?.warehouse_product?.warehouse_product?.current_quanitity')
+            console.log(item?.warehouse_product?.warehouse_product?.current_quanitity, 'item?.warehouse_product?.warehouse_product?.current_quanitity')
             return {
               item_id: item?.warehouse_product
                 ? {
-                    label: item?.warehouse_product?.name,
-                    value: item?.warehouse_product_product_id,
-                    extra: {
-                      unit: item?.warehouse_unit,
-                      unit_id: item?.warehouse_product_unit_id,
-                      last_average_price: item?.warehouse_product_last_average_price,
-                      current_quanitity: item?.warehouse_product?.current_quanitity,
-                      brand: item?.warehouse_brand,
-                      packsize: item?.warehouse_packsize,
-                      category: item?.warehouse_category,
-                      subcategory: item?.warehouse_subcategory
-                    }
+                  label: item?.warehouse_product?.name,
+                  value: item?.warehouse_product_product_id,
+                  extra: {
+                    unit: item?.warehouse_unit,
+                    unit_id: item?.warehouse_product_unit_id,
+                    last_average_price: item?.warehouse_product_last_average_price,
+                    current_quanitity: item?.warehouse_product?.current_quanitity,
+                    brand: item?.warehouse_brand,
+                    packsize: item?.warehouse_packsize,
+                    category: item?.warehouse_category,
+                    subcategory: item?.warehouse_subcategory
                   }
+                }
                 : undefined,
               unit_id: item?.warehouse_unit
                 ? {
-                    label: item?.warehouse_unit?.name,
-                    value: item?.warehouse_product_unit_id
-                  }
+                  label: item?.warehouse_unit?.name,
+                  value: item?.warehouse_product_unit_id
+                }
                 : undefined,
               quantity: item?.quantity,
               rate: item?.warehouse_product_last_average_price,
@@ -346,15 +346,15 @@ const CreateTransferItem = (props: any) => {
                   />
                 </Col>
                 <Col md='3' lg='3' sm='12' xs='12' >
-                   <FormGroupCustom
-                            name={`delivery_person`}
-                            type='text'
-                            label='Delivery Person'
-                            className='mb-0'
-                            control={form.control}
-                            rules={{ required: true }}
-                           
-                          />
+                  <FormGroupCustom
+                    name={`delivery_person`}
+                    type='text'
+                    label='Delivery Person'
+                    className='mb-0'
+                    control={form.control}
+                    rules={{ required: true }}
+
+                  />
                 </Col>
               </Row>
             </Card>
@@ -424,10 +424,10 @@ const CreateTransferItem = (props: any) => {
                             rules={{ required: true }}
                           />
                         </Col>
-                        
+
 
                         <Col md='2'>
-                           <FormGroupCustom
+                          <FormGroupCustom
                             key={`${field?.id} -${viewOrders?.requested_products[index]?.warehouse_product_product_id?.extra?.unit?.name}`}
                             control={form.control}
                             async
@@ -565,7 +565,7 @@ const CreateTransferItem = (props: any) => {
                           <FormGroupCustom
                             key={`${field?.id} - ${viewOrders?.requested_products[index]?.warehouse_product_last_average_price} - ${viewOrders?.requested_products[index]?.quantity}`}
                             name={`items.${index}.totalRate`}
-                            defaultValue={viewOrders?.requested_products[index]?.quantity  * viewOrders?.requested_products[index]?.warehouse_product_last_average_price}
+                            defaultValue={viewOrders?.requested_products[index]?.quantity * viewOrders?.requested_products[index]?.warehouse_product_last_average_price}
                             type={'number'}
                             label={'Total Rate'}
                             className='mb-0 pointer-events-none'
@@ -609,23 +609,23 @@ const CreateTransferItem = (props: any) => {
                     </Col>
                     <Col md='2' className='mt-1'>
                       <Show IF={index > 0 || index === fields?.length - 1}>
-                        <Show IF={index > 0}>
-                          <BsTooltip<ButtonProps>
-                            Tag={Button}
-                            role={'button'}
-                            color='danger'
-                            size='sm'
-                            className='btn-icon me-1 m-1'
-                            title={'Remove'}
-                            onClick={() => {
-                              remove(index)
-                            }}
-                          >
-                            <>
-                              <Trash2 size={16} />
-                            </>
-                          </BsTooltip>
-                        </Show>
+                        {/* <Show IF={index > 0}> */}
+                        <BsTooltip<ButtonProps>
+                          Tag={Button}
+                          role={'button'}
+                          color='danger'
+                          size='sm'
+                          className='btn-icon me-1 m-1'
+                          title={'Remove'}
+                          onClick={() => {
+                            remove(index)
+                          }}
+                        >
+                          <>
+                            <Trash2 size={16} />
+                          </>
+                        </BsTooltip>
+                        {/* </Show> */}
 
                         {/* <Show IF={index === fields?.length - 1}>
                           <BsTooltip<ButtonProps>

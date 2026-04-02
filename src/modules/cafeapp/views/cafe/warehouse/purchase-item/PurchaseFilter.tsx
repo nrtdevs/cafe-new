@@ -69,6 +69,9 @@ const PurchaseFilter: FC<FilterProps> = (props) => {
               path={ApiEndpoints.listWarehouseCategory}
               selectLabel={(e) => `${e.name}  `}
               selectValue={(e) => e.id}
+              onChangeValue={() => {
+                form.resetField(`subcategory_id`)
+              }}
               defaultOptions
               type='select'
               className='mb-1'
@@ -77,10 +80,11 @@ const PurchaseFilter: FC<FilterProps> = (props) => {
           </Col>
           <Col md='12'>
             <FormGroupCustom
-              key={`${form.watch('category_id')}`}
+              key={`${form.watch('category_id')?.value}`}
               control={form.control}
               async
               isClearable
+              isDisabled={!form.watch('category_id')}
               label={FM('sub-category')}
               name='subcategory_id'
               loadOptions={loadDropdown}

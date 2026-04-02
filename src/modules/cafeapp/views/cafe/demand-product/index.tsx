@@ -128,8 +128,6 @@ const DemandProduct = (props: any) => {
   //can create transfer
   const canAddTransfer = Can(Permissions.itemTransferCreate)
 
-  console.log(canAddTransfer, 'canAddTransfer')
-
   const navigate = useNavigate()
 
   // form hook

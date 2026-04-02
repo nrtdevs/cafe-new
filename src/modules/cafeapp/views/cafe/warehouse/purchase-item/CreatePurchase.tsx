@@ -84,10 +84,12 @@ const userFormSchema = {
         .typeError('Pack Size must be required'),
       shop_name: yup
         .string()
+        .trim()
         .typeError('Shop Name must be required ')
         .required('Shop Name  must be required'),
       person: yup
         .string()
+        .trim()
         .typeError('Person Name must be required ')
         .required('Person Name  must be required')
     })
@@ -287,65 +289,65 @@ const CreatePurchase = (props: any) => {
                           state.editData
                             ? ''
                             : form.setValue(
-                                `items.${index}.rate`,
-                                Number(
-                                  form.watch(`items.${index}.item_id`)?.extra?.final_average_price
-                                )
+                              `items.${index}.rate`,
+                              Number(
+                                form.watch(`items.${index}.item_id`)?.extra?.final_average_price
                               )
+                            )
                         }
                         onChangeValue={(e) => {
                           if (e?.extra !== undefined) {
                             form.watch(`items.${index}.item_id`)?.extra?.unit?.name
                               ? form.setValue(`items.${index}.unit_id`, {
-                                  label: form.watch(`items.${index}.item_id`)?.extra?.unit?.name
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.unit?.name
-                                    : undefined,
-                                  value: form.watch(`items.${index}.item_id`)?.extra?.unit_id
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.unit_id
-                                    : undefined
-                                })
+                                label: form.watch(`items.${index}.item_id`)?.extra?.unit?.name
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.unit?.name
+                                  : undefined,
+                                value: form.watch(`items.${index}.item_id`)?.extra?.unit_id
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.unit_id
+                                  : undefined
+                              })
                               : undefined
                             form.watch(`items.${index}.item_id`)?.extra?.category?.name
                               ? form.setValue(`items.${index}.category_id`, {
-                                  label: form.watch(`items.${index}.item_id`)?.extra?.category?.name
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.category?.name
-                                    : undefined,
-                                  value: form.watch(`items.${index}.item_id`)?.extra?.category?.id
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.category?.id
-                                    : undefined
-                                })
+                                label: form.watch(`items.${index}.item_id`)?.extra?.category?.name
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.category?.name
+                                  : undefined,
+                                value: form.watch(`items.${index}.item_id`)?.extra?.category?.id
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.category?.id
+                                  : undefined
+                              })
                               : undefined
                             form.watch(`items.${index}.item_id`)?.extra?.brand?.name
                               ? form.setValue(`items.${index}.brand_id`, {
-                                  label: form.watch(`items.${index}.item_id`)?.extra?.brand?.name
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.brand?.name
-                                    : undefined,
-                                  value: form.watch(`items.${index}.item_id`)?.extra?.brand?.id
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.brand?.id
-                                    : undefined
-                                })
+                                label: form.watch(`items.${index}.item_id`)?.extra?.brand?.name
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.brand?.name
+                                  : undefined,
+                                value: form.watch(`items.${index}.item_id`)?.extra?.brand?.id
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.brand?.id
+                                  : undefined
+                              })
                               : undefined
                             form.watch(`items.${index}.item_id`)?.extra?.packsize?.name
                               ? form.setValue(`items.${index}.pack_size`, {
-                                  label: form.watch(`items.${index}.item_id`)?.extra?.packsize?.name
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.packsize?.name
-                                    : undefined,
-                                  value: form.watch(`items.${index}.item_id`)?.extra?.packsize?.id
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.packsize?.id
-                                    : undefined
-                                })
+                                label: form.watch(`items.${index}.item_id`)?.extra?.packsize?.name
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.packsize?.name
+                                  : undefined,
+                                value: form.watch(`items.${index}.item_id`)?.extra?.packsize?.id
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.packsize?.id
+                                  : undefined
+                              })
                               : undefined
                             form.watch(`items.${index}.item_id`)?.extra?.subcategory?.name
                               ? form.setValue(`items.${index}.subcategory_id`, {
-                                  label: form.watch(`items.${index}.item_id`)?.extra?.subcategory
-                                    ?.name
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.subcategory?.name
-                                    : undefined,
-                                  value: form.watch(`items.${index}.item_id`)?.extra?.subcategory
-                                    ?.id
-                                    ? form.watch(`items.${index}.item_id`)?.extra?.subcategory?.id
-                                    : undefined
-                                })
+                                label: form.watch(`items.${index}.item_id`)?.extra?.subcategory
+                                  ?.name
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.subcategory?.name
+                                  : undefined,
+                                value: form.watch(`items.${index}.item_id`)?.extra?.subcategory
+                                  ?.id
+                                  ? form.watch(`items.${index}.item_id`)?.extra?.subcategory?.id
+                                  : undefined
+                              })
                               : ''
 
                             form.setValue(
@@ -451,10 +453,11 @@ const CreatePurchase = (props: any) => {
 
                     <Col md='3' lg='3' sm='12' xs='12'>
                       <FormGroupCustom
-                        key={`${form.watch(`items.${index}.category_id`)}`}
+                        key={`${form.watch(`items.${index}.category_id`)?.value}`}
                         control={form.control}
                         isClearable
                         creatable
+                        isDisabled={!form.watch(`items.${index}.category_id`)}
                         label={FM('sub-category')}
                         name={`items.${index}.subcategory_id`}
                         loadOptions={loadDropdown}

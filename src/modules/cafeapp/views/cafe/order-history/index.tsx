@@ -232,281 +232,251 @@ const OrderHistory = (props: any) => {
         }}
         handleModal={() => closeViewModal(true)}
       >
-        <div className=''></div>
-        <div className='card'>
-          <div className='card-body'>
-            <div className='container'>
-              {/* <div className='row d-flex align-items-baseline'>
-                                <div className='col-xl-9'>
-                                    <p style={{ color: '#7e8d9f', fontSize: '20px' }}>
-                                        Order No :<strong>{state.selectedUser?.id}</strong>
-                                    </p>
-                                </div>
+        <div className='px-2 py-2'>
+          <div className='row mb-2 pb-1 mx-0 border-bottom'>
+            <div className='col-xl-8'>
+              <ul className='list-unstyled mb-0'>
+                {state?.selectedUser?.customer_id ? (
+                  <li className='mb-75 d-flex align-items-center'>
+                    <span className='fw-bold text-dark me-50' style={{ minWidth: '130px' }}>
+                      {FM('customer-name')}:
+                    </span>
+                    <span className='text-primary fw-bold'>
+                      {state?.selectedUser?.customer?.name}
+                    </span>
+                  </li>
+                ) : (
+                  <li className='mb-75 text-muted small italic'>Walk-in Customer</li>
+                )}
 
-                                <hr />
-                            </div> */}
-
-              <div className='container'>
-                <div className='row'>
-                  <div className='col-xl-8'>
-                    <ul className='list-unstyled'>
-                      {state?.selectedUser?.customer_id ? (
-                        <>
-                          <li className='text-muted'>
-                            {FM('customer-name')}:{' '}
-                            <span style={{ color: '#5d9fc5 ' }}>
-                              {state?.selectedUser?.customer?.name}
-                            </span>
-                          </li>
-                        </>
-                      ) : (
-                        ''
-                      )}
-
-                      {state?.selectedUser?.payment_mode === 4 ||
-                      state?.selectedUser?.payment_mode === 3 ? (
-                        <>
-                          <li className='text-muted'>
-                            {FM('cash')} :{state?.selectedUser?.cash_amount}
-                            {
-                              <CurrencyRupee
-                                sx={{
-                                  maxHeight: '15px'
-                                }}
-                              />
-                            }
-                          </li>
-                          <li className='text-muted'>
-                            {FM('online')} :{state?.selectedUser?.online_amount}
-                            {
-                              <CurrencyRupee
-                                sx={{
-                                  maxHeight: '15px'
-                                }}
-                              />
-                            }
-                          </li>
-                        </>
-                      ) : (
-                        ''
-                      )}
-
-                      {state?.selectedUser?.payment_mode === 1 ? (
-                        <>
-                          <li className='text-muted'>
-                            {FM('cash')} :{state?.selectedUser?.cash_amount}
-                            {
-                              <CurrencyRupee
-                                sx={{
-                                  maxHeight: '15px'
-                                }}
-                              />
-                            }
-                          </li>
-                        </>
-                      ) : (
-                        ''
-                      )}
-
-                      {state?.selectedUser?.payment_mode === 2 ? (
-                        <>
-                          <li className='text-muted'>
-                            {FM('online')} :{state?.selectedUser?.online_amount}
-                            {
-                              <CurrencyRupee
-                                sx={{
-                                  maxHeight: '15px'
-                                }}
-                              />
-                            }
-                          </li>
-                        </>
-                      ) : (
-                        ''
-                      )}
-                      {state?.selectedUser?.payment_mode === 3 ? (
-                        <>
-                          <li className='text-muted text-black'>
-                            {FM('udhaar')} :{state?.selectedUser?.udhaar_amount}
-                            {
-                              <CurrencyRupee
-                                sx={{
-                                  maxHeight: '15px'
-                                }}
-                              />
-                            }
-                          </li>
-                        </>
-                      ) : (
-                        ''
-                      )}
-                      <li className='text-muted'>
-                        <span className=''>{FM('discount-amount')} (₹) : </span>
-                        <span className=''>{totalDiscount}</span>
-                      </li>
-                    </ul>
-                  </div>
-                  <div className='col-xl-4'>
-                    <ul className='list-unstyled'>
-                      <li className=''>
-                        <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                        <span className='fw-bold'>{FM('invoice')} :</span>
-                        {state.selectedUser?.order_number}
-                      </li>
-                      <li className=''>
-                        <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                        <span className='fw-bold'>Creation Date : </span>
-                        {formatDate(state.selectedUser?.created_at, 'MM/DD/YYYY')}
-                      </li>
-                      <li className=''>
-                        <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                        <span className='me-1 fw-bold'>Status:</span>
-                        <span className='badge bg-warning text-black fw-bold'>
-                          {state.selectedUser?.order_status === 1
-                            ? 'Pending'
-                            : state.selectedUser?.order_status === 3
-                            ? 'Completed'
-                            : state.selectedUser?.order_status === 2
-                            ? 'Confirmed'
-                            : ' Cancelled'}
+                {(state?.selectedUser?.payment_mode === 4 ||
+                  state?.selectedUser?.payment_mode === 3) && (
+                    <>
+                      <li className='mb-75 d-flex align-items-center'>
+                        <span className='fw-bold text-dark me-50' style={{ minWidth: '130px' }}>
+                          {FM('cash')}:
+                        </span>
+                        <span>
+                          <CurrencyRupee sx={{ maxHeight: '14px' }} />
+                          {state?.selectedUser?.cash_amount}
                         </span>
                       </li>
-                      <li className=''>
-                        <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                        <span className='me-1 fw-bold'>{FM('transaction')} :</span>
-                        <span className='text-black fw-bold'>
-                          {state.selectedUser?.payment_mode === 1 ? (
-                            <Badge color='light-warning'>{'Cash'}</Badge>
-                          ) : state.selectedUser?.payment_mode === 2 ? (
-                            <Badge color='light-danger'>{FM('online')}</Badge>
-                          ) : state.selectedUser?.payment_mode === 4 ? (
-                            <Badge color='light-secondary'>{'Split'}</Badge>
-                          ) : state.selectedUser?.payment_mode === 3 ? (
-                            <Badge color='light-secondary'>{FM('udhaar')}</Badge>
-                          ) : (
-                            ''
-                          )}
+                      <li className='mb-75 d-flex align-items-center'>
+                        <span className='fw-bold text-dark me-50' style={{ minWidth: '130px' }}>
+                          {FM('online')}:
+                        </span>
+                        <span>
+                          <CurrencyRupee sx={{ maxHeight: '14px' }} />
+                          {state?.selectedUser?.online_amount}
                         </span>
                       </li>
-                      <li className=''>
-                        <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                        <span className='fw-bold'>{FM('order-duration')} : </span>
-                        {state.selectedUser?.order_duration} Minute
-                      </li>
-                      {state?.selectedUser?.cancel_reason ? (
-                        <li className=''>
-                          <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                          <span className='fw-bold'>{FM('cancel-reason')} : </span>
-                          <span className='text-danger'>{state.selectedUser?.cancel_reason}</span>
-                        </li>
-                      ) : (
-                        ''
-                      )}
-                      {/* {state?.selectedUser?.customer_id ? (
-                                                <li className=''>
-                                                    <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                                                    <span className='fw-bold'>Customer Name : </span>
-                                                    <span className='text-danger'>{state.selectedUser?.customer?.name}</span>
+                    </>
+                  )}
 
-                                                </li>
-                                            ) : (
-                                                ''
-                                            )} */}
-                      <li className=''>
-                        <i className='fas fa-circle' style={{ color: '#84B0CA' }}></i>{' '}
-                        <span className='fw-bold'>{FM('discount')} : </span>
-                        {state.selectedUser?.discount} %
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                {state?.selectedUser?.payment_mode === 1 && (
+                  <li className='mb-75 d-flex align-items-center'>
+                    <span className='fw-bold text-dark me-50' style={{ minWidth: '130px' }}>
+                      {FM('cash')}:
+                    </span>
+                    <span>
+                      <CurrencyRupee sx={{ maxHeight: '14px' }} />
+                      {state?.selectedUser?.cash_amount}
+                    </span>
+                  </li>
+                )}
 
-                <div className='row my-2 mx-1 justify-content-center'>
-                  <table className='table table-striped table-borderless'>
-                    <thead style={{ backgroundColor: '#84B0CA' }} className='text-black'>
-                      <tr>
-                        <th scope='col'>#</th>
-                        <th scope='col'>{FM('menu-name')}</th>
-                        <th scope='col'>{FM('qty')}</th>
-                        <th scope='col'>
-                          {FM('price')}
-                          {
-                            <CurrencyRupee
-                              sx={{
-                                maxHeight: '15px'
-                              }}
-                            />
-                          }
-                        </th>
-                        <th scope='col'>
-                          {FM('discount-price')}
-                          {
-                            <CurrencyRupee
-                              sx={{
-                                maxHeight: '15px'
-                              }}
-                            />
-                          }
-                        </th>
-                        <th scope='col'>{FM('instruction')}</th>
-                        <th scope='col'>
-                          {FM('total')}
-                          {
-                            <CurrencyRupee
-                              sx={{
-                                maxHeight: '15px'
-                              }}
-                            />
-                          }
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {state?.selectedUser?.order_details?.map((item: any, index: any) => {
-                        const menu = JsonParseValidate(item?.menu_detail)
-                        return (
-                          <>
-                            <tr>
-                              <th scope='row'>{index + 1}</th>
-                              <td>{menu?.name}</td>
-                              <td>{item?.quantity}</td>
-                              <td>{item?.price}</td>
-                              <td>{item?.discount_amount}</td>
-                              <td>{item?.instructions}</td>
-                              <td>{item?.total - item?.discount_amount}</td>
-                            </tr>
-                          </>
-                        )
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-                <hr />
-                <div className='row'>
-                  <div className='col-xl-6'></div>
-                  <div className='col-xl-5'>
-                    <ul className='list-unstyled'>
-                      <li className='text-muted ms-3 d-flex justify-content-end'>
-                        <span className='text-black me-1'>SubTotal(₹) :</span>
-                        <span className='text-black'>{state.selectedUser?.total_amount}</span>
-                      </li>
-                      <li className='text-muted ms-3 d-flex justify-content-end'>
-                        <span className='text-black me-1'>{FM('tax')} (₹) : </span>
-                        <span className='text-black'>{Number(state.selectedUser?.tax_amount)}</span>
-                      </li>
+                {state?.selectedUser?.payment_mode === 2 && (
+                  <li className='mb-75 d-flex align-items-center'>
+                    <span className='fw-bold text-dark me-50' style={{ minWidth: '130px' }}>
+                      {FM('online')}:
+                    </span>
+                    <span>
+                      <CurrencyRupee sx={{ maxHeight: '14px' }} />
+                      {state?.selectedUser?.online_amount}
+                    </span>
+                  </li>
+                )}
 
-                      <hr />
-                      <li className='text-muted ms-3 d-flex justify-content-end'>
-                        <span className='text-black text-dark text-bolder'>
-                          {FM('total-amount')}(₹) :{' '}
-                        </span>
-                        <span className='text-black text-bolder'>
-                          {Number(state.selectedUser?.payable_amount)}
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+                {state?.selectedUser?.payment_mode === 3 && (
+                  <li className='mb-75 d-flex align-items-center'>
+                    <span className='fw-bold text-danger me-50' style={{ minWidth: '130px' }}>
+                      {FM('udhaar')}:
+                    </span>
+                    <span className='text-danger fw-bold'>
+                      <CurrencyRupee sx={{ maxHeight: '14px' }} />
+                      {state?.selectedUser?.udhaar_amount}
+                    </span>
+                  </li>
+                )}
+
+                <li className='mb-0 d-flex align-items-center'>
+                  <span className='fw-bold text-dark me-50' style={{ minWidth: '130px' }}>
+                    {FM('discount-amount')}:
+                  </span>
+                  <span className='text-success fw-bold'>
+                    <CurrencyRupee sx={{ maxHeight: '14px' }} />
+                    {totalDiscount}
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div className='col-xl-4 border-start-md ps-md-2 mt-2 mt-md-0'>
+              <ul className='list-unstyled mb-0'>
+                <li className='mb-75 d-flex align-items-center'>
+                  <i
+                    className='fas fa-circle font-small-3 me-50'
+                    style={{ color: '#84B0CA', fontSize: '10px' }}
+                  ></i>
+                  <span className='fw-bold text-dark me-50'>{FM('invoice')}:</span>
+                  <span className='text-secondary'>#{state.selectedUser?.order_number}</span>
+                </li>
+                <li className='mb-75 d-flex align-items-center'>
+                  <i
+                    className='fas fa-circle font-small-3 me-50'
+                    style={{ color: '#84B0CA', fontSize: '10px' }}
+                  ></i>
+                  <span className='fw-bold text-dark me-50'>Created:</span>
+                  <span className='text-secondary'>
+                    {formatDate(state.selectedUser?.created_at, 'MMM DD, YYYY')}
+                  </span>
+                </li>
+                <li className='mb-75 d-flex align-items-center'>
+                  <i
+                    className='fas fa-circle font-small-3 me-50'
+                    style={{ color: '#84B0CA', fontSize: '10px' }}
+                  ></i>
+                  <span className='fw-bold text-dark me-50'>Status:</span>
+                  <Badge
+                    pill
+                    color={
+                      state.selectedUser?.order_status === 1
+                        ? 'light-warning'
+                        : state.selectedUser?.order_status === 3
+                          ? 'light-success'
+                          : state.selectedUser?.order_status === 2
+                            ? 'light-primary'
+                            : 'light-danger'
+                    }
+                    className='text-capitalize'
+                  >
+                    {state.selectedUser?.order_status === 1
+                      ? 'Pending'
+                      : state.selectedUser?.order_status === 3
+                        ? 'Completed'
+                        : state.selectedUser?.order_status === 2
+                          ? 'Confirmed'
+                          : 'Cancelled'}
+                  </Badge>
+                </li>
+                <li className='mb-75 d-flex align-items-center'>
+                  <i
+                    className='fas fa-circle font-small-3 me-50'
+                    style={{ color: '#84B0CA', fontSize: '10px' }}
+                  ></i>
+                  <span className='fw-bold text-dark me-50'>{FM('transaction')}:</span>
+                  <span>
+                    {state.selectedUser?.payment_mode === 1 ? (
+                      <Badge color='light-warning'>Cash</Badge>
+                    ) : state.selectedUser?.payment_mode === 2 ? (
+                      <Badge color='light-danger'>{FM('online')}</Badge>
+                    ) : state.selectedUser?.payment_mode === 4 ? (
+                      <Badge color='light-secondary'>Split</Badge>
+                    ) : state.selectedUser?.payment_mode === 3 ? (
+                      <Badge color='light-secondary'>{FM('udhaar')}</Badge>
+                    ) : (
+                      ''
+                    )}
+                  </span>
+                </li>
+                <li className='mb-75 d-flex align-items-center'>
+                  <i
+                    className='fas fa-circle font-small-3 me-50'
+                    style={{ color: '#84B0CA', fontSize: '10px' }}
+                  ></i>
+                  <span className='fw-bold text-dark me-50'>{FM('order-duration')}:</span>
+                  <span className='text-secondary'>{state.selectedUser?.order_duration} mins</span>
+                </li>
+                {state?.selectedUser?.cancel_reason && (
+                  <li className='mb-0 d-flex align-items-top'>
+                    <i
+                      className='fas fa-circle font-small-3 me-50 text-danger mt-25'
+                      style={{ fontSize: '10px' }}
+                    ></i>
+                    <div>
+                      <span className='fw-bold text-danger me-50'>{FM('cancel-reason')}:</span>
+                      <span className='text-danger small'>{state.selectedUser?.cancel_reason}</span>
+                    </div>
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+
+          <div className='table-responsive border rounded-3 my-2'>
+            <table className='table table-hover table-striped mb-0'>
+              <thead className='table-light text-dark fw-bold'>
+                <tr>
+                  <th className='py-1 ps-2'>#</th>
+                  <th className='py-1'>{FM('menu-name')}</th>
+                  <th className='py-1 text-center'>{FM('qty')}</th>
+                  <th className='py-1 text-end'>{FM('price')} (₹)</th>
+                  <th className='py-1 text-center'>{FM('discount')} %</th>
+                  <th className='py-1 text-end'>{FM('discount-price')} (₹)</th>
+                  <th className='py-1'>{FM('instruction')}</th>
+                  <th className='py-1 text-end pe-2'>{FM('total')} (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {state?.selectedUser?.order_details?.map((item: any, index: any) => {
+                  const menu = JsonParseValidate(item?.menu_detail)
+                  return (
+                    <tr key={index}>
+                      <td className='ps-2 align-middle'>{index + 1}</td>
+                      <td className='align-middle fw-bold text-dark'>{menu?.name}</td>
+                      <td className='text-center align-middle'>{item?.quantity}</td>
+                      <td className='text-end align-middle'>{item?.price}</td>
+                      <td className='text-center align-middle'>
+                        {item?.discount_per > 0 ? (
+                          <span className='text-success'>{item?.discount_per}%</span>
+                        ) : (
+                          <span className='text-muted'>-</span>
+                        )}
+                      </td>
+                      <td className='text-end align-middle'>
+                        {item?.discount_amount > 0 ? (
+                          <span className='text-success'>{item?.discount_amount}</span>
+                        ) : (
+                          <span className='text-muted'>-</span>
+                        )}
+                      </td>
+                      <td className='align-middle text-muted small'>{item?.instructions || '-'}</td>
+                      <td className='text-end align-middle fw-bolder text-dark pe-2'>
+                        {(item?.total - item?.discount_amount).toFixed(2)}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className='row justify-content-end pr-1 mx-0'>
+            <div className='col-md-5 bg-light p-1 rounded-3'>
+              <div className='d-flex justify-content-between mb-50'>
+                <span className='text-muted fw-bold'>SubTotal(₹) :</span>
+                <span className='fw-bold text-dark'>{state.selectedUser?.total_amount}</span>
+              </div>
+              <div className='d-flex justify-content-between mb-50'>
+                <span className='text-muted fw-bold'>{FM('tax')} (₹) : </span>
+                <span className='fw-bold text-dark'>
+                  {Number(state.selectedUser?.tax_amount).toFixed(2)}
+                </span>
+              </div>
+              <div className='d-flex justify-content-between border-top mt-1 pt-1'>
+                <h5 className='fw-bolder text-primary mb-0 uppercase'>{FM('total-amount')}(₹) : </h5>
+                <h5 className='fw-bolder text-primary mb-0'>
+                  {Number(state.selectedUser?.payable_amount).toFixed(2)}
+                </h5>
               </div>
             </div>
           </div>
@@ -580,27 +550,27 @@ const OrderHistory = (props: any) => {
               className='text-capitalize'
               color={
                 statusObj1[
-                  row?.payment_mode === 1
-                    ? 'cash'
-                    : row?.payment_mode === 2
+                row?.payment_mode === 1
+                  ? 'cash'
+                  : row?.payment_mode === 2
                     ? 'online'
                     : row?.payment_mode === 4
-                    ? 'split'
-                    : row?.payment_mode === 3
-                    ? 'udhar'
-                    : ''
+                      ? 'split'
+                      : row?.payment_mode === 3
+                        ? 'udhar'
+                        : ''
                 ]
               }
             >
               {row?.payment_mode === 1
                 ? 'cash'
                 : row?.payment_mode === 2
-                ? 'upi'
-                : row?.payment_mode === 4
-                ? 'split'
-                : row?.payment_mode === 3
-                ? 'udhar'
-                : ''}
+                  ? 'upi'
+                  : row?.payment_mode === 4
+                    ? 'split'
+                    : row?.payment_mode === 3
+                      ? 'udhar'
+                      : ''}
             </Badge>
           }
         </Fragment>

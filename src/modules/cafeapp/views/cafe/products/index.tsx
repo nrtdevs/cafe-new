@@ -208,8 +208,8 @@ const Product = (props: any) => {
           image_path: userData?.image_path
             ? userData?.image_path[0]?.file_name
             : state?.editData?.image_path
-            ? state?.editData?.image_path
-            : ''
+              ? state?.editData?.image_path
+              : ''
         }
       })
     } else {
@@ -223,7 +223,7 @@ const Product = (props: any) => {
             create_menu: userData?.create_menu === 1 ? 'true' : userData?.create_menu,
             unit_id: userData?.unit_id?.value,
             category_id: userData?.category_id?.value,
-            is_product_monitoring: userData?.is_product_monitoring === 1 ? 'true' : 'false',
+            is_product_monitoring: userData?.is_product_monitoring === 1 ? 1 : 0,
             subcategory_id: userData?.subcategory_id?.value,
             quantity: userData?.create_menu === 1 ? 1 : 0,
             image_path: userData?.image_path[0]?.file_name ? userData?.image_path[0]?.file_name : ''
@@ -284,21 +284,21 @@ const Product = (props: any) => {
           status: state?.editData?.status,
           unit_id: state.editData?.unit_id
             ? {
-                label: state.editData?.unit?.name,
-                value: state.editData?.unit_id
-              }
+              label: state.editData?.unit?.name,
+              value: state.editData?.unit_id
+            }
             : undefined,
           category_id: state?.editData?.category_id
             ? {
-                label: state.editData?.category?.name,
-                value: state.editData?.category?.id
-              }
+              label: state.editData?.category?.name,
+              value: state.editData?.category?.id
+            }
             : undefined,
           subcategory_id: state?.editData?.subcategory_id
             ? {
-                label: state.editData?.subcategory?.name,
-                value: state.editData?.subcategory?.id
-              }
+              label: state.editData?.subcategory?.name,
+              value: state.editData?.subcategory?.id
+            }
             : undefined
         },
         form.setValue
