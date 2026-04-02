@@ -87,6 +87,24 @@ const userFormSchema = {
 // validate
 const schema = yup.object(userFormSchema).required()
 
+const productFormSchema = {
+  category_id: yup.object().typeError('This field is required').required(),
+  unit_id: yup.object().typeError('This field is required').required(),
+  name: yup.string().required('This field is required'),
+  current_quanitity: yup
+    .number()
+    .typeError('This field is required')
+    .required('This field is required'),
+  price: yup.number().typeError('This field is required').required('This field is required'),
+  alert_quanitity: yup
+    .number()
+    .typeError('This field is required')
+    .required('This field is required')
+}
+
+// validate
+const productSchema = yup.object(productFormSchema).required()
+
 // states
 type States = {
   page?: any
@@ -131,6 +149,21 @@ const StockManage = (props: any) => {
   const form = useForm<stockManagementResponseTypes>({
     resolver: yupResolver(schema),
     defaultValues
+  })
+
+  // product form hook
+  const productForm = useForm<{
+    category_id: any
+    subcategory_id: any
+    name: string
+    current_quanitity: string
+    price: string
+    alert_quanitity: string
+    unit_id: any
+    description: string
+    image_path: string
+  }>({
+    resolver: yupResolver(productSchema)
   })
 
   // toggle add modal
@@ -185,7 +218,7 @@ const StockManage = (props: any) => {
       enableEdit: false,
       editData: null
     })
-    form.reset()
+    productForm.reset()
     toggleModalAddProduct()
   }
 
@@ -215,57 +248,57 @@ const StockManage = (props: any) => {
           purchase_by: state.editData?.purchase_by,
           recieved_by: state.editData?.recieved_by
             ? {
-                label: state.editData?.recieved_by?.name,
-                value: state.editData?.recieved_by?.id
-              }
+              label: state.editData?.recieved_by?.name,
+              value: state.editData?.recieved_by?.id
+            }
             : undefined,
           product_id: state.editData?.product_id
             ? {
-                label: state.editData?.product?.name,
-                value: state.editData?.product_id
-              }
+              label: state.editData?.product?.name,
+              value: state.editData?.product_id
+            }
             : undefined,
           unit_id: state.editData?.unit_id
             ? {
-                label: state.editData?.unit?.name,
-                value: state.editData?.unit_id
-              }
+              label: state.editData?.unit?.name,
+              value: state.editData?.unit_id
+            }
             : undefined,
           stock_operation: state.editData?.stock_operation
             ? {
-                label: state.editData?.stock_operation,
-                value: state.editData?.stock_operation
-              }
+              label: state.editData?.stock_operation,
+              value: state.editData?.stock_operation
+            }
             : undefined,
           resource: state.editData?.resource
             ? {
-                label: state.editData?.resource,
-                value: state.editData?.resource
-              }
+              label: state.editData?.resource,
+              value: state.editData?.resource
+            }
             : undefined,
           category_id: state.editData?.category_id
             ? {
-                label: state.editData?.category?.name,
-                value: state.editData?.category?.id
-              }
+              label: state.editData?.category?.name,
+              value: state.editData?.category?.id
+            }
             : undefined,
           subcategory_id: state.editData?.subcategory_id
             ? {
-                label: state.editData?.subcategory?.name,
-                value: state.editData?.subcategory?.id
-              }
+              label: state.editData?.subcategory?.name,
+              value: state.editData?.subcategory?.id
+            }
             : undefined,
           brand_id: state.editData?.brand_id
             ? {
-                label: state.editData?.brand?.name,
-                value: state.editData?.brand?.id
-              }
+              label: state.editData?.brand?.name,
+              value: state.editData?.brand?.id
+            }
             : undefined,
           pack_size_id: state.editData?.pack_size_id
             ? {
-                label: state.editData?.packsize?.name,
-                value: state.editData?.packsize?.id
-              }
+              label: state.editData?.packsize?.name,
+              value: state.editData?.packsize?.id
+            }
             : undefined
         },
         form.setValue
@@ -1053,7 +1086,7 @@ const StockManage = (props: any) => {
         // handle error
         const errors: any = createProductResponse.error
         log(errors)
-        setInputErrors(errors?.data?.payload, form.setError)
+        setInputErrors(errors?.data?.payload, productForm.setError)
       }
     }
   }, [createProductResponse])
@@ -1084,82 +1117,14 @@ const StockManage = (props: any) => {
         modalClass={'modal-lg'}
         scrollControl={false}
         loading={createProductResponse.isLoading}
-        handleSave={form.handleSubmit(handleProductSave)}
+        handleSave={productForm.handleSubmit(handleProductSave)}
       >
         <div className='p-2'>
-          <Form onSubmit={form.handleSubmit(handleProductSave)}>
+          <Form onSubmit={productForm.handleSubmit(handleProductSave)}>
             <Row>
-              {/* {form.watch('create_menu') ? (
-                                <Fragment>
-
-                                    <Col md='6'>
-                                        <FormGroupCustom
-                                            control={form.control}
-                                            async
-                                            label='Category'
-                                            name='category_id'
-                                            loadOptions={loadDropdown}
-                                            path={ApiEndpoints.categories}
-                                            selectLabel={(e) => `${e.name}  `}
-                                            selectValue={(e) => e.id}
-                                            defaultOptions
-                                            type='select'
-                                            className='mb-1'
-                                            rules={{ required: false }}
-                                        />
-                                    </Col>
-
-                                    <Col md='6'>
-                                        <FormGroupCustom
-                                            control={form.control}
-                                            label='Quantity'
-                                            name='quantity'
-                                            type='number'
-                                            className='mb-1'
-                                            rules={{ required: false }}
-                                        />
-                                    </Col>
-
-                                    <Col md='6'>
-                                        <FormGroupCustom
-                                            control={form.control}
-                                            label='Menu Price'
-                                            name='menu_price'
-                                            type='number'
-                                            className='mb-1'
-                                            rules={{ required: false }}
-                                        />
-                                    </Col>
-
-                                    <Col md='6'>
-                                        <FormGroupCustom
-                                            control={form.control}
-                                            label='Priority Rank'
-                                            name='priority_rank'
-                                            type='number'
-                                            className='mb-1'
-                                            rules={{ required: false }}
-                                        />
-                                    </Col>
-
-                                    <Col md='6'>
-                                        <FormGroupCustom
-                                            control={form.control}
-                                            label={FM('order-duration')}
-                                            name='order_duration'
-                                            type='number'
-                                            className='mb-1'
-                                            rules={{ required: false }}
-                                        />
-                                    </Col>
-                                </Fragment>
-                            ) : (
-                                ''
-                            )} */}
-
               <Col md='6'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   async
                   isClearable
                   label={FM('category')}
@@ -1177,8 +1142,8 @@ const StockManage = (props: any) => {
 
               <Col md='6'>
                 <FormGroupCustom
-                  key={`${form.watch('category_id')}`}
-                  control={form.control}
+                  key={`${productForm.watch('category_id')}`}
+                  control={productForm.control}
                   async
                   isClearable
                   label={FM('sub-category')}
@@ -1188,7 +1153,7 @@ const StockManage = (props: any) => {
                   selectLabel={(e) => `${e.name}  `}
                   selectValue={(e) => e.id}
                   jsonData={{
-                    is_parent: form.watch('category_id')?.value
+                    is_parent: productForm.watch('category_id')?.value
                   }}
                   defaultOptions
                   type='select'
@@ -1199,7 +1164,7 @@ const StockManage = (props: any) => {
 
               <Col md='6' lg='6' sm='12' xs='12'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   label={FM('name')}
                   name='name'
                   type='text'
@@ -1210,7 +1175,7 @@ const StockManage = (props: any) => {
 
               <Col md='6' lg='6' sm='12' xs='12'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   label={FM('current-quantity')}
                   name='current_quanitity'
                   type='number'
@@ -1221,7 +1186,7 @@ const StockManage = (props: any) => {
 
               <Col md='6' lg='6' sm='12' xs='12'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   label='buy price'
                   name='price'
                   type='number'
@@ -1232,7 +1197,7 @@ const StockManage = (props: any) => {
 
               <Col md='6' lg='6' sm='12' xs='12'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   label={FM('alert-quantity')}
                   name='alert_quanitity'
                   type='number'
@@ -1243,7 +1208,7 @@ const StockManage = (props: any) => {
 
               <Col md='6' lg='6' sm='12' xs='12'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   async
                   label='unit'
                   name='unit_id'
@@ -1260,7 +1225,7 @@ const StockManage = (props: any) => {
 
               <Col md='6' lg='6' sm='12' xs='12'>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   label={FM('description')}
                   name='description'
                   type='textarea'
@@ -1271,7 +1236,7 @@ const StockManage = (props: any) => {
 
               <Col md='12' lg='12' sm='12' xs='12' className=''>
                 <FormGroupCustom
-                  control={form.control}
+                  control={productForm.control}
                   label={'Upload image'}
                   name='image_path'
                   type='dropZone'
