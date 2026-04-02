@@ -57,12 +57,12 @@ export const ItemTransferRTKManagement = createApi({
       })
     }),
     exportTransferItemReport: builder.mutation<any, any>({
-          query: (jsonData) => ({
-            jsonData,
-            method: 'post',
-            path: ApiEndpoints.exportTransfer
-          })
-        }),
+      query: (jsonData) => ({
+        jsonData,
+        method: 'post',
+        path: ApiEndpoints.exportTransfer
+      })
+    }),
     loadEmployeeHandover: builder.mutation<ResponseListType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
@@ -71,14 +71,14 @@ export const ItemTransferRTKManagement = createApi({
         path: ApiEndpoints.employeeHandoverList
       })
     }),
-      exportPurchaseReport: builder.mutation<any, any>({
-          query: (jsonData) => ({
-            jsonData,
-            method: 'post',
-            path: ApiEndpoints.exportPurchase
-          })
-        }),
-     loadStockReceived: builder.mutation<ResponseListType, RequestType>({
+    exportPurchaseReport: builder.mutation<any, any>({
+      query: (jsonData) => ({
+        jsonData,
+        method: 'post',
+        path: ApiEndpoints.exportPurchase
+      })
+    }),
+    loadStockReceived: builder.mutation<ResponseListType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
         params: { page: args?.page, per_page_record: args.per_page_record },
@@ -86,7 +86,7 @@ export const ItemTransferRTKManagement = createApi({
         path: ApiEndpoints.stockReceivingList
       })
     }),
-     createOrUpdateStockReceiveConfirm: builder.mutation<ResponseType, RequestType>({
+    createOrUpdateStockReceiveConfirm: builder.mutation<ResponseType, RequestType>({
       query: (args) => ({
         jsonData: args?.jsonData,
         method: args?.jsonData?.id ? 'put' : 'post',
@@ -96,14 +96,14 @@ export const ItemTransferRTKManagement = createApi({
   })
 })
 export const {
-useCreateOrUpdateTransferMutation,
-useDeleteTransferIdMutation,
-useLoadTransferMutation,
-useViewTransferByIdMutation,
-useExportTransferItemReportMutation,
-useLoadEmployeeHandoverMutation,
-useExportPurchaseReportMutation,
-useLoadStockReceivedMutation,
-useCreateOrUpdateStockReceiveConfirmMutation
- 
+  useCreateOrUpdateTransferMutation,
+  useDeleteTransferIdMutation,
+  useLoadTransferMutation,
+  useViewTransferByIdMutation,
+  useExportTransferItemReportMutation,
+  useLoadEmployeeHandoverMutation,
+  useExportPurchaseReportMutation,
+  useLoadStockReceivedMutation,
+  useCreateOrUpdateStockReceiveConfirmMutation
+
 } = ItemTransferRTKManagement

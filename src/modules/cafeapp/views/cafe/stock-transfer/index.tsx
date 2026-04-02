@@ -54,6 +54,7 @@ import {
   useLoadStockManagesMutation
 } from '@src/modules/cafeapp/redux/RTKFiles/cafe/StockManagementRTK'
 import StockFilter from '../../stockmanage/StockFilter'
+import StockTransferFilter from './StockTransferFilter'
 // import StockFilter from './StockFilter'
 
 // validation schema
@@ -203,33 +204,33 @@ const StockTransfer = (props: any) => {
           purchase_by: state.editData?.purchase_by,
           recieved_by: state.editData?.recieved_by
             ? {
-                label: state.editData?.recieved_by?.name,
-                value: state.editData?.recieved_by?.id
-              }
+              label: state.editData?.recieved_by?.name,
+              value: state.editData?.recieved_by?.id
+            }
             : undefined,
           product_id: state.editData?.product_id
             ? {
-                label: state.editData?.product?.name,
-                value: state.editData?.product_id
-              }
+              label: state.editData?.product?.name,
+              value: state.editData?.product_id
+            }
             : undefined,
           unit_id: state.editData?.unit_id
             ? {
-                label: state.editData?.unit?.name,
-                value: state.editData?.unit_id
-              }
+              label: state.editData?.unit?.name,
+              value: state.editData?.unit_id
+            }
             : undefined,
           stock_operation: state.editData?.stock_operation
             ? {
-                label: state.editData?.stock_operation,
-                value: state.editData?.stock_operation
-              }
+              label: state.editData?.stock_operation,
+              value: state.editData?.stock_operation
+            }
             : undefined,
           resource: state.editData?.resource
             ? {
-                label: state.editData?.resource,
-                value: state.editData?.resource
-              }
+              label: state.editData?.resource,
+              value: state.editData?.resource
+            }
             : undefined
         },
         form.setValue
@@ -1060,7 +1061,7 @@ const StockTransfer = (props: any) => {
 
       <Header route={props?.route} icon={<List size='25' />} title='Stock Transfer'>
         <ButtonGroup color='dark'>
-          <StockFilter handleFilterData={handleFilterData} />
+          <StockTransferFilter handleFilterData={handleFilterData} />
 
           {/* {canAddProduct ? (
             <>

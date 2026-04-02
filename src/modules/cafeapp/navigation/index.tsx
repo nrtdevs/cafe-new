@@ -72,6 +72,13 @@ export default [
     ...Permissions.employeeHanoverRead
   },
   {
+    id: 'employee-recovery',
+    title: 'Employee Recovery',
+    icon: <GitPullRequest size={12} />,
+    navLink: getPath('employee-handover-receiving-list'),
+    ...Permissions.employeeHanoverRead
+  },
+  {
     id: 'order-report',
     title: 'Cash Handover',
     icon: <List size={12} />,

@@ -622,10 +622,11 @@
     "payment-mode": "Payment Mode",
     "payable-amount": "Payable Amount",
     "place-order": "Place Order",
-    "add-demand":"Add Demand",
-    "demand-date":"Demand Date",
-    "warehouse":"Warehouse",
-    "filter-demand-product":"Filter Demand Product",
-    "delivery-person":"Delivery Person",
-    "filter-quantity-mismatch":"Filter Quantity MisMatch"
+    "add-demand": "Add Demand",
+    "demand-date": "Demand Date",
+    "warehouse": "Warehouse",
+    "filter-demand-product": "Filter Demand Product",
+    "delivery-person": "Delivery Person",
+    "filter-quantity-mismatch": "Filter Quantity MisMatch",
+    "filter-stock-transfer": "Filter Stock Transfer"
 }

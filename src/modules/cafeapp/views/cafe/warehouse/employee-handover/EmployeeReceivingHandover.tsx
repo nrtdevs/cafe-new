@@ -27,6 +27,7 @@ import { useNavigate } from 'react-router-dom'
 import { Badge, Button, ButtonGroup, Col, Label, Row, UncontrolledTooltip } from 'reactstrap'
 import EmployeeHandoverFilter from './EmployeeHandoverFilter'
 import { useLoadEmployeeRecoveryDataMutation } from '@src/modules/cafeapp/redux/RTKFiles/common-cafe/DashboardRTK'
+import EmployeeReceiverfilter from './EmployeeReceiverfilter'
 
 // states
 
@@ -48,10 +49,9 @@ const EmployeeReceivingHandover = (props: any) => {
   const { setHeaderMenu } = useContext(RenderHeaderMenu)
   const navigate = useNavigate()
 
-  // can delete menu
-  const canCreateHandover = Can(Permissions.employeeHandoverCreate)
+
   //can read menu
-  const canReadUser = Can(Permissions.productBrowse)
+  const canReadUser = Can(Permissions.employeeHanoverRead)
 
   // toggle add modal
   const [modalAdd, toggleModalAdd] = useModal()
@@ -399,12 +399,30 @@ const EmployeeReceivingHandover = (props: any) => {
     })
   }
 
+
+  const handleFilterData = (e: any) => {
+    setState({
+      filterData: {
+        ...e,
+        product_id: e?.product_id?.value,
+        employee_id: e?.employee_id?.value,
+        subcategory_id: e?.subcategory_id?.value ? e?.subcategory_id?.value : undefined,
+        category_id: e?.category_id?.value ? e?.category_id?.value : undefined
+      },
+      page: 1,
+      search: '',
+      per_page_record: 20
+    })
+  }
+
   return (
     <Fragment>
       {renderViewModal()}
 
-      <Header route={props?.route} icon={<Menu size='25' />} title='Handover List'>
+      <Header route={props?.route} icon={<Menu size='25' />} title='Employee Recovery List'>
+
         <ButtonGroup color='dark'>
+          <EmployeeReceiverfilter handleFilterData={handleFilterData} />
           <LoadingButton
             tooltip={FM('reload')}
             loading={loadMenuResp.isLoading}

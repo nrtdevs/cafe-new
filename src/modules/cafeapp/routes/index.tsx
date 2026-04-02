@@ -215,14 +215,14 @@ const DprRoutes = [
       ...Permissions.employeeHandoverCreate
     }
   },
-  //   {
-  //     element: <EmployeeHandoverReceiving />,
-  //     path: '/employee-handover-receiving-list',
-  //     name: 'employee-handover-receiving-list',
-  //     meta: {
-  //       ...Permissions.employeeHanoverRead
-  //     }
-  //   },
+  {
+    element: <EmployeeHandoverReceiving />,
+    path: '/employee-handover-receiving-list',
+    name: 'employee-handover-receiving-list',
+    meta: {
+      ...Permissions.employeeHanoverRead
+    }
+  },
   {
     element: <PullData />,
     path: '/pull-data',

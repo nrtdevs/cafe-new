@@ -21,7 +21,8 @@ const defaultValues: any = {
   start_date: '',
   end_date: '',
   category_id: '',
-  subcategory_id: ''
+  subcategory_id: '',
+  handover_by: ''
 }
 
 const EmployeeHandoverFilter: FC<FilterProps> = (props) => {
