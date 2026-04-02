@@ -80,6 +80,8 @@ const FormGroupCustom = (props: FormGroupCustomProps) => {
         onChangeValue = () => { },
         maskOptions,
         step,
+        min,
+        max,
         creatable = false,
         modifySelectData = (data: any) => data,
         createLabel = 'create',
@@ -564,6 +566,8 @@ const FormGroupCustom = (props: FormGroupCustomProps) => {
                         pattern={type === 'email' ? pattern : null}
                         type={type}
                         step={step}
+                        min={min}
+                        max={max}
                         id={`input-${id}-tooltip`}
                     />
                 </>

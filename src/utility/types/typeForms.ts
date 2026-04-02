@@ -66,6 +66,8 @@ export interface FormGroupCustomProps {
   searchItem?: any
   feedback?: any
   step?: any
+  min?: any
+  max?: any
   creatable?: boolean
   onChangeValue?: (e: any) => void
   createLabel?: FMKeys

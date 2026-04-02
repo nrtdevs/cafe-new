@@ -1144,12 +1144,10 @@ function Dashboard(props: any) {
                               const total = form.watch(`order_details.${i}.discount` as any)
                                 ? price * d?.buy_quantity
                                 : price * d?.buy_quantity
-
-
                               return (
                                 <>
                                   <Row className='mb-1 ms-1'>
-                                    <Col sx='2'>
+                                    <Col xs='2'>
                                       <FormGroupCustom
                                         noGroup
                                         noLabel
@@ -1158,12 +1156,21 @@ function Dashboard(props: any) {
                                         label='Discount'
                                         placeholder='Discount'
                                         onChangeValue={(e) => {
+                                          let val = Number(e?.target.value)
+                                          if (isNaN(val)) return
+                                          if (val < 0) {
+                                            form.setValue(`order_details.${i}.discount`, 0 as any)
+                                          } else if (val > 99) {
+                                            form.setValue(`order_details.${i}.discount`, 99 as any)
+                                          }
                                           handleChange(e?.target.value, i)
                                         }}
                                         name={`${`order_details.${i}`}.discount`}
                                         type='number'
                                         className='mb-1 me-1'
-                                        rules={{ required: false, max: 99 }}
+                                        min={0}
+                                        max={99}
+                                        rules={{ required: false, min: 0, max: 99 }}
                                       />
                                       {/* <BsTooltip title='Add particular menu discount'>
                                         <input
