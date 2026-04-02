@@ -316,7 +316,7 @@ function Dashboard(props: any) {
 
   //handle submit
   const handlePlaceOrder = (userData: any) => {
-    // log('userData', userData)
+    log('userData', userData)
     setLoading(true)
     if (!userData?.payment_mode) {
       toast.error('Please select payment mode')
@@ -428,7 +428,21 @@ function Dashboard(props: any) {
     if (isValid(viewOrders)) {
       const data = {
         ...viewOrders,
-        order_status: viewOrders?.order_status?.value,
+        order_status: viewOrders?.order_status
+          ? {
+            label:
+              viewOrders?.order_status === 1
+                ? 'Pending'
+                : viewOrders?.order_status === 2
+                  ? 'Confirmed'
+                  : viewOrders?.order_status === 3
+                    ? 'Completed'
+                    : viewOrders?.order_status === 4
+                      ? 'Cancelled'
+                      : '',
+            value: viewOrders?.order_status
+          }
+          : undefined,
         table_number: viewOrders?.table_number,
         contact_number: viewOrders?.contact_number,
         send_invoice_to_whats_app: viewOrders?.send_invoice_to_whats_app === true ? 1 : 0,
@@ -683,26 +697,7 @@ function Dashboard(props: any) {
     }
   }, [selectedItems])
 
-  useEffect(() => {
-    if (isValidArray(state.menuArr)) {
-      setValues<orderResponseTypes>(
-        {
-          order_details: state.menuArr.map((d: any, i: any) => {
-            // log('d', d)
-            const isChecked = selectedItems.includes(d.id)
-            let p: any = form.watch('discount') ? form.watch('discount') : 0
-            const discount = isChecked ? (p * d.price) / 100 : 0
-            const price = d.price - discount
-            const total = isChecked ? price * d?.buy_quantity + d.tax : price + d.tax
-            return {
-              total: total
-            }
-          })
-        },
-        form.setValue
-      )
-    }
-  }, [state.menuArr])
+
 
   const handleChange = (e: any, i) => {
     const total =

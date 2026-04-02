@@ -54,7 +54,7 @@ const CustomerAccount = lazy(
 )
 const Expense = lazy(() => import('@src/modules/cafeapp/views/cafe/Expense'))
 const Menus = lazy(() => import('@src/modules/cafeapp/views/cafe/Menus'))
-const DemandProduct=lazy(()=>import('@src/modules/cafeapp/views/cafe/demand-product'))
+const DemandProduct = lazy(() => import('@src/modules/cafeapp/views/cafe/demand-product'))
 const Orders = lazy(() => import('@src/modules/cafeapp/views/cafe/Order'))
 const EmployeeLeave = lazy(() => import('@src/modules/cafeapp/views/commons/Employee/EmpLeave'))
 const Category = lazy(() => import('@src/modules/cafeapp/views/cafe/categories'))
@@ -88,8 +88,8 @@ const CafeWiseSaleReport = lazy(() => import('@src/modules/cafeapp/views/Report/
 const CafeSetting = lazy(() => import('@src/modules/cafeapp/views/cafe/CafeSetting'))
 const OrderSaleReport = lazy(() => import('@src/modules/cafeapp/views/Report/OrderSaleReport'))
 const MenuLiveReport = lazy(() => import('@src/modules/cafeapp/views/Report/MenuLiveReport'))
-const QuantityMismatch=lazy(()=>import('@src/modules/cafeapp/views/cafe/qunatity-mismatch-list'))
-const WasteItems=lazy(()=>import('@src/modules/cafeapp/views/cafe/waste-items'))
+const QuantityMismatch = lazy(() => import('@src/modules/cafeapp/views/cafe/qunatity-mismatch-list'))
+const WasteItems = lazy(() => import('@src/modules/cafeapp/views/cafe/waste-items'))
 
 const DprRoutes = [
   {
@@ -141,8 +141,8 @@ const DprRoutes = [
       ...Permissions.itemTransferCreate
     }
   },
-  
-    {
+
+  {
     element: <CreateItemTransfer />,
     path: '/item-transfer-create',
     name: 'item-transfers-create',
@@ -461,40 +461,40 @@ const DprRoutes = [
       ...Permissions.productMenuBrowse
     }
   },
-    {
-    element: <DemandProduct/>,
-    path: '/demand-product',
-    name: 'demand-product',
-    meta: {
-      ...Permissions.brandBrowse
-    }
-  },
-   {
-    element: <DemandProduct/>,
+  // {
+  //   element: <DemandProduct />,
+  //   path: '/demand-product',
+  //   name: 'demand-product',
+  //   meta: {
+  //     ...Permissions.demandProductsBrowse
+  //   }
+  // },
+  {
+    element: <DemandProduct />,
     path: '/demand-products',
     name: 'demand-products',
     meta: {
-      ...Permissions.unitBrowse
+      ...Permissions.demandProductsBrowse
     }
   },
-     {
-    element: <QuantityMismatch/>,
+  {
+    element: <QuantityMismatch />,
     path: '/quantity-mismatch-list',
     name: 'quantity-mismatch-list',
     meta: {
       ...Permissions.brandBrowse
     }
   },
-   {
-    element: <QuantityMismatch/>,
+  {
+    element: <QuantityMismatch />,
     path: '/quantity-mismatch-lists',
     name: 'quantity-mismatch-lists',
     meta: {
       ...Permissions.unitBrowse
     }
   },
-     {
-    element: <WasteItems/>,
+  {
+    element: <WasteItems />,
     path: '/waste-items',
     name: 'waste-items',
     meta: {

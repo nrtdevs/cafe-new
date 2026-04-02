@@ -780,4 +780,32 @@ export const Permissions = Object.freeze({
     belongs_to: 2
   },
 
+  //demand products
+  demandProductsBrowse: {
+    action: 'item-demand-browse',
+    resource: 'item-demand',
+    belongs_to: 7
+  },
+  demandProductsRead: {
+    action: 'item-demand-read',
+    resource: 'item-demand',
+    belongs_to: 7
+  },
+  demandProductsCreate: {
+    action: 'item-demand-create',
+    resource: 'item-demand',
+    belongs_to: 7
+  },
+  demandProductsEdit: {
+    action: 'item-demand-edit',
+    resource: 'item-demand',
+    belongs_to: 7
+  },
+  demandProductsDelete: {
+    action: 'item-demand-delete',
+    resource: 'item-demand',
+    belongs_to: 7
+  },
+
+
 })

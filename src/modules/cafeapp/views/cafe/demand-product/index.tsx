@@ -117,13 +117,13 @@ const DemandProduct = (props: any) => {
   // header menu context categoryResponseTypes
   const { setHeaderMenu } = useContext(RenderHeaderMenu)
   // can add menu
-  const canAddUser = Can(Permissions.productMenuCreate)
+  const canAddUser = Can(Permissions.demandProductsCreate)
   // can edit menu
-  const canEditUser = Can(Permissions.productMenuEdit)
+  const canEditUser = Can(Permissions.demandProductsEdit)
   // can delete menu
-  const canDeleteUser = Can(Permissions.productMenuDelete)
+  const canDeleteUser = Can(Permissions.demandProductsDelete)
   //can read menu
-  const canReadUser = Can(Permissions.productMenuRead)
+  const canReadUser = Can(Permissions.demandProductsRead)
 
   //can create transfer
   const canAddTransfer = Can(Permissions.itemTransferCreate)
@@ -885,23 +885,23 @@ const DemandProduct = (props: any) => {
             >
               <Printer size={14} />
             </Button>
-
-            <UncontrolledTooltip placement='top' id='view' target='view'>
-              {'view'}
-            </UncontrolledTooltip>
-            <Button
-              className='d-flex waves-effect btn btn-secondary btn-sm'
-              id='view'
-              color='secondary'
-              onClick={() => {
-                setState({
-                  selectedUser: row
-                })
-              }}
-            >
-              <Eye size={14} />
-            </Button>
-
+            {canReadUser && <>
+              <UncontrolledTooltip placement='top' id='view' target='view'>
+                {'view'}
+              </UncontrolledTooltip>
+              <Button
+                className='d-flex waves-effect btn btn-secondary btn-sm'
+                id='view'
+                color='secondary'
+                onClick={() => {
+                  setState({
+                    selectedUser: row
+                  })
+                }}
+              >
+                <Eye size={14} />
+              </Button>
+            </>}
 
             {canAddTransfer && <>
               <Show IF={row?.status === 0}>

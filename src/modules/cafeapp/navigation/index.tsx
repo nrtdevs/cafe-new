@@ -157,19 +157,19 @@ export default [
     badge: 'light-success',
     // badgeText: '12',
     navLink: getPath('demand-products'),
-    ...Permissions.unitBrowse
+    ...Permissions.demandProductsBrowse
   },
 
 
-  {
-    id: 'demand-product',
-    title: 'Demand Product',
-    icon: <Menu size={20} />,
-    badge: 'light-success',
-    // badgeText: '12',
-    navLink: getPath('demand-product'),
-    ...Permissions.brandBrowse
-  },
+  // {
+  //   id: 'demand-product',
+  //   title: 'Demand Product',
+  //   icon: <Menu size={20} />,
+  //   badge: 'light-success',
+  //   // badgeText: '12',
+  //   navLink: getPath('demand-product'),
+  //   ...Permissions.brandBrowse
+  // },
 
 
 
@@ -458,7 +458,7 @@ export default [
     navLink: getPath('quantity-mismatch-list'),
     ...Permissions.brandBrowse
   },
-    {
+  {
     id: '',
     title: 'Waste Items',
     icon: <List size={20} />,
