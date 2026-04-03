@@ -200,13 +200,13 @@ const TableListReport = (props: any) => {
         start_date: form.watch('start_datess')
           ? form.watch('start_datess')
           : form.watch('request_fors_ss')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         end_date: form.watch('end_datess')
           ? form.watch('end_datess')
           : form.watch('request_fors_ss')?.value
-          ? ''
-          : currentDate
+            ? ''
+            : currentDate
         // menu_id: form.watch('menu_id_ss')?.value,
         // cafe_id: form.watch('cafe_id')?.value,
         // product_id: form.watch('product_id')?.value,
@@ -313,13 +313,13 @@ const TableListReport = (props: any) => {
         start_date: form.watch('start_date')
           ? form.watch('start_date')
           : form.watch('request_for')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         end_date: form.watch('end_date')
           ? form.watch('end_date')
           : form.watch('request_for')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         cafe_id: form.watch('cafe_id')?.value,
         sub_cafe_id: form.watch('sub_cafe_id')?.value
       }
@@ -333,13 +333,13 @@ const TableListReport = (props: any) => {
         start_date: form.watch('start_dates')
           ? form.watch('start_dates')
           : form.watch('request_for')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         end_date: form.watch('end_dates')
           ? form.watch('end_dates')
           : form.watch('request_for')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         menu_id: form.watch('menu_ids')?.value,
         cafe_id: form.watch('cafe_ids')?.value,
         category_id: form.watch('category_ids')?.value,
@@ -349,7 +349,7 @@ const TableListReport = (props: any) => {
   }
 
   const handleOrderTimeWiseReport = (data: any) => {
-    dashboardsTable({
+    loadDashboardTimeTable({
       jsonData: {
         start_date: form.watch('start_datetime')
           ? formatDateValue(form.watch('start_datetime'), 'YYYY-MM-DD HH:mm:ss')
@@ -371,13 +371,13 @@ const TableListReport = (props: any) => {
         start_date: form.watch('start_dates')
           ? form.watch('start_dates')
           : form.watch('request_for')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         end_date: form.watch('end_dates')
           ? form.watch('end_dates')
           : form.watch('request_for')?.value
-          ? ''
-          : currentDate,
+            ? ''
+            : currentDate,
         menu_id: form.watch('menu_ids')?.value,
         cafe_id: form.watch('cafe_ids')?.value,
         category_id: form.watch('category_ids')?.value,
@@ -1108,8 +1108,8 @@ const TableListReport = (props: any) => {
                     cafe_id: form.watch('sub_cafe_ids')?.value
                       ? form.watch('sub_cafe_ids')?.value
                       : form.watch('cafe_ids')?.value
-                      ? form.watch('cafe_ids')?.value
-                      : user?.cafe_id
+                        ? form.watch('cafe_ids')?.value
+                        : user?.cafe_id
                   }}
                   path={ApiEndpoints.category_list}
                   selectLabel={(e) => `${e.name}  `}
@@ -1122,9 +1122,8 @@ const TableListReport = (props: any) => {
               </Col>
               <Col md='4' lg='4' xl='4' sm='12'>
                 <FormGroupCustom
-                  key={`${form.watch('cafe_ids')?.value},${form.watch('category_ids')?.value}-${
-                    form.watch('sub_cafe_ids')?.value
-                  }`}
+                  key={`${form.watch('cafe_ids')?.value},${form.watch('category_ids')?.value}-${form.watch('sub_cafe_ids')?.value
+                    }`}
                   control={form.control}
                   noGroup
                   noLabel
@@ -1137,8 +1136,8 @@ const TableListReport = (props: any) => {
                     cafe_id: form.watch('sub_cafe_ids')?.value
                       ? form.watch('sub_cafe_ids')?.value
                       : form.watch('cafe_ids')?.value
-                      ? form.watch('cafe_ids')?.value
-                      : user?.cafe_id,
+                        ? form.watch('cafe_ids')?.value
+                        : user?.cafe_id,
                     category_id: form.watch('category_ids')?.value
                   }}
                   path={ApiEndpoints.menu_list}
@@ -1444,8 +1443,8 @@ const TableListReport = (props: any) => {
                     cafe_id: form.watch('sub_cafe_ids1')?.value
                       ? form.watch('sub_cafe_ids1')?.value
                       : form.watch('cafe_ids1')?.value
-                      ? form.watch('cafe_ids1')?.value
-                      : user?.cafe_id
+                        ? form.watch('cafe_ids1')?.value
+                        : user?.cafe_id
                   }}
                   path={ApiEndpoints.menu_list}
                   selectLabel={(e) => `${e.name}  `}

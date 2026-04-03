@@ -283,56 +283,56 @@ const PurchaseItem = (props: any) => {
           price: state?.editData?.price,
           unit_name: state.editData?.unit
             ? {
-                label: state.editData?.unit?.name,
-                value: state.editData?.unit?.id
-              }
+              label: state.editData?.unit?.name,
+              value: state.editData?.unit?.id
+            }
             : undefined,
 
           item_id: state?.editData?.product?.id
             ? {
-                label: state.editData?.product?.name,
-                value: state.editData?.product?.id
-              }
+              label: state.editData?.product?.name,
+              value: state.editData?.product?.id
+            }
             : undefined,
           category_id: state?.editData?.category?.id
             ? {
-                label: state.editData?.category?.name,
-                value: state.editData?.category?.id
-              }
+              label: state.editData?.category?.name,
+              value: state.editData?.category?.id
+            }
             : undefined,
           subcategory_id: state?.editData?.subcategory?.id
             ? {
-                label: state.editData?.subcategory?.name,
-                value: state.editData?.subcategory?.id
-              }
+              label: state.editData?.subcategory?.name,
+              value: state.editData?.subcategory?.id
+            }
             : undefined,
           shop_name: state?.editData?.shop_name,
           person: state?.editData?.person,
           contact_number: Number(state?.editData?.contact_number),
           payment_mode: state?.editData?.payment_mode
             ? {
-                label:
-                  state?.editData?.payment_mode === 'cash'
-                    ? 'Cash'
-                    : state?.editData?.payment_mode === 'upi'
+              label:
+                state?.editData?.payment_mode === 'cash'
+                  ? 'Cash'
+                  : state?.editData?.payment_mode === 'upi'
                     ? 'UPI'
                     : state?.editData?.payment_mode === 'udhaar'
-                    ? 'Udhaar'
-                    : '',
-                value: state?.editData?.payment_mode
-              }
+                      ? 'Udhaar'
+                      : '',
+              value: state?.editData?.payment_mode
+            }
             : undefined,
           pack_size: state?.editData?.packsize
             ? {
-                label: state.editData?.packsize?.name,
-                value: state.editData?.packsize?.id
-              }
+              label: state.editData?.packsize?.name,
+              value: state.editData?.packsize?.id
+            }
             : undefined,
           brand_id: state?.editData?.brand_id
             ? {
-                label: state.editData?.brand?.name,
-                value: state.editData?.brand?.id
-              }
+              label: state.editData?.brand?.name,
+              value: state.editData?.brand?.id
+            }
             : undefined,
           purchase_date: state?.editData?.date
             ? formatDate(state?.editData?.date, 'YYYY-MM-DD')
@@ -370,7 +370,7 @@ const PurchaseItem = (props: any) => {
         item_id: e?.item_id?.value ? e?.item_id?.value : undefined,
         pack_size_id: e?.pack_size?.value ? e?.pack_size?.value : undefined,
         shop_name: e?.shop_name,
-        category_id: e?.category?.value ? e?.category?.value : undefined,
+        category_id: e?.category_id?.value ? e?.category_id?.value : undefined,
         subcategory_id: e?.subcategory_id?.value ? e?.subcategory_id?.value : undefined
       },
       page: 1,
@@ -484,53 +484,53 @@ const PurchaseItem = (props: any) => {
                       if (e?.extra !== undefined) {
                         form.watch(`item_id`)?.extra?.unit?.name
                           ? form.setValue(`unit_id`, {
-                              label: form.watch(`item_id`)?.extra?.unit?.name
-                                ? form.watch(`item_id`)?.extra?.unit?.name
-                                : undefined,
-                              value: form.watch(`item_id`)?.extra?.unit_id
-                                ? form.watch(`item_id`)?.extra?.unit_id
-                                : undefined
-                            })
+                            label: form.watch(`item_id`)?.extra?.unit?.name
+                              ? form.watch(`item_id`)?.extra?.unit?.name
+                              : undefined,
+                            value: form.watch(`item_id`)?.extra?.unit_id
+                              ? form.watch(`item_id`)?.extra?.unit_id
+                              : undefined
+                          })
                           : undefined
                         form.watch(`item_id`)?.extra?.category?.name
                           ? form.setValue(`category_id`, {
-                              label: form.watch(`item_id`)?.extra?.category?.name
-                                ? form.watch(`item_id`)?.extra?.category?.name
-                                : undefined,
-                              value: form.watch(`item_id`)?.extra?.category?.id
-                                ? form.watch(`item_id`)?.extra?.category?.id
-                                : undefined
-                            })
+                            label: form.watch(`item_id`)?.extra?.category?.name
+                              ? form.watch(`item_id`)?.extra?.category?.name
+                              : undefined,
+                            value: form.watch(`item_id`)?.extra?.category?.id
+                              ? form.watch(`item_id`)?.extra?.category?.id
+                              : undefined
+                          })
                           : undefined
                         form.watch(`item_id`)?.extra?.brand?.name
                           ? form.setValue(`brand_id`, {
-                              label: form.watch(`item_id`)?.extra?.brand?.name
-                                ? form.watch(`item_id`)?.extra?.brand?.name
-                                : undefined,
-                              value: form.watch(`item_id`)?.extra?.brand?.id
-                                ? form.watch(`item_id`)?.extra?.brand?.id
-                                : undefined
-                            })
+                            label: form.watch(`item_id`)?.extra?.brand?.name
+                              ? form.watch(`item_id`)?.extra?.brand?.name
+                              : undefined,
+                            value: form.watch(`item_id`)?.extra?.brand?.id
+                              ? form.watch(`item_id`)?.extra?.brand?.id
+                              : undefined
+                          })
                           : undefined
                         form.watch(`item_id`)?.extra?.packsize?.name
                           ? form.setValue(`pack_size`, {
-                              label: form.watch(`item_id`)?.extra?.packsize?.name
-                                ? form.watch(`item_id`)?.extra?.packsize?.name
-                                : undefined,
-                              value: form.watch(`item_id`)?.extra?.packsize?.id
-                                ? form.watch(`item_id`)?.extra?.packsize?.id
-                                : undefined
-                            })
+                            label: form.watch(`item_id`)?.extra?.packsize?.name
+                              ? form.watch(`item_id`)?.extra?.packsize?.name
+                              : undefined,
+                            value: form.watch(`item_id`)?.extra?.packsize?.id
+                              ? form.watch(`item_id`)?.extra?.packsize?.id
+                              : undefined
+                          })
                           : undefined
                         form.watch(`item_id`)?.extra?.subcategory?.name
                           ? form.setValue(`subcategory_id`, {
-                              label: form.watch(`item_id`)?.extra?.subcategory?.name
-                                ? form.watch(`item_id`)?.extra?.subcategory?.name
-                                : undefined,
-                              value: form.watch(`item_id`)?.extra?.subcategory?.id
-                                ? form.watch(`item_id`)?.extra?.subcategory?.id
-                                : undefined
-                            })
+                            label: form.watch(`item_id`)?.extra?.subcategory?.name
+                              ? form.watch(`item_id`)?.extra?.subcategory?.name
+                              : undefined,
+                            value: form.watch(`item_id`)?.extra?.subcategory?.id
+                              ? form.watch(`item_id`)?.extra?.subcategory?.id
+                              : undefined
+                          })
                           : ''
 
                         form.setValue(
@@ -935,13 +935,12 @@ const PurchaseItem = (props: any) => {
       sortable: false,
       cell: (row) => (
         <span
-          className={`${
-            row?.payment_mode === 'cash'
+          className={`${row?.payment_mode === 'cash'
               ? 'text-primary text-capitalize'
               : row?.payment_mode === 'credit'
-              ? 'text-red text-capitalize'
-              : 'text-warning text-capitalize'
-          }`}
+                ? 'text-red text-capitalize'
+                : 'text-warning text-capitalize'
+            }`}
         >
           {row?.payment_mode}
         </span>
@@ -1078,7 +1077,7 @@ const PurchaseItem = (props: any) => {
             className='btn btn-primary btn-sm d-flex align-items-center'
             size='sm'
             color='secondary'
-            // title={FM('import')}
+          // title={FM('import')}
           >
             <div>
               <Download size='14' />
@@ -1100,7 +1099,7 @@ const PurchaseItem = (props: any) => {
               className='btn btn-secondary btn-sm d-flex align-items-center'
               size='sm'
               color='secondary'
-              // title={FM('import')}
+            // title={FM('import')}
             >
               <div>
                 <Upload size='14' />

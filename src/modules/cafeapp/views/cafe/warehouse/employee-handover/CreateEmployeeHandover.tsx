@@ -82,7 +82,6 @@ const CreateEmployeeHandover = (props: any) => {
   // header menu context categoryResponseTypes
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [remaining, setRemainingStocks] = useState<{ [key: number]: number }>({})
   // form hook
   const form = useForm<any>({
     resolver: yupResolver(schema),
@@ -161,18 +160,7 @@ const CreateEmployeeHandover = (props: any) => {
   //     }
   //   }, [fields])
 
-  useEffect(() => {
-    const updatedRemainingStocks: { [key: number]: number } = {}
 
-    payload?.forEach((item: any, index: number) => {
-      const watched = form.watch(`items.${index}.current_stock`)
-      const currentStock = watched !== undefined && watched !== '' ? Number(watched) : Number(item?.RemainingStock || 0)
-      const remaining = Number(item?.RemainingStock)
-      updatedRemainingStocks[index] = isNaN(remaining) ? 0 : remaining
-    })
-
-    setRemainingStocks(updatedRemainingStocks)
-  }, [watchedItems, payload])
 
   // handle save handover
   const handleSaveUser = (userData: any) => {
@@ -482,64 +470,51 @@ const CreateEmployeeHandover = (props: any) => {
                   {payload &&
                     payload.map((item: any, index: any) => {
                       return (
-                        <>
-                          <tbody key={item?.id}>
-                            <tr>
-                              <td>{item?.product}</td>
-                              <td>{item?.category?.name}</td>
-                              <td>{item?.subcategory?.name}</td>
-                              <td>{item?.unit}</td>
-                              <td>{item?.inStock}</td>
-                              <td>{item?.outStock}</td>
-                              <td>{item?.RemainingStock}</td>
-                              <td>
-                                <FormGroupCustom
-                                  defaultValue={item?.RemainingStock}
-                                  name={`items.${index}.current_stock`}
-                                  type={'number'}
-                                  noLabel
-                                  noGroup
-                                  label={'Quantity'}
-                                  className='mb-0'
-                                  control={form.control}
-                                  rules={{ required: true, min: 0 }}
-                                //   onChangeValue={(e) => {
-                                //     let value = Number(e.target.value)
-
-                                //     let stock = Number(item?.RemainingStock)
-
-                                //     if (value >= stock) {
-                                //       // Show error message
-                                //       form.setError(`items.${index}.current_stock` as any, {
-                                //         type: 'manual',
-                                //         message: `Quantity cannot be more than available stock (${stock})`
-                                //       })
-                                //     } else {
-                                //       // Clear error if within limit
-                                //       form.clearErrors(`items.${index}.quantity` as any)
-                                //     }
-
-                                //     // Optionally update value in form state if you need
-                                //     form.setValue(`items.${index}.current_stock`, value)
-                                //   }}
-                                />
-                              </td>
-                              <td>{remaining[index] ?? 0}</td>
-                              <td>
-                                <FormGroupCustom
-                                  noLabel
-                                  noGroup
-                                  name={`items.${index}.comment`}
-                                  type={'textarea'}
-                                  label={'comment'}
-                                  className='mb-0'
-                                  control={form.control}
-                                  rules={{ required: true }}
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </>
+                        <tbody key={item?.id ?? index}>
+                          <tr>
+                            <td>{item?.product}</td>
+                            <td>{item?.category?.name}</td>
+                            <td>{item?.subcategory?.name}</td>
+                            <td>{item?.unit}</td>
+                            <td>{item?.inStock}</td>
+                            <td>{item?.outStock}</td>
+                            <td>{item?.RemainingStock}</td>
+                            <td>
+                              <FormGroupCustom
+                                defaultValue={item?.RemainingStock ?? ''}
+                                name={`items.${index}.current_stock`}
+                                type={'number'}
+                                noLabel
+                                noGroup
+                                label={'Quantity'}
+                                className='mb-0'
+                                control={form.control}
+                                rules={{ required: true, min: 0 }}
+                              />
+                            </td>
+                            <td>
+                              {(() => {
+                                const watched = watchedItems?.[index]?.current_stock
+                                const currentStock = watched !== undefined && watched !== '' ? Number(watched) : Number(item?.RemainingStock || 0)
+                                const difference = Number(item?.RemainingStock || 0) - currentStock
+                                return isNaN(difference) ? 0 : difference
+                              })()}
+                            </td>
+                            <td>
+                              <FormGroupCustom
+                                defaultValue={item?.comment ?? ''}
+                                noLabel
+                                noGroup
+                                name={`items.${index}.comment`}
+                                type={'textarea'}
+                                label={'comment'}
+                                className='mb-0'
+                                control={form.control}
+                                rules={{ required: true }}
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
                       )
                     })}
                 </>

@@ -513,6 +513,9 @@ const Product = (props: any) => {
                   path={ApiEndpoints.listWarehouseCategory}
                   selectLabel={(e) => `${e.name}  `}
                   selectValue={(e) => e.id}
+                  onChangeValue={() => {
+                    form.setValue('subcategory_id', null)
+                  }}
                   defaultOptions
                   type='select'
                   className='mb-1'
@@ -522,13 +525,14 @@ const Product = (props: any) => {
 
               <Col md='6'>
                 <FormGroupCustom
-                  key={`${form.watch('category_id')}`}
+                  key={`${form.watch('category_id')?.value}`}
                   control={form.control}
                   async
                   isClearable
                   label={FM('sub-category')}
                   name='subcategory_id'
                   loadOptions={loadDropdown}
+                  isDisabled={!form.watch('category_id')}
                   path={ApiEndpoints.listWarehouseCategory}
                   selectLabel={(e) => `${e.name}  `}
                   selectValue={(e) => e.id}

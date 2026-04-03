@@ -193,7 +193,7 @@ const EmployeeHandoverReceiving = (props: any) => {
             unit_id: item?.unit_id,
             in_stock: item?.inStock ? Number(item?.inStock) : 0,
             out_stock: item?.outStock ? Number(item?.outStock) : 0,
-            remaining_stock: item?.RemainingStock ? Number(item?.RemainingStock) : 0,
+            remaining_stock: Number(item?.RemainingStock ?? item?.remaining_stock ?? 0),
             current_stock: Number(form.watch(`items.${index}.current_stock`)),
             comment: form.watch(`items.${index}.comment`)
           }))
@@ -212,7 +212,7 @@ const EmployeeHandoverReceiving = (props: any) => {
             // unit_id: item?.unit_id,
             // in_stock: item?.inStock ? Number(item?.inStock) : 0,
             // out_stock: item?.outStock ? Number(item?.outStock) : 0,
-            remaining_stock: item?.RemainingStock ? Number(item?.RemainingStock) : 0,
+            remaining_stock: Number(item?.RemainingStock ?? item?.remaining_stock ?? 0),
             current_stock: Number(form.watch(`items.${index}.current_stock`)),
             comment: form.watch(`items.${index}.comment`)
               ? form.watch(`items.${index}.comment`)
@@ -404,70 +404,69 @@ const EmployeeHandoverReceiving = (props: any) => {
                     payload?.map((item: any, index: any) => {
                       //   log(form.watch(`items.${index}.status`), 'status')
                       return (
-                        <>
-                          <tbody key={item?.id}>
-                            <tr>
-                              <td>{item?.product?.name}</td>
-                              {/* <td>{item?.category?.name}</td>
-                          <td>{item?.subcategory?.name}</td> */}
-                              <td>{item?.unit?.name}</td>
-                              {/* <td>{item?.inStock}</td>
-                          <td>{item?.outStock}</td> */}
-                              <td>{item?.remaining_stock}</td>
-                              <td>
-                                <FormGroupCustom
-                                  defaultValue={item?.remaining_stock}
-                                  name={`items.${index}.current_stock`}
-                                  type={'number'}
-                                  noLabel
-                                  noGroup
-                                  label={'Quantity'}
-                                  className='mb-0'
-                                  control={form.control}
-                                  rules={{ required: true, min: 0 }}
-                                  onChangeValue={(e) => {
-                                    let value = Number(e.target.value)
+                        <tbody key={item?.id ?? index}>
+                          <tr>
+                            <td>{item?.product?.name}</td>
+                            {/* <td>{item?.category?.name}</td>
+                        <td>{item?.subcategory?.name}</td> */}
+                            <td>{item?.unit?.name}</td>
+                            {/* <td>{item?.inStock}</td>
+                        <td>{item?.outStock}</td> */}
+                            <td>{item?.RemainingStock ?? item?.remaining_stock}</td>
+                            <td>
+                              <FormGroupCustom
+                                defaultValue={item?.RemainingStock ?? item?.remaining_stock ?? ''}
+                                name={`items.${index}.current_stock`}
+                                type={'number'}
+                                noLabel
+                                noGroup
+                                label={'Quantity'}
+                                className='mb-0'
+                                control={form.control}
+                                rules={{ required: true, min: 0 }}
+                                onChangeValue={(e) => {
+                                  let value = Number(e.target.value)
 
-                                    let stock = Number(item?.RemainingStock)
+                                  let stock = Number(item?.RemainingStock)
 
-                                    if (value === stock) {
-                                      form.setValue(`items.${index}.current_stock`, value)
-                                      form.clearErrors(`items.${index}.comment` as any)
-                                      form.clearErrors(`comment` as any)
-                                    } else {
-                                      //Show error message
-                                      form.setError(`items.${index}.comment` as any, {
-                                        type: 'manual',
-                                        message: `Comment must bhi required`
-                                      })
-                                      form.setError(`comment` as any, {
-                                        type: 'manual',
-                                        message: `Comment must bhi required`
-                                      })
-                                    }
+                                  if (value === stock) {
+                                    form.setValue(`items.${index}.current_stock`, value)
+                                    form.clearErrors(`items.${index}.comment` as any)
+                                    form.clearErrors(`comment` as any)
+                                  } else {
+                                    //Show error message
+                                    form.setError(`items.${index}.comment` as any, {
+                                      type: 'manual',
+                                      message: `Comment must bhi required`
+                                    })
+                                    form.setError(`comment` as any, {
+                                      type: 'manual',
+                                      message: `Comment must bhi required`
+                                    })
+                                  }
 
-                                    // Optionally update value in form state if you need
-                                    // form.setValue(`items.${index}.current_stock`, value)
-                                  }}
-                                />
-                              </td>
+                                  // Optionally update value in form state if you need
+                                  // form.setValue(`items.${index}.current_stock`, value)
+                                }}
+                              />
+                            </td>
 
-                              <td>
-                                <FormGroupCustom
-                                  key={index}
-                                  noLabel
-                                  noGroup
-                                  name={`items.${index}.comment`}
-                                  type={'textarea'}
-                                  label={'comment'}
-                                  className='mb-0'
-                                  control={form.control}
-                                  rules={{ required: true }}
-                                />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </>
+                            <td>
+                              <FormGroupCustom
+                                key={index}
+                                defaultValue={item?.comment ?? ''}
+                                noLabel
+                                noGroup
+                                name={`items.${index}.comment`}
+                                type={'textarea'}
+                                label={'comment'}
+                                className='mb-0'
+                                control={form.control}
+                                rules={{ required: true }}
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
                       )
                     })}
                 </>

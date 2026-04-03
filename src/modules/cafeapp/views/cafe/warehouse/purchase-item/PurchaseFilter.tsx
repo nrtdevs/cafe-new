@@ -18,7 +18,9 @@ const defaultValues: any = {
   brand_id: '',
   unit_id: '',
   pack_size: '',
-  item_id: ''
+  item_id: '',
+  category_id: '',
+  subcategory_id: ''
 }
 
 const PurchaseFilter: FC<FilterProps> = (props) => {

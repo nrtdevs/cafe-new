@@ -46,7 +46,7 @@ const StockFormSchema = {
   //     .required('unit name must be required')
   //     .typeError('unit name must be required'),
   //   brand_id: yup.object().required('brand  must be required').typeError('Brand must be required')
-  is_confirm: yup.boolean().required('This Field required')
+  is_confirm: yup.boolean().oneOf([true], 'This Field required').required('This Field required')
 }
 
 // validate
@@ -251,7 +251,7 @@ const StockReceiving = (props: any) => {
                   <th>{FM('product')}</th>
 
                   <th>{FM('Receiving-Stock')}</th>
-                   <th>{('Confirm Stock Receipt')}</th>
+                  <th>{('Confirm Stock Receipt')}</th>
                   <th>{FM('unit')}</th>
 
                   <th>{FM('transfer-from')}</th>
@@ -259,7 +259,7 @@ const StockReceiving = (props: any) => {
                   <th>{FM('sub-category')}</th>
                   <th>{FM('brand')}</th>
                   <th>{FM('pack-size')}</th>
-                  
+
                   <th>{FM('comment')}</th>
                 </tr>
               </thead>
@@ -437,7 +437,7 @@ const StockReceiving = (props: any) => {
                                     // form.setValue(`items.${index}.current_stock`, value)
                                   }}
                                 />
-                              </td> 
+                              </td>
                               <td>{item?.unit?.name}</td>
 
                               <td>{item?.transfer_info?.name}</td>
@@ -445,8 +445,8 @@ const StockReceiving = (props: any) => {
                               <td>{item?.subcategory?.name}</td>
                               <td>{item?.brand?.name}</td>
                               <td>{item?.packsize?.name}</td>
-                            
-                            
+
+
                               <td>
                                 <FormGroupCustom
                                   key={index}
@@ -459,7 +459,7 @@ const StockReceiving = (props: any) => {
                                   control={form.control}
                                   rules={{ required: true }}
                                 />
-                              </td> 
+                              </td>
                             </tr>
                           </tbody>
                         </>
@@ -484,9 +484,10 @@ const StockReceiving = (props: any) => {
                   name={`is_confirm`}
                   type={'checkbox'}
                   label={'Stock Received Confirm'}
+
                   className='mb-0 w-10'
                   control={form.control}
-                  rules={{ required: false }}
+                  rules={{ required: true }}
                 />
               </div>
               <div className='text-end'>
