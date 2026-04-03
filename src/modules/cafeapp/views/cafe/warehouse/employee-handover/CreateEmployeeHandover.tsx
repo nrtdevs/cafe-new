@@ -75,7 +75,7 @@ type States = {
 }
 
 const defaultValues: any = {
-  handover_date: '',
+  handover_date: new Date(),
   handover_employee_id: ''
 }
 const CreateEmployeeHandover = (props: any) => {
@@ -278,14 +278,14 @@ const CreateEmployeeHandover = (props: any) => {
             </Col>
             <Col md='4' lg='4' sm='12' xs='12' className='mt-2'>
               <FormGroupCustom
-                key={`${state?.editData?.purchase_date}`}
+
                 control={form.control}
                 label={'Handover Date'}
                 name='handover_date'
                 type='date'
                 className='mb-1'
                 datePickerOptions={{
-                  minDate: new Date(new Date().setDate(new Date().getDate() - 1)),
+                  minDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 1),
                   maxDate: new Date()
                 }}
                 rules={{ required: true }}
