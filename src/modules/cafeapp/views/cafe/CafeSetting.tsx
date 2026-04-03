@@ -11,6 +11,7 @@ import Show, { Can } from '@src/utility/Show'
 import { FM, SuccessToast, log, setInputErrors, setValues } from '@src/utility/Utils'
 
 import ApiEndpoints from '@src/utility/http/ApiEndpoints'
+import httpConfig from '@src/utility/http/httpConfig'
 import { loadDropdown } from '@src/utility/http/Apis/dropdowns'
 import { stateReducer } from '@src/utility/stateReducer'
 import { Fragment, useEffect, useReducer } from 'react'
@@ -130,13 +131,11 @@ const CafeSetting = (props: any) => {
         contact_person_email: user?.contact_person_email,
         contact_person_phone: userData?.contact_person_phone,
         profile_image_path:
-          userData?.profile_image_path.length === 1
+          userData?.profile_image_path?.length > 0
             ? userData?.profile_image_path[0]?.file_name
-            : userData?.profile_image_path === null || undefined
-            ? userData?.profile_image_path[0]?.file_name
-            : user.profile_image_path
-            ? user.profile_image_path
-            : undefined
+            : user?.profile_image_path
+              ? user?.profile_image_path
+              : undefined
       }
     })
   }
@@ -146,7 +145,16 @@ const CafeSetting = (props: any) => {
     if (!settingCafeResponse.isUninitialized) {
       if (settingCafeResponse.isSuccess) {
         // navigate(getPath('purchase-items'))
-
+        if (settingCafeResponse?.data?.payload) {
+          localStorage.setItem(
+            httpConfig.storageUserData,
+            JSON.stringify({
+              ...user,
+              ...settingCafeResponse.data.payload
+            })
+          )
+          setTimeout(() => window.location.reload(), 500)
+        }
         SuccessToast(<>{FM('cafe-setting-successfully')}</>)
       } else if (settingCafeResponse.isError) {
         // handle error

@@ -71,7 +71,7 @@ const userFormSchema = {
     .test(
       'len',
       'Please Enter Valid Mobile Number',
-      (val: any) => val && val.toString().length === 10
+      (val: any) => val && val.toString().length >= 10 && val.toString().length <= 12
     )
     .typeError('Please Enter  Mobile'),
   gender: yup.object().typeError('Please Select Gender').required(),
@@ -178,20 +178,27 @@ const Customer = (props: any) => {
 
   // handle save user
   const handleSaveUser = (userData: any) => {
+    let finalMobile = userData?.mobile?.toString()
+    if (finalMobile && finalMobile.length === 12) {
+      finalMobile = finalMobile.substring(2)
+    }
+
+    const finalData = {
+      ...userData,
+      mobile: finalMobile,
+      gender: userData?.gender?.value
+    }
+
     if (state?.editData?.id) {
       createCustomer({
         jsonData: {
           ...state?.editData,
-          ...userData,
-          gender: userData?.gender?.value
+          ...finalData
         }
       })
     } else {
       createCustomer({
-        jsonData: {
-          ...userData,
-          gender: userData?.gender?.value
-        }
+        jsonData: finalData
       })
     }
   }
@@ -269,14 +276,14 @@ const Customer = (props: any) => {
           account_balance: state.editData?.account_balance,
           gender: state.editData?.gender
             ? {
-                label:
-                  state.editData?.gender === 1
-                    ? 'male'
-                    : state.editData?.gender === 2
+              label:
+                state.editData?.gender === 1
+                  ? 'male'
+                  : state.editData?.gender === 2
                     ? 'female'
                     : '',
-                value: state.editData?.gender
-              }
+              value: state.editData?.gender
+            }
             : undefined
         },
         form.setValue
