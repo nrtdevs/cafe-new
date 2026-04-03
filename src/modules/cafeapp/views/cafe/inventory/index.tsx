@@ -165,6 +165,7 @@ const InventoryStock = (props: any) => {
 
   // handle save stock wasted
   const handleSaveUser = (userData: any) => {
+    log(userData, 'userData')
     if (isValid(state.editData)) {
       if (
         (userData?.create_menu === 1 && form.watch('menu_id') === null) ||
@@ -183,11 +184,11 @@ const InventoryStock = (props: any) => {
             menu_id: userData?.menu_id?.value ? userData?.menu_id?.value : null,
             product_id: userData?.product_id?.value ? userData?.product_id?.value : null,
             unit_id: userData?.unit_id?.value ? userData?.unit_id?.value : null,
-            image: userData?.image
+            image: userData?.image?.length > 0
               ? userData?.image[0]?.file_name
               : state?.editData?.image
-              ? state?.editData?.image
-              : ''
+                ? state?.editData?.image
+                : ''
           }
         })
       }
@@ -207,7 +208,7 @@ const InventoryStock = (props: any) => {
             menu_id: userData?.menu_id?.value ? userData?.menu_id?.value : null,
             product_id: userData?.product_id?.value ? userData?.product_id?.value : null,
             unit_id: userData?.unit_id?.value ? userData?.unit_id?.value : null,
-            image: userData?.image[0]?.file_name ? userData?.image[0]?.file_name : '',
+            image: userData?.image?.length > 0 ? userData?.image[0]?.file_name : '',
             reason: userData?.reason ? userData?.reason : ''
           }
         })
@@ -246,23 +247,23 @@ const InventoryStock = (props: any) => {
           quantity: state.editData?.quantity,
           menu_id: state.editData?.menu_id
             ? {
-                label: state.editData?.menu?.name,
-                value: state.editData?.menu_id
-              }
+              label: state.editData?.menu?.name,
+              value: state.editData?.menu_id
+            }
             : undefined,
           product_id: state.editData?.product_id
             ? {
-                label: state.editData?.product?.name,
-                value: state.editData?.product_id
-              }
+              label: state.editData?.product?.name,
+              value: state.editData?.product_id
+            }
             : undefined,
           reason: state.editData?.reason,
           create_menu: state?.editData?.menu_id ? 1 : 0,
           unit_id: state.editData?.unit_id
             ? {
-                label: state.editData?.unit?.name,
-                value: state.editData?.unit_id
-              }
+              label: state.editData?.unit?.name,
+              value: state.editData?.unit_id
+            }
             : undefined
         },
         form.setValue

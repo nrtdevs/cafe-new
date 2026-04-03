@@ -151,6 +151,8 @@ const DemandProduct = (props: any) => {
   // load menus
   const [loadMenu, loadMenuResp] = useLoadDemandsMutation()
 
+
+
   // delete mutation
   const [menuDelete, deleteResp] = useDeleteDemandByIdMutation()
 
@@ -333,6 +335,7 @@ const DemandProduct = (props: any) => {
   // create a menu on header
   useEffect(() => {
     if (!canAddUser) return
+    if (loadMenuResp?.isLoading) return
     if (loadMenuResp?.data?.payload?.creatable === false) return
     setHeaderMenu(
       <>
@@ -349,7 +352,7 @@ const DemandProduct = (props: any) => {
     return () => {
       setHeaderMenu(null)
     }
-  }, [modalAdd, canAddUser, loadMenuResp?.data?.payload?.creatable])
+  }, [modalAdd, canAddUser, loadMenuResp?.data?.payload?.creatable, loadMenuResp?.isLoading])
 
   //handle actions
   const handleActions = (ids?: any, action?: any, eventId?: any) => {
@@ -751,6 +754,7 @@ const DemandProduct = (props: any) => {
                     <th scope="col">Pack Size</th>
                     <th scope="col">Category</th>
                     <th scope="col">Sub Category</th>
+                    <th scope="col">Comment</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -764,6 +768,7 @@ const DemandProduct = (props: any) => {
                       <td>{item?.packsize?.name || '-'}</td>
                       <td>{item?.category?.name || '-'}</td>
                       <td>{item?.subcategory?.name || '-'}</td>
+                      <td>{item?.comment || '-'}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -165,8 +165,9 @@ const CreateEmployeeHandover = (props: any) => {
     const updatedRemainingStocks: { [key: number]: number } = {}
 
     payload?.forEach((item: any, index: number) => {
-      const currentStock = Number(form.watch(`items.${index}.current_stock`) || 0)
-      const remaining = Number(item?.RemainingStock) - currentStock
+      const watched = form.watch(`items.${index}.current_stock`)
+      const currentStock = watched !== undefined && watched !== '' ? Number(watched) : Number(item?.RemainingStock || 0)
+      const remaining = Number(item?.RemainingStock)
       updatedRemainingStocks[index] = isNaN(remaining) ? 0 : remaining
     })
 
@@ -184,17 +185,20 @@ const CreateEmployeeHandover = (props: any) => {
           handover_date: userData?.handover_date
             ? formatDate(userData?.handover_date, 'YYYY-MM-DD')
             : undefined,
-          items: payload?.map((item: any, index: any) => ({
-            product_id: item?.product_id,
-            category_id: item?.category?.id,
-            subcategory_id: item?.subcategory?.id,
-            unit_id: item?.unit_id,
-            in_stock: item?.inStock ? Number(item?.inStock) : 0,
-            out_stock: item?.outStock ? Number(item?.outStock) : 0,
-            remaining_stock: item?.RemainingStock ? Number(item?.RemainingStock) : 0,
-            current_stock: Number(form.watch(`items.${index}.current_stock`)),
-            comment: form.watch(`items.${index}.comment`)
-          }))
+          items: payload?.map((item: any, index: any) => {
+            const watchedStock = form.watch(`items.${index}.current_stock`)
+            return {
+              product_id: item?.product_id,
+              category_id: item?.category?.id,
+              subcategory_id: item?.subcategory?.id,
+              unit_id: item?.unit_id,
+              in_stock: item?.inStock ? Number(item?.inStock) : 0,
+              out_stock: item?.outStock ? Number(item?.outStock) : 0,
+              remaining_stock: item?.RemainingStock ? Number(item?.RemainingStock) : 0,
+              current_stock: watchedStock !== undefined && watchedStock !== '' ? Number(watchedStock) : Number(item?.RemainingStock || 0),
+              comment: form.watch(`items.${index}.comment`)
+            }
+          })
         }
       })
     } else {
@@ -204,17 +208,20 @@ const CreateEmployeeHandover = (props: any) => {
           handover_date: userData?.handover_date
             ? formatDate(userData?.handover_date, 'YYYY-MM-DD')
             : undefined,
-          items: payload?.map((item: any, index: any) => ({
-            product_id: item?.product_id,
-            category_id: item?.category?.id,
-            subcategory_id: item?.subcategory?.id,
-            unit_id: item?.unit_id,
-            in_stock: item?.inStock ? Number(item?.inStock) : 0,
-            out_stock: item?.outStock ? Number(item?.outStock) : 0,
-            remaining_stock: item?.RemainingStock ? Number(item?.RemainingStock) : 0,
-            current_stock: Number(form.watch(`items.${index}.current_stock`)),
-            comment: form.watch(`items.${index}.comment`)
-          }))
+          items: payload?.map((item: any, index: any) => {
+            const watchedStock = form.watch(`items.${index}.current_stock`)
+            return {
+              product_id: item?.product_id,
+              category_id: item?.category?.id,
+              subcategory_id: item?.subcategory?.id,
+              unit_id: item?.unit_id,
+              in_stock: item?.inStock ? Number(item?.inStock) : 0,
+              out_stock: item?.outStock ? Number(item?.outStock) : 0,
+              remaining_stock: item?.RemainingStock ? Number(item?.RemainingStock) : 0,
+              current_stock: watchedStock !== undefined && watchedStock !== '' ? Number(watchedStock) : Number(item?.RemainingStock || 0),
+              comment: form.watch(`items.${index}.comment`)
+            }
+          })
         }
       })
     }
@@ -496,25 +503,25 @@ const CreateEmployeeHandover = (props: any) => {
                                   className='mb-0'
                                   control={form.control}
                                   rules={{ required: true, min: 0 }}
-                                  //   onChangeValue={(e) => {
-                                  //     let value = Number(e.target.value)
+                                //   onChangeValue={(e) => {
+                                //     let value = Number(e.target.value)
 
-                                  //     let stock = Number(item?.RemainingStock)
+                                //     let stock = Number(item?.RemainingStock)
 
-                                  //     if (value >= stock) {
-                                  //       // Show error message
-                                  //       form.setError(`items.${index}.current_stock` as any, {
-                                  //         type: 'manual',
-                                  //         message: `Quantity cannot be more than available stock (${stock})`
-                                  //       })
-                                  //     } else {
-                                  //       // Clear error if within limit
-                                  //       form.clearErrors(`items.${index}.quantity` as any)
-                                  //     }
+                                //     if (value >= stock) {
+                                //       // Show error message
+                                //       form.setError(`items.${index}.current_stock` as any, {
+                                //         type: 'manual',
+                                //         message: `Quantity cannot be more than available stock (${stock})`
+                                //       })
+                                //     } else {
+                                //       // Clear error if within limit
+                                //       form.clearErrors(`items.${index}.quantity` as any)
+                                //     }
 
-                                  //     // Optionally update value in form state if you need
-                                  //     form.setValue(`items.${index}.current_stock`, value)
-                                  //   }}
+                                //     // Optionally update value in form state if you need
+                                //     form.setValue(`items.${index}.current_stock`, value)
+                                //   }}
                                 />
                               </td>
                               <td>{remaining[index] ?? 0}</td>

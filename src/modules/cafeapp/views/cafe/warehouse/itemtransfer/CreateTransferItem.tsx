@@ -144,7 +144,8 @@ const CreateTransferItem = (props: any) => {
             item_id: item?.item_id?.value,
             unit_id: item?.unit_id?.value,
             quantity: item?.quantity,
-            rate: item?.rate
+            rate: item?.rate,
+            comment: item?.comment
           }
         }
       })
@@ -607,27 +608,37 @@ const CreateTransferItem = (props: any) => {
                         </Col>
                       </Row>
                     </Col>
-                    <Col md='2' className='mt-1'>
-                      <Show IF={index > 0 || index === fields?.length - 1}>
-                        {/* <Show IF={index > 0}> */}
-                        <BsTooltip<ButtonProps>
-                          Tag={Button}
-                          role={'button'}
-                          color='danger'
-                          size='sm'
-                          className='btn-icon me-1 m-1'
-                          title={'Remove'}
-                          onClick={() => {
-                            remove(index)
-                          }}
-                        >
-                          <>
-                            <Trash2 size={16} />
-                          </>
-                        </BsTooltip>
-                        {/* </Show> */}
+                    <Col md='2' className=''>
+                      <FormGroupCustom
 
-                        {/* <Show IF={index === fields?.length - 1}>
+                        name={`items.${index}.comment`}
+                        defaultValue={viewOrders?.requested_products[index]?.comment}
+                        type={'textarea'}
+                        label={'Comment'}
+                        className='mb-0'
+                        control={form.control}
+                        rules={{ required: false, min: 0 }}
+                      />
+                      {/* <Show IF={index > 0 || index === fields?.length - 1}>
+                        <Show IF={index > 0}>
+                          <BsTooltip<ButtonProps>
+                            Tag={Button}
+                            role={'button'}
+                            color='danger'
+                            size='sm'
+                            className='btn-icon me-1 m-1'
+                            title={'Remove'}
+                            onClick={() => {
+                              remove(index)
+                            }}
+                          >
+                            <>
+                              <Trash2 size={16} />
+                            </>
+                          </BsTooltip>
+                        </Show>
+
+                        <Show IF={index === fields?.length - 1}>
                           <BsTooltip<ButtonProps>
                             Tag={Button}
                             color='primary'
@@ -643,8 +654,8 @@ const CreateTransferItem = (props: any) => {
                               <Plus size={16} />
                             </>
                           </BsTooltip>
-                        </Show> */}
-                      </Show>
+                        </Show>
+                      </Show> */}
                     </Col>
                   </Row>
                 </CardBody>

@@ -121,7 +121,8 @@ const defaultValues: productsResponseTypes = {
   quantity: 1,
   price: '',
   priority_rank: '',
-  order_duration: ''
+  order_duration: '',
+  menu_category_id: ''
 }
 const Product = (props: any) => {
   // header menu context categoryResponseTypes
@@ -226,6 +227,7 @@ const Product = (props: any) => {
             is_product_monitoring: userData?.is_product_monitoring === 1 ? 1 : 0,
             subcategory_id: userData?.subcategory_id?.value,
             quantity: userData?.create_menu === 1 ? 1 : 0,
+            menu_category_id: userData?.menu_category_id?.value ?? undefined,
             image_path: userData?.image_path[0]?.file_name ? userData?.image_path[0]?.file_name : ''
           }
         })
@@ -438,8 +440,8 @@ const Product = (props: any) => {
                     <FormGroupCustom
                       control={form.control}
                       async
-                      label={FM('category')}
-                      name='category_id'
+                      label={'Menu Category'}
+                      name='menu_category_id'
                       loadOptions={loadDropdown}
                       path={ApiEndpoints.categories}
                       selectLabel={(e) => `${e.name}  `}
