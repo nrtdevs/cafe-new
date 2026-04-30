@@ -39,7 +39,7 @@ import { loadDropdown } from '@src/utility/http/Apis/dropdowns'
 import { stateReducer } from '@src/utility/stateReducer'
 import React, { Fragment, useContext, useEffect, useReducer } from 'react'
 import { TableColumn } from 'react-data-table-component'
-import { Edit, Eye, List, Menu, Plus, PlusCircle, Printer, RefreshCcw, Trash2 } from 'react-feather'
+import { Edit, Eye, List, Menu, Plus, PlusCircle, Printer, RefreshCcw, Trash2, Upload } from 'react-feather'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import {
@@ -60,6 +60,7 @@ import {
 import * as yup from 'yup'
 import { menusResponseTypes } from '../../../redux/RTKFiles/ResponseTypes'
 import DemandFilter from './DemandFilter'
+import DemandProductImport from './DemandProductImport'
 import { getPath } from '@src/router/RouteHelper'
 import { useNavigate } from 'react-router-dom'
 import { getUserData } from '@src/auth/utils'
@@ -127,6 +128,9 @@ const DemandProduct = (props: any) => {
 
   //can create transfer
   const canAddTransfer = Can(Permissions.itemTransferCreate)
+
+  //can import
+  const canImportUser = Can(Permissions.demandProductsImport)
 
   const navigate = useNavigate()
 
@@ -1072,6 +1076,27 @@ const DemandProduct = (props: any) => {
 
       <Header route={props?.route} icon={<List size='25' />} title='Demand Product'>
         <ButtonGroup color='dark'>
+          <Show IF={canAddUser}>
+            <DemandProductImport<ButtonProps>
+              Tag={Button}
+              responseData={() => {
+                reloadData()
+                setState({
+                  lastRefresh: new Date().getTime(),
+                  page: 1
+                })
+              }}
+              className='btn btn-secondary btn-sm d-flex align-items-center me-2'
+              size='sm'
+              color='secondary'
+            // title={FM('import')}
+            >
+              <div>
+                <Upload size='14' />
+                <span className='align-middle ms-25'>{FM('import')}</span>
+              </div>
+            </DemandProductImport>
+          </Show>
           <DemandFilter handleFilterData={handleFilterData} />
           <LoadingButton
             tooltip={FM('reload')}

@@ -628,5 +628,7 @@
     "filter-demand-product": "Filter Demand Product",
     "delivery-person": "Delivery Person",
     "filter-quantity-mismatch": "Filter Quantity MisMatch",
-    "filter-stock-transfer": "Filter Stock Transfer"
+    "filter-stock-transfer": "Filter Stock Transfer",
+    "import-demand-product": "Import Demand Product",
+    "demand-product-imported-successfully": "Demand Product Imported Successfully"
 }
