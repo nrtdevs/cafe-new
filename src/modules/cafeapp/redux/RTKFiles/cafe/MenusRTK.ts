@@ -131,6 +131,13 @@ export const MenuManagement = createApi({
         path: ApiEndpoints.demand_request + '/' + args?.id + '/print'
       })
     }),
+    importDemandProduct: builder.mutation<any, any>({
+      query: (jsonData) => ({
+        jsonData,
+        method: 'post',
+        path: ApiEndpoints.demand_request_import
+      })
+    }),
   })
 })
 export const {
@@ -146,5 +153,6 @@ export const {
   useLoadMismatchListMutation,
   useActionMismatchQuantityIdMutation,
   useLoadWasteListMutation,
-  useDemandPrintMutation
+  useDemandPrintMutation,
+  useImportDemandProductMutation
 } = MenuManagement

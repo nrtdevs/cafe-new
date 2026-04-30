@@ -806,6 +806,11 @@ export const Permissions = Object.freeze({
     resource: 'item-demand',
     belongs_to: 7
   },
+  demandProductsImport: {
+    action: 'item-demand-import',
+    resource: 'item-demand',
+    belongs_to: 7
+  }
 
 
 })

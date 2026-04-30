@@ -167,6 +167,7 @@ export default {
   list_demand: 'item-demands',
   export_demand: 'item-demand-export',
   demand_request: 'demand-request',
+  demand_request_import: 'demand-request-import',
 
   ///////////////////Customer///////////////////////
   customers: 'customers',
